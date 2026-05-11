@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Milk Society · PAMS</title>
+<style>
+/* ============================================================
+   THE MILK SOCIETY — Vintage Creamery Design System
+   Editorial almanac aesthetic, navy/cream/gold palette
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    /* Palette — Vintage Creamery */
+    --ink:           #0e1620;   /* deep night-navy, the milkman's predawn */
+    --ink-soft:      #16202c;
+    --ink-card:      #1a2532;
+    --ink-line:      #2a3645;
+    --ink-line-soft: #1e2937;
+
+    --cream:         #f4ebd8;   /* paper / milk */
+    --cream-soft:    #c9c0ad;
+    --cream-mute:    #837b6a;
+
+    --gold:          #e8c889;   /* the cap on a glass bottle */
+    --gold-bright:   #f4d9a4;
+    --gold-deep:     #a88a4a;
+
+    --rust:          #a04830;   /* Grade A stamp red */
+    --steel:         #6b8aa8;   /* cold-blue accent */
+
+    /* Typography */
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans:  'Inter', system-ui, sans-serif;
+    --mono:  'JetBrains Mono', 'SF Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--sans);
+    background: var(--ink);
+    color: var(--cream);
+    min-height: 100vh;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   ATMOSPHERIC BACKDROP — grain + radial glow
+   ============================================================ */
+.site-glow {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(232, 200, 137, .07) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(160, 72, 48, .04) 0%, transparent 50%);
+}
+.site-grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 0.92 0 0 0 0 0.8 0 0 0 0.04 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+}
+
+/* ============================================================
+   TICKER — top scrolling banner
+   ============================================================ */
+.ticker {
+    position: relative; z-index: 10;
+    background: var(--gold);
+    color: var(--ink);
+    border-bottom: 3px solid var(--ink);
+    height: 38px;
+    display: flex; align-items: center; overflow: hidden;
+}
+.ticker-track {
+    display: flex; gap: 3rem; white-space: nowrap; padding-left: 3rem;
+    animation: ticker-scroll 50s linear infinite;
+}
+.ticker-group { display: flex; gap: 3rem; }
+.ticker-item {
+    font-family: var(--mono); font-size: .72rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: .6rem;
+}
+.ticker-star { color: var(--rust); }
+@keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   NAV / MASTHEAD
+   ============================================================ */
+.nav {
+    position: sticky; top: 0; z-index: 30;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem;
+    padding: 1.2rem 2rem;
+    background: rgba(14, 22, 32, .92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--ink-line);
+}
+.nav-back, .nav-link {
+    color: var(--gold); text-decoration: none;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    transition: color .2s;
+}
+.nav-back { justify-self: start; }
+.nav-link { justify-self: end; }
+.nav-back:hover, .nav-link:hover { color: var(--gold-bright); }
+
+.nav-center { text-align: center; justify-self: center; }
+.nav-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .3rem;
+}
+.nav-title {
+    font-family: var(--serif);
+    font-size: 1.4rem; letter-spacing: .02em; color: var(--cream);
+}
+.nav-title em { font-style: italic; color: var(--gold); }
+
+/* Secondary nav links (when the back link isn't needed) */
+.nav-links {
+    display: flex; gap: 1.5rem;
+    justify-self: start;
+}
+.nav-links a {
+    color: var(--cream-soft); text-decoration: none;
+    font-family: var(--mono); font-weight: 500;
+    font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+    transition: color .2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 4rem 1.5rem 3rem;
+    max-width: 1100px; margin: 0 auto;
+}
+.hero-sup {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+}
+.hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 9vw, 7.5rem);
+    line-height: .92; letter-spacing: -.025em;
+    color: var(--cream); margin-bottom: 1.5rem;
+}
+.hero-title em {
+    font-style: italic; color: var(--gold);
+}
+.hero-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.55; color: var(--cream-soft);
+    max-width: 580px; margin: 0 auto;
+}
+.hero-meta {
+    margin-top: 1.5rem;
+    font-family: var(--mono);
+    font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section {
+    position: relative; z-index: 10;
+    max-width: 1200px; margin: 3rem auto 0;
+    padding: 0 2rem;
+}
+.section-header {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
+    gap: .75rem; padding-bottom: 1rem; margin-bottom: 2rem;
+    border-bottom: 3px double var(--ink-line);
+}
+.section-num {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold);
+}
+.section-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.01em;
+    color: var(--cream);
+}
+.section-meta {
+    font-family: var(--mono);
+    font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+.italic-gold { font-style: italic; color: var(--gold); }
+
+/* ============================================================
+   CARD GRID — used on Hub for section navigation
+   ============================================================ */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.card {
+    position: relative;
+    padding: 2rem 1.75rem 1.75rem;
+    display: flex; flex-direction: column; gap: .9rem;
+    background: linear-gradient(160deg, var(--ink-card), var(--ink-soft));
+    border: 1px solid var(--ink-line);
+    text-decoration: none; color: inherit;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1),
+                box-shadow .3s, border-color .3s;
+    overflow: hidden;
+    cursor: pointer;
+}
+.card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--gold); transition: width .3s ease;
+}
+.card:hover {
+    border-color: rgba(232, 200, 137, .5);
+    box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 30px rgba(232, 200, 137, .08);
+    transform: translateY(-4px);
+}
+.card:hover::before { width: 5px; }
+
+.card-corner {
+    position: absolute; top: 1.2rem; right: 1.4rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .2em;
+    color: var(--gold);
+}
+.card-roman {
+    font-family: var(--serif); font-style: italic;
+    font-size: 3rem; line-height: 1;
+    color: var(--gold);
+    letter-spacing: -.02em;
+}
+.card-title {
+    font-family: var(--serif);
+    font-size: 1.85rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--cream);
+}
+.card-title em { font-style: italic; color: var(--gold); }
+.card-desc {
+    font-family: var(--sans);
+    font-size: .92rem; line-height: 1.55;
+    color: var(--cream-soft); flex: 1;
+}
+.card-cta {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold);
+    margin-top: .7rem; padding-top: 1rem;
+    border-top: 1px solid var(--ink-line);
+    transition: color .2s;
+}
+.card:hover .card-cta { color: var(--gold-bright); }
+.card-arrow { display: inline-block; transition: transform .25s ease; }
+.card:hover .card-arrow { transform: translateX(4px); }
+
+/* ============================================================
+   HERO STAT BAR — for top records on landing
+   ============================================================ */
+.stat-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+.stat {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+    padding: 1.2rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+}
+.stat::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--gold);
+}
+.stat-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .5rem;
+}
+.stat-value {
+    font-family: var(--serif);
+    font-size: 2.2rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--gold); margin-bottom: .4rem;
+}
+.stat-detail {
+    font-family: var(--sans);
+    font-size: .82rem; color: var(--cream-soft);
+    line-height: 1.4;
+}
+.stat-detail strong { color: var(--cream); }
+
+/* ============================================================
+   BADGES & PILLS
+   ============================================================ */
+.badge {
+    display: inline-flex; align-items: center; gap: .45rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+    padding: .35rem .65rem; border-radius: 2px;
+}
+.badge.live {
+    background: rgba(232, 200, 137, .1);
+    color: var(--gold);
+    border: 1px solid rgba(232, 200, 137, .3);
+}
+.badge.alert {
+    background: rgba(160, 72, 48, .12);
+    color: var(--rust);
+    border: 1px solid rgba(160, 72, 48, .35);
+}
+.badge.current {
+    background: rgba(107, 138, 168, .12);
+    color: var(--steel);
+    border: 1px solid rgba(107, 138, 168, .3);
+}
+.badge-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--rust);
+    box-shadow: 0 0 8px rgba(160, 72, 48, .6);
+    animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: .5; transform: scale(.8); }
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+.table-wrap {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+    overflow-x: auto;
+}
+table.data {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--sans);
+}
+table.data thead {
+    background: var(--ink-soft);
+    border-bottom: 1px solid var(--ink-line);
+}
+table.data th {
+    padding: .85rem 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute);
+    text-align: left;
+    white-space: nowrap;
+}
+table.data th.num { text-align: right; }
+table.data td {
+    padding: .85rem 1rem;
+    border-top: 1px solid var(--ink-line-soft);
+    font-size: .9rem;
+    color: var(--cream-soft);
+}
+table.data td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data td.name { color: var(--cream); font-weight: 500; }
+table.data td.rank {
+    font-family: var(--mono); font-weight: 700;
+    color: var(--gold);
+}
+table.data tbody tr:hover {
+    background: rgba(232, 200, 137, .03);
+}
+table.data tbody tr.highlight {
+    background: rgba(232, 200, 137, .06);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+    position: relative; z-index: 10;
+    margin-top: 5rem;
+    padding: 2rem;
+    border-top: 1px solid var(--ink-line);
+    text-align: center;
+    font-family: var(--mono);
+    font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.site-footer em { color: var(--gold); font-style: italic; font-family: var(--serif); }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.divider-dotted {
+    border-top: 1px dotted var(--ink-line);
+    margin: 1.5rem 0;
+}
+.text-mono { font-family: var(--mono); }
+.text-serif { font-family: var(--serif); }
+.text-gold { color: var(--gold); }
+.text-cream-mute { color: var(--cream-mute); }
+
+</style>
+<style>
+/* ============================================================
+   SECTION-SPECIFIC LAYOUTS (hub middle overrides)
+   ============================================================ */
+
+/* === § 01 BENCHMARKS — hero on top, 2-col list below === */
+.benchmarks {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.hero-stat {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 1rem;
+}
+.hero-stat-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .32em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+}
+.hero-stat-value {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(6rem, 14vw, 11rem);
+    line-height: .9; letter-spacing: -.04em;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+}
+.hero-stat-detail {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.3rem; line-height: 1.4;
+    color: var(--cream-soft);
+    max-width: 56ch;
+    margin: 0 auto;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--ink-line);
+}
+.hero-stat-detail strong { color: var(--gold); font-style: normal; font-family: var(--sans); font-weight: 700; letter-spacing: .02em; }
+.hero-stat-detail .game-context {
+    display: block;
+    font-family: var(--mono); font-style: normal;
+    font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .85rem;
+}
+
+/* Two-column grid of secondary stats — with vertical divider between cols */
+.stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem;
+    border-top: 1px solid var(--ink-line);
+    position: relative;
+}
+/* Vertical center divider line, hidden on mobile */
+.stat-grid::before {
+    content: '';
+    position: absolute;
+    top: 1.75rem;     /* match top padding of first row */
+    bottom: 1.75rem;  /* match bottom padding of last row */
+    left: 50%;
+    width: 1px;
+    background: var(--ink-line);
+    transform: translateX(-50%);
+}
+@media (max-width: 720px) {
+    .stat-grid { grid-template-columns: 1fr; column-gap: 0; }
+    .stat-grid::before { display: none; }
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 1.75rem 0;
+    border-bottom: 1px dotted var(--ink-line);
+}
+/* On desktop, last two rows (one per column) have no border */
+@media (min-width: 721px) {
+    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: none; }
+}
+@media (max-width: 720px) {
+    .stat-grid .stat-row:last-child { border-bottom: none; }
+}
+
+.stat-row-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.8rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--gold);
+    min-width: 6rem;
+    text-align: right;
+}
+.stat-row-body { display: flex; flex-direction: column; gap: .3rem; }
+.stat-row-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.stat-row-name {
+    font-family: var(--serif);
+    font-size: 1.15rem; line-height: 1.2;
+    color: var(--cream);
+}
+.stat-row-name em { font-style: italic; color: var(--gold); }
+.stat-row-detail {
+    font-family: var(--mono);
+    font-size: .65rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .2rem;
+}
+
+
+/* === § 02 NAVIGATION — Ledger table of contents === */
+.toc {
+    background: linear-gradient(180deg, rgba(26, 37, 50, .4) 0%, rgba(22, 32, 44, .2) 100%);
+    border: 1px solid var(--ink-line);
+}
+.toc-header {
+    padding: 1.25rem 2rem;
+    background: var(--ink-soft);
+    border-bottom: 1px solid var(--ink-line);
+    display: flex; justify-content: space-between; align-items: baseline;
+}
+.toc-header-title {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .68rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--gold);
+}
+.toc-header-meta {
+    font-family: var(--mono);
+    font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.toc-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--ink-line-soft);
+    transition: background .2s, padding-left .25s ease;
+}
+.toc-row:last-child { border-bottom: none; }
+.toc-row:hover {
+    background: rgba(232, 200, 137, .03);
+    padding-left: 2.5rem;
+}
+.toc-row:hover .toc-arrow { transform: translateX(4px); color: var(--gold-bright); }
+.toc-row:hover .toc-title { color: var(--gold); }
+
+.toc-chapter {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold);
+    min-width: 5.5rem;
+}
+.toc-title-wrap { display: flex; flex-direction: column; }
+.toc-title {
+    font-family: var(--serif);
+    font-size: 1.7rem; line-height: 1.1;
+    color: var(--cream);
+    transition: color .2s;
+}
+.toc-title em { font-style: italic; color: var(--gold); }
+.toc-desc {
+    font-family: var(--sans);
+    font-size: .85rem;
+    color: var(--cream-soft);
+    margin-top: .35rem;
+    max-width: 50ch;
+}
+.toc-badge {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    padding: .3rem .6rem;
+    border: 1px solid rgba(232, 200, 137, .3);
+    color: var(--gold);
+    background: rgba(232, 200, 137, .06);
+    border-radius: 2px;
+    white-space: nowrap;
+}
+.toc-badge.alert {
+    border-color: rgba(160, 72, 48, .4);
+    color: var(--rust);
+    background: rgba(160, 72, 48, .08);
+}
+.toc-badge.steel {
+    border-color: rgba(107, 138, 168, .35);
+    color: var(--steel);
+    background: rgba(107, 138, 168, .08);
+}
+.toc-arrow {
+    color: var(--gold);
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    transition: transform .25s ease, color .2s;
+    min-width: 1.5rem;
+    text-align: right;
+}
+
+/* === § 03 CHAMPION SEAL === */
+.champion-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding: 1rem 0;
+}
+@media (max-width: 700px) {
+    .champion-row { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; text-align: center; }
+}
+.champion-seal { width: 200px; height: 200px; flex-shrink: 0; }
+.champion-text-block { max-width: 50ch; }
+.champion-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .8rem;
+}
+.champion-name {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    line-height: .95; letter-spacing: -.025em;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+}
+.champion-name em { font-style: italic; color: var(--gold); }
+.champion-blurb {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.15rem; line-height: 1.5;
+    color: var(--cream-soft);
+    margin-bottom: 1.4rem;
+}
+.champion-blurb strong { color: var(--cream); font-style: normal; font-family: var(--sans); font-weight: 600; }
+.champion-link {
+    display: inline-flex; align-items: center; gap: .8rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    padding-top: 1rem; border-top: 1px solid var(--ink-line);
+    transition: color .2s;
+}
+.champion-link:hover { color: var(--gold-bright); }
+.champion-link:hover .arrow { transform: translateX(4px); }
+.arrow { transition: transform .25s ease; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<!-- TICKER -->
+<div class="ticker">
+    <div class="ticker-track">
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE MILK SOCIETY · EST. 2019</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 689 GAMES</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SINGLE-WEEK RECORD: 200.6 · CHRIS</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> LONGEST STREAK: 8W · JOEY</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> 17 MANAGERS · 12 CURRENT</span>
+        </div>
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE MILK SOCIETY · EST. 2019</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 689 GAMES</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SINGLE-WEEK RECORD: 200.6 · CHRIS</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> LONGEST STREAK: 8W · JOEY</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> 17 MANAGERS · 12 CURRENT</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-links">
+        <a href="standings.html">Standings</a>
+        <a href="managers/index.html">Managers</a>
+        <a href="records.html">Records</a>
+    </div>
+    <div class="nav-center">
+        <div class="nav-kicker">PA MILK SOCIETY · VOL. 07</div>
+        <div class="nav-title">The Milk <em>Society.</em></div>
+    </div>
+    <a href="seasons/index.html" class="nav-link">Seasons →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-sup">★ PAMS · Fantasy Football Almanac ★</div>
+    <h1 class="hero-title">
+        The Milk<br>
+        <em>Society.</em>
+    </h1>
+    <p class="hero-sub">
+        Seven seasons of champions, blowouts, and grudge matches.
+        Every record, every rivalry, every Sunday — kept in the books.
+    </p>
+    <div class="hero-meta">2019 — 2025 · 689 MATCHUPS · 17 MANAGERS</div>
+</div>
+
+
+<!-- § 01 — BENCHMARKS (rendered by JS from records array) -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-num">§ 01 · Benchmarks</span>
+        <span class="section-title">The records of record —</span>
+        <span class="section-meta">cycles each visit</span>
+    </div>
+
+    <div class="benchmarks">
+        <!-- Hero record (cycled on each page load) -->
+        <div class="hero-stat" id="hero-stat">
+            <!-- populated by JS -->
+        </div>
+
+        <!-- 6 (or more) smaller records — remaining ones from the array -->
+        <div class="stat-grid" id="stat-grid">
+            <!-- populated by JS -->
+        </div>
+    </div>
+</div>
+
+
+<!-- § 02 — LEDGER / TABLE OF CONTENTS -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-num">§ 02 · The Almanac</span>
+        <span class="section-title">Table of contents —</span>
+        <span class="section-meta">four chapters</span>
+    </div>
+
+    <div class="toc">
+        <div class="toc-header">
+            <span class="toc-header-title">Vol. 07 · Index</span>
+            <span class="toc-header-meta">Updated weekly</span>
+        </div>
+
+        <a href="standings.html" class="toc-row">
+            <div class="toc-chapter">Ch. I</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">All-Time <em>Standings.</em></div>
+                <div class="toc-desc">Every manager's career record, split by regular season and playoffs.</div>
+            </div>
+            <span class="toc-badge alert">2025 Live</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="managers/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. II</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">The <em>Managers.</em></div>
+                <div class="toc-desc">Twelve active profiles. Championship banners, streaks, and head-to-head records.</div>
+            </div>
+            <span class="toc-badge steel">12 Active</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="seasons/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. III</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Season <em>Archives.</em></div>
+                <div class="toc-desc">Year by year — standings, champions, and the games that defined each campaign.</div>
+            </div>
+            <span class="toc-badge">7 Years</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="records.html" class="toc-row">
+            <div class="toc-chapter">Ch. IV</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Record <em>Book.</em></div>
+                <div class="toc-desc">Career, season, and weekly marks. Shootouts, snoozers, and unluckiest losses.</div>
+            </div>
+            <span class="toc-badge">The Book</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+    </div>
+</div>
+
+
+<!-- § 03 — CHAMPION SEAL -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-num">§ 03 · Reigning</span>
+        <span class="section-title">The defending champion —</span>
+        <span class="section-meta">2024 season</span>
+    </div>
+
+    <div class="champion-row">
+
+        <svg class="champion-seal" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="2024 Champion Seal">
+            <defs>
+                <path id="topArc" d="M 20,100 A 80,80 0 0 1 180,100" fill="none"/>
+                <path id="bottomArc" d="M 24,108 A 76,76 0 0 0 176,108" fill="none"/>
+            </defs>
+            <circle cx="100" cy="100" r="92" fill="none" stroke="#e8c889" stroke-width="1.5" opacity="0.4"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="#e8c889" stroke-width="0.5" opacity="0.6"/>
+            <g fill="#e8c889">
+                <circle cx="100" cy="14" r="1.5"/>
+                <circle cx="161" cy="39" r="1.5"/>
+                <circle cx="186" cy="100" r="1.5"/>
+                <circle cx="161" cy="161" r="1.5"/>
+                <circle cx="100" cy="186" r="1.5"/>
+                <circle cx="39" cy="161" r="1.5"/>
+                <circle cx="14" cy="100" r="1.5"/>
+                <circle cx="39" cy="39" r="1.5"/>
+            </g>
+            <text fill="#e8c889" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" letter-spacing="3">
+                <textPath href="#topArc" startOffset="50%" text-anchor="middle">
+                    ★ PAMS · CHAMPION ·
+                </textPath>
+            </text>
+            <text fill="#e8c889" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" letter-spacing="3">
+                <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">
+                    MMXXIV
+                </textPath>
+            </text>
+            <g stroke="#e8c889" stroke-width="1.2" fill="none" opacity="0.85">
+                <path d="M 50,110 Q 55,95 50,80"/>
+                <path d="M 52,110 Q 47,100 42,90"/>
+                <path d="M 54,103 Q 50,93 44,85"/>
+                <path d="M 56,96 Q 52,87 46,80"/>
+                <path d="M 58,90 Q 54,82 49,76"/>
+                <path d="M 150,110 Q 145,95 150,80"/>
+                <path d="M 148,110 Q 153,100 158,90"/>
+                <path d="M 146,103 Q 150,93 156,85"/>
+                <path d="M 144,96 Q 148,87 154,80"/>
+                <path d="M 142,90 Q 146,82 151,76"/>
+            </g>
+            <g fill="#e8c889">
+                <polygon points="100,42 102,49 109,49 103,53 105,60 100,56 95,60 97,53 91,49 98,49"/>
+            </g>
+            <text x="100" y="125" fill="#f4ebd8" font-family="DM Serif Display, serif" font-style="italic"
+                  font-size="58" font-weight="400" letter-spacing="-0.04em" text-anchor="middle">I</text>
+            <line x1="78" y1="138" x2="122" y2="138" stroke="#e8c889" stroke-width="0.8"/>
+            <text x="100" y="152" fill="#c9c0ad" font-family="JetBrains Mono, monospace"
+                  font-size="6.5" font-weight="700" letter-spacing="2" text-anchor="middle">
+                FIRST · PLACE
+            </text>
+        </svg>
+
+        <div class="champion-text-block">
+            <div class="champion-kicker">★ 2024 · Reigning Champion ★</div>
+            <h2 class="champion-name">The <em>GLIZZYS.</em></h2>
+            <p class="champion-blurb">
+                <strong>Luke</strong> took home the chip in 2024 — 8-6-0 through
+                the regular season, then a hot playoff run. The first championship
+                for the Glizzy franchise after years of knocking on the door.
+            </p>
+            <a href="seasons/season.html?year=2024" class="champion-link">
+                <span>View the 2024 season</span>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <span>The Milk Society · <em>PAMS</em> · Since MMXIX</span>
+</footer>
+
+
+<!-- ============================================================
+     RECORDS DATA + RENDERER
+     To add a record: just append another object to the array.
+     The script auto-picks one for the hero spot and shows the rest
+     in the 2-column grid. Each record needs:
+       label:         small label above the value
+       value:         the headline number/string
+       name:          who set the record (use <em>name</em> for italics)
+       detail:        small mono caption (season/week/etc)
+       prose:         long-form sentence(s) ONLY shown when this record is in the hero spot
+       gameContext:   short mono line below the prose ONLY in hero spot
+     ============================================================ -->
+<script>
+const records = [
+    {
+        label: "Highest Single-Week Score",
+        value: "200.60",
+        name: "<em>Chris</em>, untouchable",
+        detail: "2021 · W5 · vs Joey",
+        prose: "<strong>Chris</strong> dropped two hundred on Joey in week five of the 2021 season — still the only manager to break the barrier.",
+        gameContext: "2021 · Week 5 · 200.60 — 142.18",
+    },
+    {
+        label: "Biggest Blowout",
+        value: "99.16",
+        name: "<em>Kyle</em> over Connor",
+        detail: "2022 · W12 · 170.92 — 71.76",
+        prose: "<strong>Kyle</strong> hung a buck-seventy on Connor in week twelve of 2022, ninety-nine points clear — the most lopsided beating in league history.",
+        gameContext: "2022 · Week 12 · 170.92 — 71.76",
+    },
+    {
+        label: "Longest Win Streak",
+        value: "8",
+        name: "<em>Joey</em> — 2021 run",
+        detail: "Weeks 9 through 16, undefeated",
+        prose: "<strong>Joey</strong> ran the table for eight straight in 2021, weeks nine through sixteen — the longest unbroken stretch any manager has put together.",
+        gameContext: "2021 · W9 → W16 · Eight straight wins",
+    },
+    {
+        label: "Highest Season Total",
+        value: "2,417",
+        name: "<em>Joey</em> — \"Oreos\"",
+        detail: "2021 · 142.18 ppg avg",
+        prose: "<strong>Joey</strong>'s 2021 \"Oreos\" squad piled up 2,417 points across the year, averaging 142 a game — the highest single-season output in league history.",
+        gameContext: "2021 Season · 2,417 PF · 142.18 ppg",
+    },
+    {
+        label: "Closest Game Ever",
+        value: "0.02",
+        name: "<em>Chris</em> over Andrew",
+        detail: "2019 · W13 · 121.32 — 121.30",
+        prose: "<strong>Chris</strong> edged Andrew by two-hundredths of a point in week thirteen of 2019 — the smallest possible margin in fantasy football.",
+        gameContext: "2019 · Week 13 · 121.32 — 121.30",
+    },
+    {
+        label: "Unluckiest Loss",
+        value: "175.3",
+        name: "<em>Connie</em>, defeated",
+        detail: "2020 · W3 · Lost to Joey (188.50)",
+        prose: "<strong>Connie</strong> put up 175 points in week three of 2020 — a top-twenty score in league history — and still lost to Joey, who somehow scored 188.",
+        gameContext: "2020 · Week 3 · 175.30 — 188.50 L",
+    },
+    {
+        label: "Shootout (Highest Combined)",
+        value: "363.8",
+        name: "<em>Joey</em> vs Connie",
+        detail: "2020 · W3 · 188.50 — 175.30",
+        prose: "<strong>Joey</strong> and <strong>Connie</strong> combined for 363.8 points in week three of 2020 — the highest-scoring matchup ever played in the league.",
+        gameContext: "2020 · Week 3 · 188.50 — 175.30",
+    },
+    // Add more records here as needed — script picks them up automatically.
+];
+
+// Pick one random record for hero, the rest go in the grid
+function renderRecords() {
+    const heroIdx = Math.floor(Math.random() * records.length);
+    const hero = records[heroIdx];
+    const others = records.filter((_, i) => i !== heroIdx);
+
+    // Render hero
+    document.getElementById('hero-stat').innerHTML = `
+        <div class="hero-stat-label">${hero.label}</div>
+        <div class="hero-stat-value">${hero.value}</div>
+        <div class="hero-stat-detail">
+            ${hero.prose}
+            <span class="game-context">${hero.gameContext}</span>
+        </div>
+    `;
+
+    // Render small records — no prose, no gameContext
+    document.getElementById('stat-grid').innerHTML = others.map(r => `
+        <div class="stat-row">
+            <div class="stat-row-num">${r.value}</div>
+            <div class="stat-row-body">
+                <div class="stat-row-label">${r.label}</div>
+                <div class="stat-row-name">${r.name}</div>
+                <div class="stat-row-detail">${r.detail}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+renderRecords();
+</script>
+
+</body>
+</html>

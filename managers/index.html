@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Managers · The Milk Society</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+/* ============================================================
+   MANAGERS DIRECTORY PAGE
+   ============================================================ */
+
+.page-header {
+    text-align: center;
+    padding: 3.5rem 1.5rem 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+.page-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+}
+.page-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: .95; letter-spacing: -.025em;
+    color: var(--cream); margin-bottom: 1rem;
+}
+.page-title em { font-style: italic; color: var(--gold); }
+.page-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.2rem; line-height: 1.5;
+    color: var(--cream-soft);
+    max-width: 540px; margin: 0 auto;
+}
+
+/* ============================================================
+   SORT/FILTER BAR
+   ============================================================ */
+.sort-bar {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 1.5rem;
+    padding: 1.25rem 0;
+    margin-bottom: 2rem;
+    border-top: 1px solid var(--ink-line);
+    border-bottom: 1px solid var(--ink-line);
+}
+.sort-bar-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.sort-options {
+    display: flex; flex-wrap: wrap; gap: .25rem;
+}
+.sort-option {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--cream-soft);
+    font-family: var(--mono); font-weight: 500;
+    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+    padding: .5rem .85rem;
+    cursor: pointer;
+    transition: all .2s;
+    border-radius: 2px;
+}
+.sort-option:hover { color: var(--cream); }
+.sort-option.active {
+    color: var(--gold);
+    border-color: rgba(232, 200, 137, .3);
+    background: rgba(232, 200, 137, .06);
+}
+
+/* ============================================================
+   MANAGER CARDS GRID
+   ============================================================ */
+.managers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.manager-card {
+    position: relative;
+    background: linear-gradient(160deg, var(--ink-card), var(--ink-soft));
+    border: 1px solid var(--ink-line);
+    text-decoration: none;
+    color: inherit;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1),
+                box-shadow .3s, border-color .3s;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+}
+.manager-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--gold); transition: width .3s ease;
+    z-index: 1;
+}
+.manager-card:hover {
+    border-color: rgba(232, 200, 137, .5);
+    box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 30px rgba(232, 200, 137, .08);
+    transform: translateY(-4px);
+}
+.manager-card:hover::before { width: 5px; }
+
+/* Top: name + championship banner */
+.manager-top {
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-bottom: 1px solid var(--ink-line-soft);
+    position: relative;
+}
+.manager-corner {
+    position: absolute; top: 1rem; right: 1.2rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .2em;
+    color: var(--cream-mute);
+}
+.manager-name {
+    font-family: var(--serif);
+    font-size: 2.1rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--cream);
+    margin-bottom: .35rem;
+}
+.manager-team {
+    font-family: var(--mono);
+    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+/* Championship stars row (one star per chip) */
+.chip-row {
+    display: flex; align-items: center; gap: .35rem;
+    margin-top: .8rem;
+    min-height: 1.2rem;
+}
+.chip-row .chip-star {
+    color: var(--gold);
+    font-size: 1rem;
+    line-height: 1;
+}
+.chip-row .chip-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold);
+    margin-left: .4rem;
+}
+.chip-row.empty .chip-label-empty {
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+/* Middle: stats grid */
+.manager-stats {
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem 1.5rem;
+    border-bottom: 1px solid var(--ink-line-soft);
+}
+.mstat-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: .25rem;
+}
+.mstat-value {
+    font-family: var(--serif);
+    font-size: 1.4rem; line-height: 1;
+    color: var(--cream);
+}
+.mstat-value.gold { color: var(--gold); font-style: italic; }
+.mstat-detail {
+    font-family: var(--mono);
+    font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .2rem;
+}
+
+/* Bottom: CTA */
+.manager-cta {
+    padding: 1rem 1.5rem 1.25rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold);
+}
+.manager-card:hover .manager-cta { color: var(--gold-bright); }
+.manager-cta .arrow { transition: transform .25s ease; }
+.manager-card:hover .manager-cta .arrow { transform: translateX(4px); }
+
+/* ============================================================
+   FORMER MEMBERS SECTION
+   ============================================================ */
+.former-wrap {
+    margin-top: 4rem;
+    border-top: 3px double var(--ink-line);
+    padding-top: 2rem;
+}
+.former-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.former-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: .5rem;
+}
+.former-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.8rem; letter-spacing: -.01em;
+    color: var(--cream);
+}
+.former-title em { color: var(--gold); }
+.former-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0;
+    background: rgba(26, 37, 50, .25);
+    border: 1px solid var(--ink-line);
+}
+.former-item {
+    padding: 1rem 1.3rem;
+    border-right: 1px solid var(--ink-line-soft);
+    border-bottom: 1px solid var(--ink-line-soft);
+    display: flex; flex-direction: column;
+    gap: .25rem;
+}
+.former-name {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--cream);
+}
+.former-detail {
+    font-family: var(--mono);
+    font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<!-- TICKER -->
+<div class="ticker">
+    <div class="ticker-track">
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> 12 ACTIVE MANAGERS · 5 ALUMNI</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> JOEY · 1 CHAMPIONSHIP · .566 CAREER</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> MASON · DEFENDING CHAMP · 2025</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 689 GAMES</span>
+        </div>
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> 12 ACTIVE MANAGERS · 5 ALUMNI</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> JOEY · 1 CHAMPIONSHIP · .566 CAREER</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> MASON · DEFENDING CHAMP · 2025</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 689 GAMES</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <a href="../index.html" class="nav-back">← The Hub</a>
+    <div class="nav-center">
+        <div class="nav-kicker">CH. II · MANAGERS</div>
+        <div class="nav-title">The <em>Society.</em></div>
+    </div>
+    <a href="../records.html" class="nav-link">Records →</a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-kicker">★ Twelve Managers · One League ★</div>
+    <h1 class="page-title">The <em>Managers.</em></h1>
+    <p class="page-sub">
+        The active society — twelve commissioners of their own destinies.
+        Click any name for the full profile: streaks, rivalries, finishes, and championship banners.
+    </p>
+</div>
+
+<!-- SORT BAR + GRID -->
+<div class="section">
+    <div class="sort-bar">
+        <span class="sort-bar-label">Sort —</span>
+        <div class="sort-options" id="sort-options">
+            <button class="sort-option active" data-sort="winpct">Win %</button>
+            <button class="sort-option" data-sort="chips">Championships</button>
+            <button class="sort-option" data-sort="games">Games Played</button>
+            <button class="sort-option" data-sort="pf">Total Points</button>
+            <button class="sort-option" data-sort="name">Alphabetical</button>
+        </div>
+    </div>
+
+    <div class="managers-grid" id="managers-grid">
+        <!-- Populated by JS -->
+    </div>
+
+    <!-- FORMER MEMBERS -->
+    <div class="former-wrap">
+        <div class="former-header">
+            <div class="former-kicker">★ Alumni · Hall of Past Members ★</div>
+            <h2 class="former-title">Former <em>society.</em></h2>
+        </div>
+        <div class="former-list" id="former-list">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <span>The Milk Society · <em>PAMS</em> · Since MMXIX</span>
+</footer>
+
+<!-- ============================================================
+     MANAGER DATA + RENDERER
+     Once we wire up build_data.py this loads from data/managers.json.
+     For now, real numbers hardcoded from your scraper output.
+     ============================================================ -->
+<script>
+const managers = [
+    // Current 12 — sorted by Joey's requested order in CURRENT_MEMBERS,
+    // but the page sorts dynamically
+    { userId: 21679440, name: "Joey",    teamLatest: "Building Rome",        wins: 64, losses: 49, ties: 0, winPct: .566, pf: 14505.78, chips: 1,  chipYears: [2019], topThree: 4, current: true },
+    { userId: 21679447, name: "Mason",   teamLatest: "Rizzlers",             wins: 63, losses: 48, ties: 0, winPct: .568, pf: 13677.20, chips: 1,  chipYears: [2025],     topThree: 2, current: true },
+    { userId: 21688760, name: "Sean",    teamLatest: "The Family Guy",       wins: 61, losses: 50, ties: 0, winPct: .550, pf: 13545.30, chips: 0,  chipYears: [],     topThree: 1, current: true },
+    { userId: 21680417, name: "Chris",   teamLatest: "Kyler the Creator",    wins: 59, losses: 54, ties: 0, winPct: .522, pf: 14091.00, chips: 1,  chipYears: [2021],     topThree: 2, current: true },
+    { userId: 25033943, name: "Isaac",   teamLatest: "CHILD OF GOD",         wins: 53, losses: 43, ties: 0, winPct: .552, pf: 11805.30, chips: 1,  chipYears: [2022],     topThree: 1, current: true },
+    { userId: 21680087, name: "Kyle",    teamLatest: "Ginger Ninger",        wins: 54, losses: 59, ties: 0, winPct: .478, pf: 13492.10, chips: 0,  chipYears: [],     topThree: 0, current: true },
+    { userId: 21679454, name: "Connie",  teamLatest: "Tequila Sunrise",      wins: 54, losses: 59, ties: 0, winPct: .478, pf: 13662.00, chips: 1,  chipYears: [2023], topThree: 1, current: true },
+    { userId: 22539599, name: "Charlie", teamLatest: "Money God",            wins: 31, losses: 34, ties: 0, winPct: .477, pf: 7226.90,  chips: 0,  chipYears: [],     topThree: 0, current: true },
+    { userId: 25036608, name: "Luke",    teamLatest: "The GLIZZYS",          wins: 47, losses: 51, ties: 0, winPct: .480, pf: 11320.00, chips: 1,  chipYears: [2024], topThree: 1, current: true },
+    { userId: 30533399, name: "Evan",    teamLatest: "WHITEBOY FOOTBALL",    wins: 19, losses: 23, ties: 0, winPct: .452, pf: 4716.00,  chips: 0,  chipYears: [],     topThree: 0, current: true },
+    { userId: 21680682, name: "Andrew",  teamLatest: "Bo Dix",               wins: 32, losses: 33, ties: 0, winPct: .492, pf: 7857.20,  chips: 1,  chipYears: [2020],     topThree: 0, current: true },
+    { userId: 21239480, name: "Connor",  teamLatest: "The people's TightEnd", wins: 50, losses: 47, ties: 0, winPct: .515, pf: 12030.00, chips: 0,  chipYears: [],     topThree: 1, current: true },
+
+    // Former members — collected from your 2019-2022 data
+    { userId: null, name: "Krish",  teamLatest: "various",   wins: 9, losses: 7, ties: 0, winPct: .563, pf: 2064.20, chips: 0, chipYears: [], topThree: 1, current: false, seasons: 1 },
+    { userId: null, name: "Ari",    teamLatest: "various",             wins: 9, losses: 7, ties: 0, winPct: .563, pf: 1827.10, chips: 0, chipYears: [], topThree: 0, current: false, seasons: 1 },
+    { userId: null, name: "CJ",     teamLatest: "various",             wins: 4, losses: 12, ties: 0, winPct: .200, pf: 1500.0, chips: 0, chipYears: [], topThree: 0, current: false, seasons: 1 },
+    { userId: null, name: "Costigan", teamLatest: "—",                wins: 7, losses: 9, ties: 0, winPct: .438, pf: 1700.0, chips: 0, chipYears: [], topThree: 0, current: false, seasons: 1 },
+    { userId: null, name: "John", teamLatest: "—",                wins: 6, losses: 10, ties: 0, winPct: .375, pf: 1600.0, chips: 0, chipYears: [], topThree: 0, current: false, seasons: 1 },
+];
+
+// Render the 12 current members
+function renderCurrent(sortKey = 'winpct') {
+    const grid = document.getElementById('managers-grid');
+    let current = managers.filter(m => m.current);
+
+    const sorts = {
+        winpct: (a, b) => b.winPct - a.winPct,
+        chips: (a, b) => (b.chips - a.chips) || (b.winPct - a.winPct),
+        games: (a, b) => (b.wins + b.losses + b.ties) - (a.wins + a.losses + a.ties),
+        pf: (a, b) => b.pf - a.pf,
+        name: (a, b) => a.name.localeCompare(b.name),
+    };
+    current.sort(sorts[sortKey] || sorts.winpct);
+
+    grid.innerHTML = current.map((m, idx) => {
+        // Build championship stars row
+        let chipRow;
+        if (m.chips > 0) {
+            const stars = Array(m.chips).fill('<span class="chip-star">★</span>').join('');
+            const yrs = m.chipYears.join(', ');
+            chipRow = `<div class="chip-row">${stars}<span class="chip-label">${m.chips} CHIP${m.chips>1?'S':''} · ${yrs}</span></div>`;
+        } else {
+            chipRow = `<div class="chip-row empty"><span class="chip-label-empty">— No chips yet —</span></div>`;
+        }
+
+        const winPctDisplay = m.winPct.toFixed(3).replace(/^0\./, '.');
+        const games = m.wins + m.losses + m.ties;
+
+        return `
+            <a href="manager.html?id=${m.userId}" class="manager-card">
+                <div class="manager-top">
+                    <div class="manager-corner">№ ${String(idx+1).padStart(2,'0')}</div>
+                    <div class="manager-name">${m.name}</div>
+                    <div class="manager-team">${m.teamLatest}</div>
+                    ${chipRow}
+                </div>
+                <div class="manager-stats">
+                    <div>
+                        <div class="mstat-label">Career Record</div>
+                        <div class="mstat-value">${m.wins}–${m.losses}${m.ties?'–'+m.ties:''}</div>
+                        <div class="mstat-detail">${games} games</div>
+                    </div>
+                    <div>
+                        <div class="mstat-label">Win %</div>
+                        <div class="mstat-value gold">${winPctDisplay}</div>
+                        <div class="mstat-detail">All-time</div>
+                    </div>
+                    <div>
+                        <div class="mstat-label">Points For</div>
+                        <div class="mstat-value">${m.pf.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+                        <div class="mstat-detail">Career</div>
+                    </div>
+                    <div>
+                        <div class="mstat-label">Top-3 Finishes</div>
+                        <div class="mstat-value">${m.topThree}</div>
+                        <div class="mstat-detail">${m.topThree ? 'In 7 seasons' : 'Still chasing'}</div>
+                    </div>
+                </div>
+                <div class="manager-cta">
+                    <span>View profile</span>
+                    <span class="arrow">→</span>
+                </div>
+            </a>
+        `;
+    }).join('');
+}
+
+// Render former members
+function renderFormer() {
+    const list = document.getElementById('former-list');
+    const former = managers.filter(m => !m.current);
+    list.innerHTML = former.map(m => {
+        const yrs = m.seasons === 1 ? '1 season' : `${m.seasons} seasons`;
+        return `
+            <div class="former-item">
+                <div class="former-name">${m.name}</div>
+                <div class="former-detail">${yrs} · ${m.wins}–${m.losses} · ${m.pf.toFixed(0)} PF</div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Wire up sort buttons
+document.getElementById('sort-options').addEventListener('click', (e) => {
+    const btn = e.target.closest('.sort-option');
+    if (!btn) return;
+    document.querySelectorAll('.sort-option').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCurrent(btn.dataset.sort);
+});
+
+renderCurrent();
+renderFormer();
+</script>
+
+</body>
+</html>
