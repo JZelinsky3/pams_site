@@ -1,0 +1,13 @@
+# Don't commit your cookies / personal config
+config.py
+
+# Scraped data is yours, not for the repo
+output/
+
+# Python junk
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.DS_Store
