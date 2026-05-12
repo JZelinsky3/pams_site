@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Season · The Milk Society</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+/* ============================================================
+   SEASON DETAIL PAGE
+   ============================================================ */
+
+/* ─── Hero ─── */
+.season-hero {
+    position: relative; z-index: 10;
+    padding: 4rem 2rem 3rem;
+    max-width: 1100px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: end;
+}
+@media (max-width: 700px) {
+    .season-hero { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+.hero-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+}
+.hero-year {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(6rem, 18vw, 14rem);
+    line-height: .85; letter-spacing: -.05em;
+    color: var(--cream);
+    margin-bottom: 1rem;
+}
+.hero-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.3rem; line-height: 1.4;
+    color: var(--cream-soft);
+}
+.hero-sub strong { color: var(--gold); font-style: normal; font-family: var(--sans); font-weight: 700; }
+
+.hero-right {
+    display: flex; flex-direction: column;
+    align-items: flex-end; gap: .6rem;
+    padding-bottom: .5rem;
+}
+.hero-nav-year {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute); text-decoration: none;
+    padding: .5rem .8rem;
+    border: 1px solid var(--ink-line);
+    background: var(--ink-card);
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+}
+.hero-nav-year:hover { color: var(--gold); border-color: rgba(232,200,137,.4); }
+
+/* ─── Season Stats Strip ─── */
+.season-strip {
+    position: relative; z-index: 10;
+    max-width: 1100px; margin: 0 auto;
+    padding: 0 2rem;
+}
+.strip-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+}
+.strip-cell {
+    padding: 1.2rem 1.4rem;
+    border-right: 1px solid var(--ink-line-soft);
+    text-align: center;
+}
+.strip-cell:last-child { border-right: none; }
+.strip-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .4rem;
+}
+.strip-val {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.7rem; line-height: 1;
+    color: var(--gold);
+}
+.strip-val.cream { color: var(--cream); font-style: normal; }
+.strip-detail {
+    font-family: var(--mono);
+    font-size: .58rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--cream-mute); margin-top: .25rem;
+}
+
+/* ─── Champion Block — dark editorial ─── */
+.champ-block {
+    background: linear-gradient(135deg, rgba(232,200,137,.08) 0%, rgba(232,200,137,.02) 60%, transparent 100%);
+    border: 1px solid var(--ink-line);
+    border-left: 5px solid var(--gold);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 2.5rem;
+    align-items: center;
+    padding: 2.5rem 3rem;
+    position: relative;
+    overflow: hidden;
+}
+@media (max-width: 900px) {
+    .champ-block { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 1.5rem 2rem 2rem; }
+    .champ-seal-wrap { display: flex; justify-content: center; }
+    .champ-profile-link { align-self: flex-start; }
+}
+.champ-block-watermark {
+    position: absolute; right: 2.5rem; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--serif); font-style: italic;
+    font-size: 12rem; line-height: 1;
+    color: var(--gold); opacity: .04;
+    pointer-events: none; user-select: none;
+}
+.champ-seal { width: 140px; height: 140px; flex-shrink: 0; }
+
+.champ-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .75rem;
+}
+.champ-team-name {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: .95; letter-spacing: -.03em;
+    color: var(--cream);
+    margin-bottom: .6rem;
+}
+.champ-owner-name {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-soft); margin-bottom: 1rem;
+}
+.champ-facts {
+    display: flex; flex-wrap: wrap; gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ink-line-soft);
+}
+.champ-fact-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .2rem;
+}
+.champ-fact-val {
+    font-family: var(--serif);
+    font-size: 1.4rem; line-height: 1;
+    color: var(--gold);
+}
+.champ-profile-link {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    padding: .7rem 1.2rem;
+    border: 1px solid rgba(232,200,137,.3);
+    background: rgba(232,200,137,.06);
+    transition: background .2s, border-color .2s;
+    white-space: nowrap; flex-shrink: 0; align-self: center;
+}
+.champ-profile-link:hover { background: rgba(232,200,137,.12); border-color: rgba(232,200,137,.5); }
+.champ-profile-link .arrow { transition: transform .25s; display: inline-block; }
+.champ-profile-link:hover .arrow { transform: translateX(3px); }
+
+/* ─── Podium — three tinted cards ─── */
+.podium-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+}
+@media (max-width: 700px) { .podium-grid { grid-template-columns: 1fr; } }
+
+.podium-card {
+    padding: 1.75rem 1.5rem;
+    position: relative; overflow: hidden;
+    border: 1px solid;
+    text-decoration: none; color: inherit;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s;
+    display: block;
+}
+.podium-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.35); }
+
+.podium-card.first {
+    background: linear-gradient(145deg, rgba(232,200,137,.13), rgba(232,200,137,.04));
+    border-color: rgba(232,200,137,.35);
+}
+.podium-card.second {
+    background: linear-gradient(145deg, rgba(176,184,192,.1), rgba(176,184,192,.03));
+    border-color: rgba(176,184,192,.25);
+}
+.podium-card.third {
+    background: linear-gradient(145deg, rgba(160,120,72,.1), rgba(160,120,72,.03));
+    border-color: rgba(160,120,72,.25);
+}
+
+.podium-medal-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+    margin-bottom: .9rem;
+}
+.first  .podium-medal-label { color: var(--gold); }
+.second .podium-medal-label { color: #9eaab3; }
+.third  .podium-medal-label { color: #a07848; }
+
+.podium-place-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 4.5rem; line-height: .85; letter-spacing: -.04em;
+    margin-bottom: .75rem;
+}
+.first  .podium-place-num { color: var(--gold); }
+.second .podium-place-num { color: #8e9aa3; }
+.third  .podium-place-num { color: #957040; }
+
+.podium-team {
+    font-family: var(--serif);
+    font-size: 1.35rem; line-height: 1.1; letter-spacing: -.01em;
+    color: var(--cream); margin-bottom: .3rem;
+}
+.podium-owner {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.podium-record {
+    font-family: var(--mono);
+    font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--cream-mute); margin-top: .5rem;
+}
+
+/* ─── Full standings — dark background ─── */
+.standings-cream-wrap {
+    padding: 0;
+}
+
+.standings-table-wrap {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+    overflow-x: auto;
+}
+table.season-standings {
+    width: 100%; border-collapse: collapse;
+}
+table.season-standings thead {
+    background: var(--ink-soft);
+    border-bottom: 1px solid var(--ink-line);
+}
+table.season-standings th {
+    padding: .85rem 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute); text-align: left; white-space: nowrap;
+}
+table.season-standings th.num { text-align: right; }
+table.season-standings td {
+    padding: .9rem 1rem;
+    border-top: 1px solid var(--ink-line-soft);
+    font-size: .88rem; color: var(--cream-soft);
+    vertical-align: middle; white-space: nowrap;
+}
+table.season-standings td.num {
+    text-align: right; font-variant-numeric: tabular-nums;
+}
+table.season-standings td.final-rank {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; text-align: center; width: 2.5rem;
+}
+table.season-standings td.final-rank.gold   { color: var(--gold); }
+table.season-standings td.final-rank.silver { color: #b0b8c0; }
+table.season-standings td.final-rank.bronze { color: #a07848; }
+table.season-standings td.final-rank.plain  { color: var(--cream-mute); }
+
+table.season-standings td.team-name { color: var(--cream); font-weight: 500; min-width: 160px; }
+table.season-standings td.owner-link { min-width: 90px; }
+table.season-standings td.owner-link a {
+    font-family: var(--serif);
+    font-size: .95rem; color: var(--cream-soft);
+    text-decoration: none; transition: color .2s;
+}
+table.season-standings td.owner-link a:hover { color: var(--gold); }
+table.season-standings td.record {
+    font-family: var(--mono); font-weight: 700; font-size: .78rem;
+}
+table.season-standings td.winpct {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1rem; color: var(--gold);
+}
+table.season-standings td.pf-high { color: var(--gold); font-weight: 600; }
+table.season-standings td.diff-pos { color: #8aad48; }
+table.season-standings td.diff-neg { color: var(--rust); }
+table.season-standings td.diff-neu { color: var(--cream-mute); }
+table.season-standings tbody tr.podium-row { background: rgba(232,200,137,.04); }
+table.season-standings tbody tr:hover { background: rgba(232,200,137,.03); }
+
+.rank-delta {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .05em;
+}
+.rank-delta.up   { color: #8aad48; }
+.rank-delta.down { color: var(--rust); }
+.rank-delta.same { color: var(--cream-mute); }
+
+/* ─── Conference split (2025) ─── */
+.conf-toggle-bar {
+    display: flex; align-items: center; gap: .75rem;
+    margin-bottom: 1.5rem;
+}
+.conf-toggle-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.conf-btn {
+    background: none;
+    border: 1px solid var(--ink-line);
+    color: var(--cream-mute);
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+    padding: .45rem .85rem;
+    cursor: pointer; transition: all .2s; border-radius: 2px;
+}
+.conf-btn:hover { color: var(--cream); border-color: rgba(232,200,137,.3); }
+.conf-btn.active {
+    color: var(--gold);
+    background: rgba(232,200,137,.08);
+    border-color: rgba(232,200,137,.3);
+}
+.conf-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: .9rem 0 .6rem;
+    margin-top: 1.75rem;
+    border-bottom: 2px solid var(--ink-line);
+    margin-bottom: .75rem;
+}
+.conf-header:first-of-type { margin-top: 0; }
+.conf-name {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.3rem; color: var(--cream);
+}
+.conf-teams {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+/* ─── Error / loading ─── */
+.error-state, .loading-state {
+    text-align: center; padding: 4rem 2rem;
+}
+.error-state h1, .loading-state h1 {
+    font-family: var(--serif); font-style: italic;
+    font-size: 3rem; color: var(--cream); margin-bottom: 1rem;
+}
+.error-state p, .loading-state p {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.2rem; color: var(--cream-soft); margin-bottom: 1.5rem;
+}
+.error-state a {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<!-- TICKER (populated by JS) -->
+<div class="ticker">
+    <div class="ticker-track">
+        <div class="ticker-group" id="ticker-a">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE MILK SOCIETY · SEASON ARCHIVE</span>
+        </div>
+        <div class="ticker-group" id="ticker-b">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE MILK SOCIETY · SEASON ARCHIVE</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <a href="index.html" class="nav-back" id="nav-back-link">← Season Archives</a>
+    <div class="nav-center">
+        <div class="nav-kicker">CH. III · ARCHIVES</div>
+        <div class="nav-title" id="nav-year">The <em>Society.</em></div>
+    </div>
+    <div class="nav-drop" id="nav-drop">
+        <button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>
+        <div class="nav-drop-menu">
+            <span class="nav-drop-label">Go to</span>
+            <a href="../index.html">The Hub</a>
+            <a href="index.html" class="current">Season Archives</a>
+            <a href="../managers/index.html">Managers</a>
+            <a href="../standings.html">Standings</a>
+            <a href="../records.html">Record Book</a>
+        </div>
+    </div>
+</nav>
+
+<!-- PAGE BODY (rendered by JS) -->
+<div id="page-body">
+    <div class="loading-state">
+        <h1>Loading…</h1>
+        <p>Fetching the archive.</p>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <span>The Milk Society · <em>PAMS</em> · Since MMXIX</span>
+</footer>
+
+
+<script>
+// Context-aware back link: if arriving from the hub via ?ref=hub, go back to the hub
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('ref') === 'hub') {
+        const link = document.getElementById('nav-back-link');
+        link.href = '../index.html';
+        link.textContent = '← The Hub';
+    }
+})();
+
+function toggleDrop() {
+    document.getElementById('nav-drop').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+    const drop = document.getElementById('nav-drop');
+    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+});
+
+const ALL_YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
+
+const SEASON_BLURBS = {
+    2019: `The founding year. Fourteen managers, one title up for grabs. <strong>Mason</strong> had the best regular season record going in — then <strong>Joey</strong> crashed the party and took the first-ever chip right out from under him.`,
+    2020: `<strong>Andrew</strong> came in through the back door — 5th seed, 7–6, under the radar. Nobody picked Huntingforkickers. Nobody stopped them either.`,
+    2021: `The year the scoreboard broke. <strong>Chris</strong> ran the table from the 2nd seed while the league set records all around him — same season someone dropped 200 points in a single week.`,
+    2022: `<strong>Isaac</strong> went 7–7 in the regular season and snuck in as the 6th seed. He left as champion. Pat Bateman doesn't lose in December.`,
+    2023: `After years of knocking, <strong>Connie</strong> finally kicked the door down. The Milk Man's postseason run was the cleanest the league had seen — and long overdue.`,
+    2024: `<strong>Luke</strong>'s GLIZZYS had no business being here — 5th seed, overlooked, disrespected. Four playoff wins later, they were champions.`,
+    2025: `<strong>Mason</strong> and the Rizzlers left nothing to chance. Top seed, best record, and the last team standing. No upsets, no debate, no asterisks.`,
+};
+
+function toRoman(n) {
+    const vals = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],
+                  [50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+    let r = '';
+    for (const [v, s] of vals) { while (n >= v) { r += s; n -= v; } }
+    return r;
+}
+
+function miniSeal(year) {
+    const id = `s${year}`;
+    return `<svg class="champ-seal" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path id="tA${id}" d="M 20,100 A 80,80 0 0 1 180,100" fill="none"/>
+            <path id="bA${id}" d="M 24,108 A 76,76 0 0 0 176,108" fill="none"/>
+        </defs>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#a88a4a" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="100" cy="100" r="86" fill="none" stroke="#a88a4a" stroke-width="0.5" opacity="0.8"/>
+        <g fill="#a88a4a">
+            <circle cx="100" cy="14" r="1.5"/><circle cx="186" cy="100" r="1.5"/>
+            <circle cx="100" cy="186" r="1.5"/><circle cx="14" cy="100" r="1.5"/>
+        </g>
+        <text fill="#a88a4a" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" letter-spacing="3">
+            <textPath href="#tA${id}" startOffset="50%" text-anchor="middle">★ PAMS · CHAMPION ·</textPath>
+        </text>
+        <text fill="#a88a4a" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" letter-spacing="3">
+            <textPath href="#bA${id}" startOffset="50%" text-anchor="middle">${toRoman(year)}</textPath>
+        </text>
+        <g fill="#a88a4a">
+            <polygon points="100,42 102,49 109,49 103,53 105,60 100,56 95,60 97,53 91,49 98,49"/>
+        </g>
+        <text x="100" y="125" style="fill: var(--cream)" font-family="DM Serif Display,serif" font-style="italic"
+              font-size="58" letter-spacing="-0.04em" text-anchor="middle">I</text>
+        <line x1="78" y1="138" x2="122" y2="138" stroke="#a88a4a" stroke-width="0.8"/>
+        <text x="100" y="152" fill="#837b6a" font-family="JetBrains Mono,monospace"
+              font-size="6.5" font-weight="700" letter-spacing="2" text-anchor="middle">${year}</text>
+    </svg>`;
+}
+
+function rankClass(r) {
+    if (r === 1) return 'gold';
+    if (r === 2) return 'silver';
+    if (r === 3) return 'bronze';
+    return 'plain';
+}
+function fmtPct(p) { return p.toFixed(3).replace(/^0\./, '.'); }
+
+function showError(msg) {
+    document.getElementById('page-body').innerHTML = `
+        <div class="error-state">
+            <h1>Season not found.</h1>
+            <p>${msg}</p>
+            <a href="index.html">← All seasons</a>
+        </div>`;
+}
+
+function buildStandingsSection(s) {
+    const maxPF = Math.max(...s.standings.map(t => t.points_for));
+
+    function buildRow(t) {
+        const diff = t.points_for - t.points_against;
+        const diffCls = diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : 'diff-neu';
+        const pfCls = t.points_for === maxPF ? 'pf-high' : '';
+        const delta = t.reg_season_rank != null ? t.reg_season_rank - t.final_rank : null;
+        let deltaHTML = '';
+        if (delta !== null) {
+            if (delta > 0)      deltaHTML = `<span class="rank-delta up">↑${delta}</span>`;
+            else if (delta < 0) deltaHTML = `<span class="rank-delta down">↓${Math.abs(delta)}</span>`;
+            else                deltaHTML = `<span class="rank-delta same">—</span>`;
+        }
+        return `<tr class="${t.final_rank <= 3 ? 'podium-row' : ''}">
+            <td class="final-rank ${rankClass(t.final_rank)}">${t.final_rank}</td>
+            <td class="team-name">${t.team_name}</td>
+            <td class="owner-link"><a href="../managers/manager.html?id=${t.owner_user_id}">${t.owner_name}</a></td>
+            <td class="record num">${t.wins}–${t.losses}${t.ties ? '–'+t.ties : ''}</td>
+            <td class="winpct num">${fmtPct(t.win_pct)}</td>
+            <td class="num ${pfCls}">${t.points_for.toFixed(1)}</td>
+            <td class="num">${t.points_against.toFixed(1)}</td>
+            <td class="num ${diffCls}">${diff >= 0 ? '+' : ''}${diff.toFixed(1)}</td>
+            <td class="num">${t.reg_season_rank ?? '—'}</td>
+            <td class="num">${deltaHTML}</td>
+        </tr>`;
+    }
+
+    const thead = `<thead><tr>
+        <th class="num">Finish</th><th>Team</th><th>Manager</th>
+        <th class="num">Record</th><th class="num">Win %</th>
+        <th class="num">PF</th><th class="num">PA</th><th class="num">+/−</th>
+        <th class="num">Seed</th><th class="num">Δ</th>
+    </tr></thead>`;
+
+    function buildTable(teams) {
+        const rows = [...teams].sort((a, b) => a.final_rank - b.final_rank).map(buildRow).join('');
+        return `<div class="standings-table-wrap">
+            <table class="season-standings">${thead}<tbody>${rows}</tbody></table>
+        </div>`;
+    }
+
+    if (s.year === 2025) {
+        const whole = s.standings.filter(t => t.division === 'Whole');
+        const skim  = s.standings.filter(t => t.division === 'Skim');
+        return `
+            <div class="standings-cream-wrap">
+                <div class="conf-toggle-bar" id="conf-toggle-bar">
+                    <span class="conf-toggle-label">View —</span>
+                    <button class="conf-btn active" data-view="split">By Conference</button>
+                    <button class="conf-btn" data-view="combined">Combined</button>
+                </div>
+                <div id="view-split">
+                    <div class="conf-header">
+                        <span class="conf-name">Whole Conference</span>
+                        <span class="conf-teams">${whole.length} teams</span>
+                    </div>
+                    ${buildTable(whole)}
+                    <div class="conf-header">
+                        <span class="conf-name">Skim Conference</span>
+                        <span class="conf-teams">${skim.length} teams</span>
+                    </div>
+                    ${buildTable(skim)}
+                </div>
+                <div id="view-combined" style="display:none;">
+                    ${buildTable(s.standings)}
+                </div>
+            </div>`;
+    }
+
+    return `<div class="standings-cream-wrap">${buildTable(s.standings)}</div>`;
+}
+
+async function loadSeason() {
+    const year = parseInt(new URLSearchParams(window.location.search).get('year'));
+    if (!year) return showError('No year specified in the URL.');
+
+    let s;
+    try {
+        const res = await fetch(`../data/seasons/${year}.json`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        s = await res.json();
+    } catch (e) {
+        return showError(`Couldn't load the ${year} season (${e.message}).`);
+    }
+
+    document.title = `${year} Season · The Milk Society`;
+    document.getElementById('nav-year').innerHTML = `${year} <em>Season.</em>`;
+
+    ['ticker-a', 'ticker-b'].forEach(id => {
+        document.getElementById(id).innerHTML = `
+            <span class="ticker-item"><span class="ticker-star">★</span> ${year} SEASON · THE MILK SOCIETY</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> CHAMPION · ${s.champion.owner_name.toUpperCase()} · ${s.champion.team_name.toUpperCase()}</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> ${s.total_teams} TEAMS · VOL. ${toRoman(year - 2018)}</span>
+        `;
+    });
+
+    const totalPF    = s.standings.reduce((t, r) => t + r.points_for, 0);
+    const totalGames = s.standings.reduce((t, r) => t + r.wins + r.losses + r.ties, 0) / 2;
+    const avgPPG     = totalPF / (totalGames * 2);
+    const highTeam   = [...s.standings].sort((a, b) => b.points_for - a.points_for)[0];
+    const mostWins   = [...s.standings].sort((a, b) => b.wins - a.wins)[0];
+
+    const idx = ALL_YEARS.indexOf(year);
+    const prevYear = idx > 0 ? ALL_YEARS[idx - 1] : null;
+    const nextYear = idx < ALL_YEARS.length - 1 ? ALL_YEARS[idx + 1] : null;
+    const yearNavHTML = [
+        prevYear ? `<a href="season.html?year=${prevYear}" class="hero-nav-year">← ${prevYear}</a>` : '',
+        nextYear ? `<a href="season.html?year=${nextYear}" class="hero-nav-year">${nextYear} →</a>` : '',
+        `<a href="index.html" class="hero-nav-year">All seasons →</a>`,
+    ].filter(Boolean).join('');
+
+    const podiumDefs = [
+        { cls: 'first',  roman: 'I',   label: '★ Champion',    rank: 1 },
+        { cls: 'second', roman: 'II',  label: '● Runner-Up',   rank: 2 },
+        { cls: 'third',  roman: 'III', label: '▲ Third Place', rank: 3 },
+    ];
+    const podiumHTML = podiumDefs.map(p => {
+        const t = s.standings.find(r => r.final_rank === p.rank);
+        if (!t) return '';
+        return `<a href="../managers/manager.html?id=${t.owner_user_id}" class="podium-card ${p.cls}">
+            <div class="podium-medal-label">${p.label}</div>
+            <div class="podium-place-num">${p.roman}</div>
+            <div class="podium-team">${t.team_name}</div>
+            <div class="podium-owner">${t.owner_name}</div>
+            <div class="podium-record">${t.wins}–${t.losses} · ${t.points_for.toFixed(1)} PF</div>
+        </a>`;
+    }).join('');
+
+    const blurb = SEASON_BLURBS[year] ?? `<strong>${s.champion.owner_name}</strong> claimed the ${year} title with ${s.champion.team_name}.`;
+
+    document.getElementById('page-body').innerHTML = `
+
+        <div class="season-hero">
+            <div class="hero-left">
+                <div class="hero-kicker">★ Vol. ${toRoman(year - 2018)} · The Milk Society · ${year} ★</div>
+                <div class="hero-year">${year}</div>
+                <p class="hero-sub">${blurb}</p>
+            </div>
+            <div class="hero-right">${yearNavHTML}</div>
+        </div>
+
+        <div class="season-strip">
+            <div class="strip-inner">
+                <div class="strip-cell">
+                    <div class="strip-label">Teams</div>
+                    <div class="strip-val cream">${s.total_teams}</div>
+                </div>
+                <div class="strip-cell">
+                    <div class="strip-label">Total Points</div>
+                    <div class="strip-val">${Math.round(totalPF).toLocaleString()}</div>
+                </div>
+                <div class="strip-cell">
+                    <div class="strip-label">Avg Per Game</div>
+                    <div class="strip-val">${avgPPG.toFixed(1)}</div>
+                </div>
+                <div class="strip-cell">
+                    <div class="strip-label">Most Points</div>
+                    <div class="strip-val">${Math.round(highTeam.points_for)}</div>
+                    <div class="strip-detail">${highTeam.owner_name}</div>
+                </div>
+                <div class="strip-cell">
+                    <div class="strip-label">Most Wins</div>
+                    <div class="strip-val">${mostWins.wins}</div>
+                    <div class="strip-detail">${mostWins.owner_name}</div>
+                </div>
+                <div class="strip-cell">
+                    <div class="strip-label">Champ Record</div>
+                    <div class="strip-val">${s.champion.record ?? '—'}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" style="margin-top: 3rem;">
+            <div class="section-header">
+                <span class="section-num">§ 01 · Champion</span>
+                <span class="section-title">The ${year} title —</span>
+                <span class="section-meta">Final result</span>
+            </div>
+            <div class="champ-block">
+                <div class="champ-seal-wrap">${miniSeal(year)}</div>
+                <div class="champ-content">
+                    <div class="champ-kicker">★ ${year} · League Champion ★</div>
+                    <div class="champ-team-name">${s.champion.team_name}</div>
+                    <div class="champ-owner-name">${s.champion.owner_name}</div>
+                    <div class="champ-facts">
+                        ${s.champion.record ? `<div class="champ-fact"><div class="champ-fact-label">Record</div><div class="champ-fact-val">${s.champion.record}</div></div>` : ''}
+                        ${s.champion.points_for ? `<div class="champ-fact"><div class="champ-fact-label">Points For</div><div class="champ-fact-val">${s.champion.points_for.toFixed(1)}</div></div>` : ''}
+                        ${s.runner_up?.owner_name ? `<div class="champ-fact"><div class="champ-fact-label">Runner-Up</div><div class="champ-fact-val" style="font-size:1.1rem;">${s.runner_up.owner_name}</div></div>` : ''}
+                        ${s.third_place?.owner_name ? `<div class="champ-fact"><div class="champ-fact-label">Third Place</div><div class="champ-fact-val" style="font-size:1.1rem;">${s.third_place.owner_name}</div></div>` : ''}
+                    </div>
+                </div>
+                <a href="../managers/manager.html?id=${s.champion.owner_user_id}" class="champ-profile-link">
+                    View profile <span class="arrow">→</span>
+                </a>
+                <div class="champ-block-watermark">★</div>
+            </div>
+        </div>
+
+        <div class="section" style="margin-top: 3rem;">
+            <div class="section-header">
+                <span class="section-num">§ 02 · Podium</span>
+                <span class="section-title">Top three —</span>
+                <span class="section-meta">Final finish</span>
+            </div>
+            <div class="podium-grid">${podiumHTML}</div>
+        </div>
+
+        <div class="section" style="margin-top: 3rem; margin-bottom: 4rem;">
+            <div class="section-header">
+                <span class="section-num">§ 03 · Standings</span>
+                <span class="section-title">Final table —</span>
+                <span class="section-meta">${s.total_teams} managers</span>
+            </div>
+            ${buildStandingsSection(s)}
+        </div>
+
+    `;
+
+    // Wire up 2025 conference toggle
+    const toggleBar = document.getElementById('conf-toggle-bar');
+    if (toggleBar) {
+        toggleBar.addEventListener('click', e => {
+            const btn = e.target.closest('.conf-btn');
+            if (!btn) return;
+            toggleBar.querySelectorAll('.conf-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const view = btn.dataset.view;
+            document.getElementById('view-split').style.display    = view === 'split'    ? '' : 'none';
+            document.getElementById('view-combined').style.display = view === 'combined' ? '' : 'none';
+        });
+    }
+}
+
+loadSeason();
+</script>
+
+</body>
+</html>

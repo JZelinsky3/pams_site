@@ -229,12 +229,22 @@
 </div>
 
 <nav class="nav">
-    <a href="index.html" class="nav-back">← All Managers</a>
+    <a href="index.html" class="nav-back">← Managers</a>
     <div class="nav-center">
         <div class="nav-kicker">CH. II · PROFILE</div>
         <div class="nav-title" id="nav-name">The <em>Society.</em></div>
     </div>
-    <a href="../index.html" class="nav-link">The Hub →</a>
+    <div class="nav-drop" id="nav-drop">
+        <button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>
+        <div class="nav-drop-menu">
+            <span class="nav-drop-label">Go to</span>
+            <a href="../index.html">The Hub</a>
+            <a href="index.html" class="current">Managers</a>
+            <a href="../seasons/index.html">Season Archives</a>
+            <a href="../standings.html">Standings</a>
+            <a href="../records.html">Record Book</a>
+        </div>
+    </div>
 </nav>
 
 <div id="profile-body">
@@ -250,6 +260,14 @@
 
 
 <script>
+function toggleDrop() {
+    document.getElementById('nav-drop').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+    const drop = document.getElementById('nav-drop');
+    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+});
+
 function getUserIdFromURL() {
     return new URLSearchParams(window.location.search).get('id');
 }

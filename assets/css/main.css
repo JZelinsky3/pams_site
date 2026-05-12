@@ -130,6 +130,56 @@ body {
 }
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 
+/* ─── Nav dropdown ─── */
+.nav-drop {
+    position: relative;
+    justify-self: end;
+}
+.nav-drop-btn {
+    color: var(--gold); text-decoration: none;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    background: none; border: none; cursor: pointer; padding: 0;
+    transition: color .2s;
+    display: flex; align-items: center; gap: .4rem;
+}
+.nav-drop-btn:hover { color: var(--gold-bright); }
+.nav-drop-btn .drop-arrow {
+    font-size: .9rem; transition: transform .2s;
+    display: inline-block;
+}
+.nav-drop.open .drop-arrow { transform: rotate(180deg); }
+
+.nav-drop-menu {
+    display: none;
+    position: absolute; top: calc(100% + .75rem); right: 0;
+    background: rgba(14,22,32,.97);
+    border: 1px solid var(--ink-line);
+    border-radius: 3px;
+    min-width: 180px;
+    backdrop-filter: blur(12px);
+    z-index: 50;
+    overflow: hidden;
+}
+.nav-drop.open .nav-drop-menu { display: block; }
+.nav-drop-menu a {
+    display: block; padding: .7rem 1.1rem;
+    color: var(--cream-soft); text-decoration: none;
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    border-bottom: 1px solid var(--ink-line-soft);
+    transition: background .15s, color .15s;
+}
+.nav-drop-menu a:last-child { border-bottom: none; }
+.nav-drop-menu a:hover { background: rgba(232,200,137,.07); color: var(--gold); }
+.nav-drop-menu a.current { color: var(--gold); pointer-events: none; }
+.nav-drop-label {
+    display: block; padding: .45rem 1.1rem .3rem;
+    font-family: var(--mono); font-size: .55rem;
+    letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute); border-bottom: 1px solid var(--ink-line-soft);
+}
+
 /* ============================================================
    HERO
    ============================================================ */

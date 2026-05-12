@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Record Book · The Milk Society</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+/* ============================================================
+   RECORD BOOK
+   ============================================================ */
+
+.page-header {
+    text-align: center;
+    padding: 3.5rem 1.5rem 2.5rem;
+    max-width: 900px; margin: 0 auto;
+    position: relative; z-index: 10;
+}
+.page-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+}
+.page-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: .95; letter-spacing: -.025em;
+    color: var(--cream); margin-bottom: 1rem;
+}
+.page-title em { font-style: italic; color: var(--gold); }
+.page-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.2rem; line-height: 1.5;
+    color: var(--cream-soft); max-width: 540px; margin: 0 auto;
+}
+
+/* ─── Section chrome ─── */
+.rec-section {
+    margin-bottom: 4rem;
+}
+.rec-section-header {
+    display: flex; align-items: baseline; gap: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--ink-line);
+    margin-bottom: 1.5rem;
+}
+.rec-section-num {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); flex-shrink: 0;
+}
+.rec-section-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.7rem; letter-spacing: -.02em;
+    color: var(--cream);
+}
+.rec-section-note {
+    margin-left: auto; flex-shrink: 0;
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+/* ─── Streak leaderboards ─── */
+.streak-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+@media (max-width: 700px) { .streak-grid { grid-template-columns: 1fr; } }
+
+.streak-board {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+}
+.streak-board-header {
+    display: flex; align-items: center; gap: .75rem;
+    padding: 1rem 1.25rem .85rem;
+    border-bottom: 1px solid var(--ink-line);
+    background: var(--ink-soft);
+}
+.streak-board-icon { font-size: 1rem; }
+.streak-board-title {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .25em; text-transform: uppercase;
+}
+.streak-board.wins  .streak-board-title { color: var(--gold); }
+.streak-board.losses .streak-board-title { color: var(--rust); }
+
+.streak-row {
+    display: grid;
+    grid-template-columns: 1.8rem 1fr auto;
+    align-items: center;
+    gap: .75rem;
+    padding: .85rem 1.25rem;
+    border-bottom: 1px solid var(--ink-line-soft);
+    transition: background .15s;
+}
+.streak-row:last-child { border-bottom: none; }
+.streak-row:hover { background: rgba(232,200,137,.03); }
+
+.streak-rank {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .1em;
+    color: var(--cream-mute); text-align: right;
+}
+.streak-rank.gold   { color: var(--gold); }
+
+.streak-name-col { min-width: 0; }
+.streak-name {
+    font-family: var(--serif);
+    font-size: 1.05rem; line-height: 1.1;
+    color: var(--cream);
+}
+.streak-when {
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .2rem;
+}
+
+.streak-count {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.4rem; line-height: 1; letter-spacing: -.04em;
+    flex-shrink: 0;
+}
+.streak-board.wins  .streak-count { color: var(--gold); }
+.streak-board.losses .streak-count { color: var(--rust); }
+
+.streak-note {
+    padding: .75rem 1.25rem;
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cream-mute);
+    border-top: 1px dotted var(--ink-line);
+    background: var(--ink-soft);
+}
+
+/* ─── Record cells grid ─── */
+.rec-cells {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+@media (max-width: 900px) { .rec-cells { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .rec-cells { grid-template-columns: 1fr; } }
+
+.rec-cell {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+    padding: 1.4rem 1.5rem;
+    position: relative; overflow: hidden;
+}
+.rec-cell::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold); opacity: .4;
+}
+.rec-cell-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .6rem;
+}
+.rec-cell-value {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.2rem; line-height: 1; letter-spacing: -.03em;
+    color: var(--gold); margin-bottom: .4rem;
+}
+.rec-cell-holder {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream);
+}
+.rec-cell-detail {
+    font-family: var(--mono);
+    font-size: .58rem; letter-spacing: .12em;
+    color: var(--cream-mute);
+    margin-top: .2rem;
+}
+
+/* ─── Career ranked table ─── */
+.career-table-wrap {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+    overflow-x: auto;
+}
+table.career-table {
+    width: 100%; border-collapse: collapse;
+}
+table.career-table thead {
+    background: var(--ink-soft);
+    border-bottom: 1px solid var(--ink-line);
+}
+table.career-table th {
+    padding: .8rem 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute); text-align: left; white-space: nowrap;
+}
+table.career-table th.num { text-align: right; }
+table.career-table td {
+    padding: .85rem 1rem;
+    border-top: 1px solid var(--ink-line-soft);
+    font-size: .88rem; color: var(--cream-soft);
+    vertical-align: middle; white-space: nowrap;
+}
+table.career-table td.r {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; color: var(--cream-mute);
+    text-align: center; width: 2rem;
+}
+table.career-table td.r.gold { color: var(--gold); }
+table.career-table td.name-link a {
+    font-family: var(--serif); font-size: 1.05rem;
+    color: var(--cream); text-decoration: none; transition: color .2s;
+}
+table.career-table td.name-link a:hover { color: var(--gold); }
+table.career-table td.hi {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1rem; color: var(--gold);
+}
+table.career-table td.num {
+    text-align: right; font-variant-numeric: tabular-nums;
+}
+table.career-table tbody tr:hover { background: rgba(232,200,137,.03); }
+
+/* ─── Championships banner ─── */
+.chips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+}
+.chip-entry {
+    padding: 1.4rem 1.5rem;
+    border-right: 1px solid var(--ink-line-soft);
+    border-bottom: 1px solid var(--ink-line-soft);
+    display: flex; flex-direction: column; gap: .4rem;
+}
+.chip-entry-chips {
+    display: flex; gap: .25rem; align-items: center;
+}
+.chip-star-icon { font-size: 1.1rem; color: var(--gold); line-height: 1; }
+.chip-entry-name {
+    font-family: var(--serif);
+    font-size: 1.35rem; line-height: 1;
+    color: var(--cream);
+}
+.chip-entry-seasons {
+    font-family: var(--mono);
+    font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--gold);
+}
+.chip-entry-record {
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .1rem;
+}
+
+.loading-state {
+    text-align: center; padding: 4rem 2rem;
+    font-family: var(--serif); font-style: italic;
+    color: var(--cream-mute);
+}
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<!-- TICKER -->
+<div class="ticker">
+    <div class="ticker-track">
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE RECORD BOOK · THE MILK SOCIETY</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · EVERY RECORD</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> WIN STREAKS · SEASON BESTS · ALL-TIME MARKS</span>
+        </div>
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE RECORD BOOK · THE MILK SOCIETY</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · EVERY RECORD</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> WIN STREAKS · SEASON BESTS · ALL-TIME MARKS</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <a href="index.html" class="nav-back">← The Hub</a>
+    <div class="nav-center">
+        <div class="nav-kicker">CH. IV · RECORDS</div>
+        <div class="nav-title">The <em>Society.</em></div>
+    </div>
+    <div class="nav-drop" id="nav-drop">
+        <button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>
+        <div class="nav-drop-menu">
+            <span class="nav-drop-label">Go to</span>
+            <a href="index.html">The Hub</a>
+            <a href="records.html" class="current">Record Book</a>
+            <a href="managers/index.html">Managers</a>
+            <a href="seasons/index.html">Season Archives</a>
+            <a href="standings.html">Standings</a>
+        </div>
+    </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-kicker">★ Seven Seasons · All-Time Marks ★</div>
+    <h1 class="page-title">The Record <em>Book.</em></h1>
+    <p class="page-sub">
+        Streaks, season bests, and career milestones — every mark that defines the society.
+    </p>
+</div>
+
+<div id="page-body">
+    <div class="loading-state">Loading records…</div>
+</div>
+
+<footer class="site-footer">
+    <span>The Milk Society · <em>PAMS</em> · Since MMXIX</span>
+</footer>
+
+
+<script>
+function toggleDrop() {
+    document.getElementById('nav-drop').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+    const drop = document.getElementById('nav-drop');
+    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+});
+
+async function load() {
+    try {
+        const dirRes = await fetch('data/managers_directory.json');
+        if (!dirRes.ok) throw new Error(`HTTP ${dirRes.status}`);
+        const dir = await dirRes.json();
+
+        const details = await Promise.all(
+            dir.managers.map(m =>
+                fetch(`data/managers/${m.user_id}.json`)
+                    .then(r => r.ok ? r.json() : null)
+                    .catch(() => null)
+            )
+        );
+
+        // Merge directory data (win_pct, total_pf, wins/losses/ties, etc.)
+        // with detail data (season_ledger, streaks, high_score).
+        // Directory fields are the source of truth for career aggregates.
+        const managers = dir.managers.map((dirMgr, i) => {
+            const detail = details[i];
+            if (!detail) return null;
+            return { ...detail, ...dirMgr };   // dirMgr wins on overlap
+        }).filter(Boolean);
+
+        render(managers);
+    } catch (err) {
+        document.getElementById('page-body').innerHTML =
+            `<div class="loading-state" style="color:var(--rust);">
+                Couldn't load records.<br><small>${err.message}</small>
+             </div>`;
+    }
+}
+
+// Parse "W-L-T" string → {w, l, t, pct}
+function parseRecord(str) {
+    if (!str) return { w: 0, l: 0, t: 0, pct: 0 };
+    const [w, l, t = 0] = str.split('-').map(Number);
+    const pct = (w + l + t) > 0 ? (w + (t * 0.5)) / (w + l + t) : 0;
+    return { w, l, t, pct };
+}
+
+function fmtPct(p) { return (p ?? 0).toFixed(3).replace(/^0\./, '.'); }
+function fmtPts(n) { return Math.round(n).toLocaleString(); }
+
+function render(managers) {
+    // ── Build all computed data ──────────────────────────────
+
+    // Single-season records: expand season ledgers
+    const allSeasons = [];
+    managers.forEach(m => {
+        (m.season_ledger || []).forEach(s => {
+            const reg = parseRecord(s.reg_record);
+            allSeasons.push({
+                name: m.name,
+                user_id: m.user_id,
+                year: s.year,
+                team: s.team_name,
+                reg_w: reg.w, reg_l: reg.l,
+                reg_pct: reg.pct,
+                reg_pf: s.reg_pf || 0,
+                total_pf: s.total_pf || 0,
+                high_score: s.high_week_score || 0,
+                low_score: s.low_week_score || 0,
+                final_rank: s.final_rank,
+            });
+        });
+    });
+
+    // ── § 01 Streaks ───────────────────────────────────────
+    const winStreaks  = managers
+        .filter(m => m.longest_win_streak?.length > 0)
+        .map(m => ({ name: m.name, user_id: m.user_id, ...m.longest_win_streak }))
+        .sort((a, b) => b.length - a.length);
+
+    const lossStreaks = managers
+        .filter(m => m.longest_loss_streak?.length > 0)
+        .map(m => ({ name: m.name, user_id: m.user_id, ...m.longest_loss_streak }))
+        .sort((a, b) => b.length - a.length);
+
+    // ── § 02 Single-season bests ───────────────────────────
+    const mostWins   = [...allSeasons].sort((a, b) => b.reg_w - a.reg_w || b.reg_pct - a.reg_pct)[0];
+    const bestPct    = [...allSeasons].filter(s => s.reg_w + s.reg_l >= 10)
+                        .sort((a, b) => b.reg_pct - a.reg_pct)[0];
+    const mostPF     = [...allSeasons].sort((a, b) => b.reg_pf - a.reg_pf)[0];
+    const highGame   = [...allSeasons].sort((a, b) => b.high_score - a.high_score)[0];
+    const worstRec   = [...allSeasons].filter(s => s.reg_w + s.reg_l >= 10)
+                        .sort((a, b) => a.reg_pct - b.reg_pct)[0];
+    const mostLosses = [...allSeasons].sort((a, b) => b.reg_l - a.reg_l || a.reg_pct - b.reg_pct)[0];
+
+    // ── § 03 Career records ────────────────────────────────
+    const active = managers.filter(m => m.is_current);
+
+    const byChips  = [...managers].filter(m => m.championships > 0)
+                      .sort((a, b) => b.championships - a.championships || b.win_pct - a.win_pct);
+    const byWinPct = [...active].filter(m => (m.wins + m.losses + (m.ties || 0)) >= 50)
+                      .sort((a, b) => b.win_pct - a.win_pct);
+    const byPF     = [...active].sort((a, b) => b.total_pf - a.total_pf);
+    const byWins   = [...active].sort((a, b) => b.wins - a.wins);
+    const byPlayoffs = [...active].sort((a, b) => b.playoff_appearances - a.playoff_appearances || b.wins - a.wins);
+
+    document.getElementById('page-body').innerHTML = `
+    <div class="section">
+
+        <!-- § 01 STREAKS -->
+        <div class="rec-section">
+            <div class="rec-section-header">
+                <span class="rec-section-num">§ 01</span>
+                <span class="rec-section-title">Win &amp; Loss Streaks</span>
+                <span class="rec-section-note">Reg season + playoffs only · no consolation</span>
+            </div>
+            <div class="streak-grid">
+                ${buildStreakBoard('wins', '🔥', 'Longest Win Streaks', winStreaks)}
+                ${buildStreakBoard('losses', '🩸', 'Longest Loss Streaks', lossStreaks)}
+            </div>
+        </div>
+
+        <!-- § 02 SINGLE SEASON -->
+        <div class="rec-section">
+            <div class="rec-section-header">
+                <span class="rec-section-num">§ 02</span>
+                <span class="rec-section-title">Single Season Records</span>
+                <span class="rec-section-note">Regular season only</span>
+            </div>
+            <div class="rec-cells">
+                ${buildCell('Most Wins', mostWins?.reg_w, mostWins?.name,
+                    `${mostWins?.year} · ${mostWins?.reg_w}–${mostWins?.reg_l}`, mostWins?.user_id)}
+                ${buildCell('Best Win %', fmtPct(bestPct?.reg_pct || 0), bestPct?.name,
+                    `${bestPct?.year} · ${bestPct?.reg_w}–${bestPct?.reg_l}`, bestPct?.user_id)}
+                ${buildCell('Most Points', fmtPts(mostPF?.reg_pf || 0), mostPF?.name,
+                    `${mostPF?.year}`, mostPF?.user_id)}
+                ${buildCell('Highest Score', (highGame?.high_score || 0).toFixed(2), highGame?.name,
+                    `${highGame?.year} · Single game`, highGame?.user_id)}
+                ${buildCell('Most Losses', mostLosses?.reg_l, mostLosses?.name,
+                    `${mostLosses?.year} · ${mostLosses?.reg_w}–${mostLosses?.reg_l}`, mostLosses?.user_id)}
+                ${buildCell('Worst Win %', fmtPct(worstRec?.reg_pct || 0), worstRec?.name,
+                    `${worstRec?.year} · ${worstRec?.reg_w}–${worstRec?.reg_l}`, worstRec?.user_id)}
+            </div>
+        </div>
+
+        <!-- § 03 CAREER -->
+        <div class="rec-section">
+            <div class="rec-section-header">
+                <span class="rec-section-num">§ 03</span>
+                <span class="rec-section-title">Career Records</span>
+                <span class="rec-section-note">Active managers · all-time</span>
+            </div>
+            ${buildCareerTable(byWinPct, byPF, byWins, byPlayoffs)}
+        </div>
+
+        <!-- § 04 CHAMPIONSHIPS -->
+        <div class="rec-section">
+            <div class="rec-section-header">
+                <span class="rec-section-num">§ 04</span>
+                <span class="rec-section-title">Championship Roll</span>
+            </div>
+            <div class="chips-grid">
+                ${byChips.map(m => `
+                    <div class="chip-entry">
+                        <div class="chip-entry-chips">
+                            ${Array(m.championships).fill('<span class="chip-star-icon">★</span>').join('')}
+                        </div>
+                        <div class="chip-entry-name">
+                            <a href="managers/manager.html?id=${m.user_id}" style="color:inherit;text-decoration:none;">${m.name}</a>
+                        </div>
+                        <div class="chip-entry-seasons">${m.championship_seasons.join(' · ')}</div>
+                        <div class="chip-entry-record">${m.wins}–${m.losses} career · .${Math.round(m.win_pct * 1000)} win%</div>
+                    </div>`).join('')}
+            </div>
+        </div>
+
+    </div>`;
+}
+
+function buildStreakBoard(type, icon, title, streaks) {
+    const top = streaks.slice(0, 8);
+    const rows = top.map((s, i) => `
+        <div class="streak-row">
+            <span class="streak-rank${i === 0 ? ' gold' : ''}">${i + 1}</span>
+            <div class="streak-name-col">
+                <div class="streak-name">
+                    <a href="managers/manager.html?id=${s.user_id}" style="color:inherit;text-decoration:none;">${s.name}</a>
+                </div>
+                <div class="streak-when">${s.when}</div>
+            </div>
+            <span class="streak-count">${s.length}</span>
+        </div>`).join('');
+    return `
+        <div class="streak-board ${type}">
+            <div class="streak-board-header">
+                <span class="streak-board-icon">${icon}</span>
+                <span class="streak-board-title">${title}</span>
+            </div>
+            ${rows}
+            <div class="streak-note">★ Reg season + qualifying playoffs only</div>
+        </div>`;
+}
+
+function buildCell(label, value, name, detail, userId) {
+    const nameLink = userId
+        ? `<a href="managers/manager.html?id=${userId}" style="color:inherit;text-decoration:none;">${name}</a>`
+        : name;
+    return `
+        <div class="rec-cell">
+            <div class="rec-cell-label">${label}</div>
+            <div class="rec-cell-value">${value ?? '—'}</div>
+            <div class="rec-cell-holder">${nameLink ?? '—'}</div>
+            <div class="rec-cell-detail">${detail ?? ''}</div>
+        </div>`;
+}
+
+function buildCareerTable(byWinPct, byPF, byWins, byPlayoffs) {
+    // Use win pct as the primary sort table, include other stats as columns
+    const managers = byWins;  // sorted by wins
+    const rows = managers.map((m, i) => {
+        const pct = fmtPct(m.win_pct);
+        const qualPct = (m.wins + m.losses + (m.ties || 0)) >= 50 ? `<span class="hi">${pct}</span>` : pct;
+        return `<tr>
+            <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+            <td class="name-link"><a href="managers/manager.html?id=${m.user_id}">${m.name}</a></td>
+            <td class="num hi">${m.wins}</td>
+            <td class="num">${m.losses}${m.ties ? '–' + m.ties : ''}</td>
+            <td class="num">${qualPct}</td>
+            <td class="num">${fmtPts(m.total_pf)}</td>
+            <td class="num">${m.playoff_appearances}</td>
+            <td class="num">${m.championships > 0 ? '★'.repeat(m.championships) : '—'}</td>
+        </tr>`;
+    }).join('');
+
+    return `
+        <div class="career-table-wrap">
+            <table class="career-table">
+                <thead><tr>
+                    <th class="num">#</th>
+                    <th>Manager</th>
+                    <th class="num">Wins</th>
+                    <th class="num">Losses</th>
+                    <th class="num">Win %</th>
+                    <th class="num">Career PF</th>
+                    <th class="num">Playoffs</th>
+                    <th class="num">Chips</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
+}
+
+load();
+</script>
+
+</body>
+</html>

@@ -105,18 +105,6 @@
       "total_games": 6
     },
     {
-      "opp_user_id": 21679440,
-      "opp_name": "Joey",
-      "reg_record": "1-2-0",
-      "reg_pf": 384.64,
-      "reg_pa": 384.88,
-      "playoff_record": "0-1-0",
-      "playoff_pf": 143.24,
-      "playoff_pa": 147.48,
-      "total_record": "1-3-0",
-      "total_games": 4
-    },
-    {
       "opp_user_id": 21679447,
       "opp_name": "Mason",
       "reg_record": "3-1-0",
@@ -165,16 +153,16 @@
       "total_games": 4
     },
     {
-      "opp_user_id": 21239480,
-      "opp_name": "Connor",
-      "reg_record": "3-0-0",
-      "reg_pf": 385.26,
-      "reg_pa": 340.02,
-      "playoff_record": "1-0-0",
-      "playoff_pf": 104.6,
-      "playoff_pa": 21.08,
-      "total_record": "4-0-0",
-      "total_games": 4
+      "opp_user_id": 21679440,
+      "opp_name": "Joey",
+      "reg_record": "1-2-0",
+      "reg_pf": 384.64,
+      "reg_pa": 384.88,
+      "playoff_record": "0-0-0",
+      "playoff_pf": 0.0,
+      "playoff_pa": 0.0,
+      "total_record": "1-2-0",
+      "total_games": 3
     },
     {
       "opp_user_id": 25033943,
@@ -210,6 +198,18 @@
       "playoff_pf": 0.0,
       "playoff_pa": 0.0,
       "total_record": "2-1-0",
+      "total_games": 3
+    },
+    {
+      "opp_user_id": 21239480,
+      "opp_name": "Connor",
+      "reg_record": "3-0-0",
+      "reg_pf": 385.26,
+      "reg_pa": 340.02,
+      "playoff_record": "0-0-0",
+      "playoff_pf": 0.0,
+      "playoff_pa": 0.0,
+      "total_record": "3-0-0",
       "total_games": 3
     }
   ]

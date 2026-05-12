@@ -21,7 +21,7 @@
   "standings": [
     {
       "final_rank": 1,
-      "reg_season_rank": null,
+      "reg_season_rank": 2,
       "team_id": 1,
       "team_name": "On Jah",
       "owner_name": "Joey",
@@ -36,7 +36,7 @@
     },
     {
       "final_rank": 2,
-      "reg_season_rank": null,
+      "reg_season_rank": 1,
       "team_id": 3,
       "team_name": "Mdog346",
       "owner_name": "Mason",
@@ -51,7 +51,7 @@
     },
     {
       "final_rank": 3,
-      "reg_season_rank": null,
+      "reg_season_rank": 4,
       "team_id": 6,
       "team_name": "Man tit",
       "owner_name": "Krish",
@@ -66,7 +66,7 @@
     },
     {
       "final_rank": 4,
-      "reg_season_rank": null,
+      "reg_season_rank": 3,
       "team_id": 12,
       "team_name": "i wish i actually drafted",
       "owner_name": "Ari",
@@ -81,7 +81,7 @@
     },
     {
       "final_rank": 5,
-      "reg_season_rank": null,
+      "reg_season_rank": 6,
       "team_id": 7,
       "team_name": "instant kamara",
       "owner_name": "CJ",
@@ -96,7 +96,7 @@
     },
     {
       "final_rank": 6,
-      "reg_season_rank": null,
+      "reg_season_rank": 5,
       "team_id": 10,
       "team_name": "Tight end 1",
       "owner_name": "Connor",
@@ -111,7 +111,7 @@
     },
     {
       "final_rank": 7,
-      "reg_season_rank": null,
+      "reg_season_rank": 12,
       "team_id": 9,
       "team_name": "Huntingforkickers",
       "owner_name": "Andrew",
@@ -126,7 +126,7 @@
     },
     {
       "final_rank": 8,
-      "reg_season_rank": null,
+      "reg_season_rank": 10,
       "team_id": 2,
       "team_name": "THICCCCFILA",
       "owner_name": "Connie",
@@ -141,7 +141,7 @@
     },
     {
       "final_rank": 9,
-      "reg_season_rank": null,
+      "reg_season_rank": 7,
       "team_id": 15,
       "team_name": "PurpleCobras",
       "owner_name": "Charlie",
@@ -156,7 +156,7 @@
     },
     {
       "final_rank": 10,
-      "reg_season_rank": null,
+      "reg_season_rank": 8,
       "team_id": 8,
       "team_name": "Prestige Worldwide",
       "owner_name": "Chris",
@@ -171,7 +171,7 @@
     },
     {
       "final_rank": 11,
-      "reg_season_rank": null,
+      "reg_season_rank": 11,
       "team_id": 11,
       "team_name": "Wheyman",
       "owner_name": "Costigan",
@@ -186,7 +186,7 @@
     },
     {
       "final_rank": 12,
-      "reg_season_rank": null,
+      "reg_season_rank": 9,
       "team_id": 14,
       "team_name": "dumb thots",
       "owner_name": "Sean",
@@ -201,7 +201,7 @@
     },
     {
       "final_rank": 13,
-      "reg_season_rank": null,
+      "reg_season_rank": 13,
       "team_id": 5,
       "team_name": "Fuk Joey",
       "owner_name": "Kyle",
@@ -216,7 +216,7 @@
     },
     {
       "final_rank": 14,
-      "reg_season_rank": null,
+      "reg_season_rank": 14,
       "team_id": 13,
       "team_name": "MiamiDolphins",
       "owner_name": "John",

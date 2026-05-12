@@ -36,7 +36,7 @@
       "year": 2019,
       "team_name": "Prestige Worldwide",
       "final_rank": 10,
-      "reg_season_rank": null,
+      "reg_season_rank": 8,
       "reg_record": "7-6-0",
       "reg_pf": 1448.96,
       "reg_pa": 1465.28,
@@ -152,11 +152,11 @@
       "reg_record": "5-6-0",
       "reg_pf": 1372.74,
       "reg_pa": 1328.94,
-      "playoff_record": "2-1-0",
-      "playoff_pf": 419.52,
-      "playoff_pa": 421.48,
-      "total_record": "7-7-0",
-      "total_games": 14
+      "playoff_record": "2-0-0",
+      "playoff_pf": 305.92,
+      "playoff_pa": 258.12,
+      "total_record": "7-6-0",
+      "total_games": 13
     },
     {
       "opp_user_id": 21680087,
@@ -207,18 +207,6 @@
       "total_games": 9
     },
     {
-      "opp_user_id": 21239480,
-      "opp_name": "Connor",
-      "reg_record": "4-3-0",
-      "reg_pf": 852.54,
-      "reg_pa": 831.12,
-      "playoff_record": "0-2-0",
-      "playoff_pf": 217.26,
-      "playoff_pa": 261.3,
-      "total_record": "4-5-0",
-      "total_games": 9
-    },
-    {
       "opp_user_id": 21679447,
       "opp_name": "Mason",
       "reg_record": "4-4-0",
@@ -251,6 +239,18 @@
       "playoff_record": "0-0-0",
       "playoff_pf": 0.0,
       "playoff_pa": 0.0,
+      "total_record": "4-4-0",
+      "total_games": 8
+    },
+    {
+      "opp_user_id": 21239480,
+      "opp_name": "Connor",
+      "reg_record": "4-3-0",
+      "reg_pf": 852.54,
+      "reg_pa": 831.12,
+      "playoff_record": "0-1-0",
+      "playoff_pf": 117.48,
+      "playoff_pa": 158.24,
       "total_record": "4-4-0",
       "total_games": 8
     },
