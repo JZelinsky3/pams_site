@@ -6,13 +6,8 @@
 <title>Manager Profile · The Milk Society</title>
 <link rel="stylesheet" href="../assets/css/main.css">
 <style>
-/* ============================================================
-   MANAGER PROFILE PAGE
-   ============================================================ */
-
 .profile-header {
-    position: relative;
-    z-index: 10;
+    position: relative; z-index: 10;
     text-align: center;
     padding: 3.5rem 1.5rem 2rem;
     max-width: 1000px;
@@ -39,15 +34,12 @@
     max-width: 56ch; margin: 0 auto 2rem;
 }
 
-/* Championship banner row — one seal per chip */
 .banner-row {
     display: flex; justify-content: center; align-items: center; gap: 1.5rem;
     margin: 2rem 0 1rem;
     flex-wrap: wrap;
 }
-.mini-seal {
-    width: 90px; height: 90px;
-}
+.mini-seal { width: 90px; height: 90px; }
 .banner-empty {
     font-family: var(--mono);
     font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
@@ -57,9 +49,6 @@
     border-radius: 2px;
 }
 
-/* ============================================================
-   STAT STRIP — at-a-glance career numbers
-   ============================================================ */
 .stat-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -93,9 +82,6 @@
     color: var(--cream-mute);
 }
 
-/* ============================================================
-   REG vs PLAYOFF split callout
-   ============================================================ */
 .split-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -138,68 +124,23 @@
     color: var(--cream-mute);
 }
 
-/* ============================================================
-   SEASON LEDGER TABLE
-   ============================================================ */
 .ledger-section { margin-bottom: 4rem; }
-.season-ledger {
-    background: var(--ink-card);
-    border: 1px solid var(--ink-line);
-    overflow-x: auto;
-}
-.season-ledger table {
-    width: 100%; border-collapse: collapse;
-    font-family: var(--sans);
-}
-.season-ledger thead { background: var(--ink-soft); border-bottom: 1px solid var(--ink-line); }
-.season-ledger th {
-    padding: .85rem 1rem;
-    font-family: var(--mono); font-weight: 700;
-    font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--cream-mute);
-    text-align: left; white-space: nowrap;
-}
-.season-ledger th.num { text-align: right; }
-.season-ledger td {
-    padding: 1rem;
-    border-top: 1px solid var(--ink-line-soft);
-    font-size: .9rem;
-    color: var(--cream-soft);
-    vertical-align: middle;
-}
-.season-ledger td.num { text-align: right; font-variant-numeric: tabular-nums; }
-.season-ledger td.year {
-    font-family: var(--serif); font-style: italic;
-    font-size: 1.25rem;
-    color: var(--gold);
-    width: 5rem;
-}
-.season-ledger td.team {
-    color: var(--cream); font-weight: 500;
-}
-.season-ledger td.finish {
-    font-family: var(--mono); font-weight: 700;
-    font-size: .75rem;
-}
-.season-ledger td.finish.gold { color: var(--gold); }
-.season-ledger td.finish.silver { color: #c0c0c0; }
-.season-ledger td.finish.bronze { color: #cd7f32; }
-.season-ledger tbody tr:hover { background: rgba(232, 200, 137, .03); }
-
-/* ============================================================
-   H2H TABLE
-   ============================================================ */
-.h2h-section { margin-bottom: 4rem; }
+.season-ledger,
 .h2h-table {
     background: var(--ink-card);
     border: 1px solid var(--ink-line);
     overflow-x: auto;
 }
+.season-ledger table,
 .h2h-table table {
     width: 100%; border-collapse: collapse;
     font-family: var(--sans);
 }
-.h2h-table thead { background: var(--ink-soft); border-bottom: 1px solid var(--ink-line); }
+.season-ledger thead,
+.h2h-table thead {
+    background: var(--ink-soft); border-bottom: 1px solid var(--ink-line);
+}
+.season-ledger th,
 .h2h-table th {
     padding: .85rem 1rem;
     font-family: var(--mono); font-weight: 700;
@@ -207,14 +148,32 @@
     color: var(--cream-mute);
     text-align: left; white-space: nowrap;
 }
+.season-ledger th.num,
 .h2h-table th.num { text-align: right; }
+.season-ledger td,
 .h2h-table td {
-    padding: .85rem 1rem;
+    padding: 1rem;
     border-top: 1px solid var(--ink-line-soft);
     font-size: .9rem;
     color: var(--cream-soft);
+    vertical-align: middle;
 }
+.season-ledger td.num,
 .h2h-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.season-ledger td.year {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.25rem;
+    color: var(--gold);
+    width: 5rem;
+}
+.season-ledger td.team { color: var(--cream); font-weight: 500; }
+.season-ledger td.finish {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .75rem;
+}
+.season-ledger td.finish.gold { color: var(--gold); }
+.season-ledger td.finish.silver { color: #c0c0c0; }
+.season-ledger td.finish.bronze { color: #cd7f32; }
 .h2h-table td.opp {
     font-family: var(--serif);
     font-size: 1.1rem;
@@ -225,35 +184,20 @@
 .h2h-table td.record.winning { color: var(--gold); }
 .h2h-table td.record.losing  { color: var(--rust); }
 .h2h-table td.record.even    { color: var(--cream-soft); }
+.season-ledger tbody tr:hover,
 .h2h-table tbody tr:hover { background: rgba(232, 200, 137, .03); }
 
-/* Section title (smaller than page header) */
-.section-h2 {
-    font-family: var(--serif); font-style: italic;
-    font-size: clamp(1.8rem, 4vw, 2.4rem);
-    color: var(--cream);
-    margin-bottom: .35rem;
-}
-.section-h2 em { color: var(--gold); }
-.section-meta-sm {
-    font-family: var(--mono);
-    font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--cream-mute);
-    margin-bottom: 1.5rem;
-}
-
-/* Error/not-found state */
-.error-state {
+.error-state, .loading-state {
     text-align: center;
     padding: 4rem 2rem;
 }
-.error-state h1 {
+.error-state h1, .loading-state h1 {
     font-family: var(--serif); font-style: italic;
     font-size: 3rem;
     color: var(--cream);
     margin-bottom: 1rem;
 }
-.error-state p {
+.error-state p, .loading-state p {
     font-family: var(--serif); font-style: italic;
     font-size: 1.2rem;
     color: var(--cream-soft);
@@ -273,7 +217,6 @@
 <div class="site-glow"></div>
 <div class="site-grain"></div>
 
-<!-- TICKER -->
 <div class="ticker">
     <div class="ticker-track">
         <div class="ticker-group" id="ticker-1">
@@ -285,7 +228,6 @@
     </div>
 </div>
 
-<!-- NAV -->
 <nav class="nav">
     <a href="index.html" class="nav-back">← All Managers</a>
     <div class="nav-center">
@@ -295,142 +237,32 @@
     <a href="../index.html" class="nav-link">The Hub →</a>
 </nav>
 
-<!-- PROFILE BODY (rendered by JS) -->
-<div id="profile-body"></div>
+<div id="profile-body">
+    <div class="loading-state">
+        <h1>Loading…</h1>
+        <p>Fetching the records.</p>
+    </div>
+</div>
 
-<!-- FOOTER -->
 <footer class="site-footer">
     <span>The Milk Society · <em>PAMS</em> · Since MMXIX</span>
 </footer>
 
 
 <script>
-// ============================================================
-//  TEMP DATA — will move to data/managers/<userId>.json later
-//  Real numbers from your scraper output. Each manager has:
-//    seasons:    array of {year, teamName, finalRank, regSeasonRank, regRecord, regPF, regPA, playoffRecord, playoffPF}
-//    h2h:        array of {oppId, oppName, regRecord, playoffRecord, totalRecord, totalGames, regPF, regPA}
-//    streaks:    {longestWin: {length, when}, longestLoss: {length, when}}
-//    extremes:   {high, highWhen, low, lowWhen}
-// ============================================================
-
-const MANAGER_DATA = {
-
-    21679440: {  // Joey
-        name: "Joey",
-        nflDisplayName: "Joey",
-        tagline: "The career win-percentage leader. Seven seasons, one championship, the league's only 200+ ppg single-season campaign.",
-        chips: 1,
-        chipYears: [2019],
-        seasonsPlayed: 7,
-        regRecord: "52-40-0",
-        regWinPct: .565,
-        regPF: 12612.6,
-        regPA: 12164.4,
-        playoffRecord: "12-9-0",
-        playoffWinPct: .571,
-        playoffPF: 1893.2,
-        playoffPA: 2118.3,
-        totalGames: 113,
-        career: {
-            highScore: 199.76,
-            lowScore: 49.46,
-            avgPPG: 128.37,
-            topThree: 4,
-            playoffAppearances: 7,
-        },
-        streaks: {
-            longestWin: { length: 8, when: "W9 2021 → W16 2021" },
-            longestLoss: { length: 9, when: "W2 2023 → W10 2023" },
-        },
-        seasons: [
-            { year: 2019, teamName: "On Jah", finalRank: 1, regRank: null, regRecord: "8-5-0", regPF: 1463.7, regPA: 1280.0, playoffRecord: "1-0-0", playoffPF: 296.0 },
-            { year: 2020, teamName: "Deshaun Dotson", finalRank: 3, regRank: 3, regRecord: "7-6-0", regPF: 1632.0, regPA: 1500.0, playoffRecord: "2-1-0", playoffPF: 460.3 },
-            { year: 2021, teamName: "Oreos", finalRank: 2, regRank: 3, regRecord: "8-6-0", regPF: 1988.3, regPA: 1700.0, playoffRecord: "2-1-0", playoffPF: 428.8 },
-            { year: 2022, teamName: "Space Mav", finalRank: 3, regRank: 1, regRecord: "12-2-0", regPF: 1739.3, regPA: 1500.0, playoffRecord: "1-2-0", playoffPF: 290.0 },
-            { year: 2023, teamName: "Win Streak", finalRank: 10, regRank: 12, regRecord: "4-10-0", regPF: 1578.1, regPA: 1812.9, playoffRecord: "0-2-0", playoffPF: 250.0 },
-            { year: 2024, teamName: "PWD", finalRank: 9, regRank: 8, regRecord: "5-9-0", regPF: 1681.1, regPA: 1872.8, playoffRecord: "0-2-0", playoffPF: 250.0 },
-            { year: 2025, teamName: "Building Rome", finalRank: 7, regRank: 6, regRecord: "7-7-0", regPF: 1666.5, regPA: 1775.5, playoffRecord: "0-0-0", playoffPF: 0 },
-        ],
-        h2h: [
-            { oppId: 21679447, oppName: "Mason",   regRecord: "5-3-0", playoffRecord: "1-0-0", totalRecord: "6-3-0", totalGames: 9 },
-            { oppId: 21688760, oppName: "Sean",    regRecord: "5-5-0", playoffRecord: "0-1-0", totalRecord: "5-6-0", totalGames: 11 },
-            { oppId: 21680417, oppName: "Chris",   regRecord: "7-7-0", playoffRecord: "1-0-0", totalRecord: "8-7-0", totalGames: 15 },
-            { oppId: 25033943, oppName: "Isaac",   regRecord: "4-3-0", playoffRecord: "0-0-0", totalRecord: "4-3-0", totalGames: 7 },
-            { oppId: 21680087, oppName: "Kyle",    regRecord: "5-8-0", playoffRecord: "1-1-0", totalRecord: "6-9-0", totalGames: 15 },
-            { oppId: 21679454, oppName: "Connie",  regRecord: "5-3-0", playoffRecord: "1-0-0", totalRecord: "6-3-0", totalGames: 9 },
-            { oppId: 22539599, oppName: "Charlie", regRecord: "4-2-0", playoffRecord: "0-0-0", totalRecord: "4-2-0", totalGames: 6 },
-            { oppId: 25036608, oppName: "Luke",    regRecord: "3-2-0", playoffRecord: "0-1-0", totalRecord: "3-3-0", totalGames: 6 },
-            { oppId: 30533399, oppName: "Evan",    regRecord: "2-1-0", playoffRecord: "0-0-0", totalRecord: "2-1-0", totalGames: 3 },
-            { oppId: 21680682, oppName: "Andrew",  regRecord: "3-2-0", playoffRecord: "1-0-0", totalRecord: "4-2-0", totalGames: 6 },
-            { oppId: 21239480, oppName: "Connor",  regRecord: "5-4-0", playoffRecord: "1-1-0", totalRecord: "6-5-0", totalGames: 11 },
-        ],
-    },
-
-    21679447: {  // Mason
-        name: "Mason",
-        nflDisplayName: "Mason",
-        tagline: "Hot on Joey's heels for all-time win percentage. Plays every week — has yet to claim the championship he keeps almost reaching.",
-        chips: 0, chipYears: [],
-        seasonsPlayed: 7,
-        regRecord: "53-39-0", regWinPct: .576, regPF: 12000.0, regPA: 11500.0,
-        playoffRecord: "10-9-0", playoffWinPct: .526, playoffPF: 1677.2, playoffPA: 1620.0,
-        totalGames: 111,
-        career: { highScore: 198.0, lowScore: 65.2, avgPPG: 123.2, topThree: 1, playoffAppearances: 6 },
-        streaks: { longestWin: { length: 7, when: "W4 2025 → W10 2025" }, longestLoss: { length: 5, when: "W3 2024 → W7 2024" } },
-        seasons: [],
-        h2h: [],
-    },
-
-    21679454: {  // Connie
-        name: "Connie",
-        nflDisplayName: "Connor",
-        tagline: "2023 league champion as 'Milk Man'. The single most heartbreaking loss in league history belongs to him — 175 points and still defeated.",
-        chips: 1, chipYears: [2023],
-        seasonsPlayed: 7,
-        regRecord: "47-50-0", regWinPct: .485, regPF: 12000.0, regPA: 12200.0,
-        playoffRecord: "7-9-0", playoffWinPct: .438, playoffPF: 1662.0, playoffPA: 1462.0,
-        totalGames: 113,
-        career: { highScore: 175.3, lowScore: 65.0, avgPPG: 120.9, topThree: 1, playoffAppearances: 6 },
-        streaks: { longestWin: { length: 7, when: "W13 2023 → W3 2024" }, longestLoss: { length: 9, when: "W11 2021 → W3 2022" } },
-        seasons: [],
-        h2h: [],
-    },
-
-    25036608: {  // Luke
-        name: "Luke",
-        nflDisplayName: "Luke",
-        tagline: "Reigning champion. The 2024 title was the first chip for the Glizzy franchise after years of knocking on the door.",
-        chips: 1, chipYears: [2024],
-        seasonsPlayed: 7,
-        regRecord: "40-47-0", regWinPct: .460, regPF: 9800.0, regPA: 10500.0,
-        playoffRecord: "7-4-0", playoffWinPct: .636, playoffPF: 1520.0, playoffPA: 1180.0,
-        totalGames: 98,
-        career: { highScore: 178.0, lowScore: 58.0, avgPPG: 115.5, topThree: 1, playoffAppearances: 5 },
-        streaks: { longestWin: { length: 5, when: "W11 2024 → W15 2024" }, longestLoss: { length: 6, when: "W5 2022 → W10 2022" } },
-        seasons: [],
-        h2h: [],
-    },
-
-    // Stub others — will fill from JSON later
-    21688760: { name: "Sean",    nflDisplayName: "sean",    tagline: "Seven-time participant, still chasing the chip.", chips: 0, chipYears: [], seasonsPlayed: 7, regRecord: "—", regWinPct: .55, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 111, career: { highScore: 0, lowScore: 0, avgPPG: 0, topThree: 1, playoffAppearances: 0 }, streaks: { longestWin: {length:0,when:""}, longestLoss:{length:0,when:""} }, seasons: [], h2h: [] },
-    21680417: { name: "Chris",   nflDisplayName: "Chris",   tagline: "Holds the league record for highest single-week score: 200.6 in 2021. Also won the closest game ever played.", chips: 0, chipYears: [], seasonsPlayed: 7, regRecord: "—", regWinPct: .52, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 113, career: { highScore: 200.6, lowScore: 0, avgPPG: 0, topThree: 2, playoffAppearances: 0 }, streaks: { longestWin: {length:7,when:"W10 2021 → W17 2021"}, longestLoss:{length:0,when:""} }, seasons: [], h2h: [] },
-    25033943: { name: "Isaac",   nflDisplayName: "Isaac",   tagline: "Six-season run. Two-time runner-up.", chips: 0, chipYears: [], seasonsPlayed: 6, regRecord: "—", regWinPct: .55, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 96, career: { highScore: 0, lowScore: 0, avgPPG: 0, topThree: 1, playoffAppearances: 0 }, streaks: { longestWin: {length:0,when:""}, longestLoss:{length:8,when:"W17 2023 → W7 2024"} }, seasons: [], h2h: [] },
-    21680087: { name: "Kyle",    nflDisplayName: "Kyle",    tagline: "Owner of the biggest blowout in league history — 99-point demolition of Connor in 2022.", chips: 0, chipYears: [], seasonsPlayed: 7, regRecord: "—", regWinPct: .48, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 113, career: { highScore: 0, lowScore: 0, avgPPG: 0, topThree: 0, playoffAppearances: 0 }, streaks: { longestWin: {length:0,when:""}, longestLoss:{length:7,when:"W5 2019 → W11 2019"} }, seasons: [], h2h: [] },
-    22539599: { name: "Charlie", nflDisplayName: "Charlie", tagline: "Joined the league mid-history. Still building his book.", chips: 0, chipYears: [], seasonsPlayed: 5, regRecord: "—", regWinPct: .48, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 65, career: { highScore: 0, lowScore: 0, avgPPG: 0, topThree: 0, playoffAppearances: 0 }, streaks: { longestWin: {length:0,when:""}, longestLoss:{length:0,when:""} }, seasons: [], h2h: [] },
-    30533399: { name: "Evan",    nflDisplayName: "Evan",    tagline: "Newest member. Building his ledger.", chips: 0, chipYears: [], seasonsPlayed: 3, regRecord: "—", regWinPct: .45, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 42, career: { highScore: 0, lowScore: 0, avgPPG: 0, topThree: 0, playoffAppearances: 0 }, streaks: { longestWin: {length:0,when:""}, longestLoss:{length:0,when:""} }, seasons: [], h2h: [] },
-    21680682: { name: "Andrew",  nflDisplayName: "Ricci",   tagline: "Listed as Ricci on NFL.com — but you know him as Andrew.", chips: 0, chipYears: [], seasonsPlayed: 7, regRecord: "—", regWinPct: .49, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 65, career: { highScore: 0, lowScore: 0, avgPPG: 0, topThree: 0, playoffAppearances: 0 }, streaks: { longestWin: {length:0,when:""}, longestLoss:{length:0,when:""} }, seasons: [], h2h: [] },
-    21239480: { name: "Connor",  nflDisplayName: "Cat",     tagline: "Listed as Cat on NFL.com — but you know him as Connor.", chips: 0, chipYears: [], seasonsPlayed: 7, regRecord: "—", regWinPct: .52, regPF: 0, regPA: 0, playoffRecord: "—", playoffWinPct: 0, playoffPF: 0, playoffPA: 0, totalGames: 97, career: { highScore: 0, lowScore: 0, avgPPG: 0, topThree: 1, playoffAppearances: 0 }, streaks: { longestWin: {length:0,when:""}, longestLoss:{length:0,when:""} }, seasons: [], h2h: [] },
-};
-
-
-// ============================================================
-//  RENDER
-// ============================================================
-
 function getUserIdFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('id');
+    return new URLSearchParams(window.location.search).get('id');
+}
+
+function toRoman(num) {
+    const romans = [
+        [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
+        [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
+        [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+    ];
+    let result = '';
+    for (const [v, s] of romans) { while (num >= v) { result += s; num -= v; } }
+    return result;
 }
 
 function miniSeal(year) {
@@ -464,19 +296,6 @@ function miniSeal(year) {
     `;
 }
 
-function toRoman(num) {
-    const romans = [
-        [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
-        [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
-        [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
-    ];
-    let result = '';
-    for (const [value, symbol] of romans) {
-        while (num >= value) { result += symbol; num -= value; }
-    }
-    return result;
-}
-
 function finishClass(rank) {
     if (rank === 1) return 'gold';
     if (rank === 2) return 'silver';
@@ -487,52 +306,64 @@ function finishClass(rank) {
 function recordClass(record) {
     if (!record || record === '—') return 'even';
     const parts = record.split('-').map(Number);
-    if (parts.length < 2) return 'even';
+    if (parts.length < 2 || isNaN(parts[0])) return 'even';
     const [w, l] = parts;
     if (w > l) return 'winning';
     if (l > w) return 'losing';
     return 'even';
 }
 
-function renderProfile() {
-    const userId = getUserIdFromURL();
-    const m = userId ? MANAGER_DATA[userId] : null;
+function fmtPct(p) {
+    if (p == null) return '—';
+    return p.toFixed(3).replace(/^0\./, '.');
+}
 
-    if (!m) {
-        document.getElementById('profile-body').innerHTML = `
-            <div class="error-state">
-                <h1>Manager not found.</h1>
-                <p>This profile doesn't exist in the records.</p>
-                <a href="index.html">← View all managers</a>
-            </div>
-        `;
-        return;
+function showError(msg) {
+    document.getElementById('profile-body').innerHTML = `
+        <div class="error-state">
+            <h1>Manager not found.</h1>
+            <p>${msg}</p>
+            <a href="index.html">← View all managers</a>
+        </div>
+    `;
+}
+
+async function loadProfile() {
+    const userId = getUserIdFromURL();
+    if (!userId) return showError("No manager ID was specified.");
+
+    let m;
+    try {
+        const res = await fetch(`../data/managers/${userId}.json`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        m = await res.json();
+    } catch (err) {
+        return showError(`Couldn't load profile (${err.message}). Did you run build_data.py?`);
     }
 
     document.getElementById('nav-name').innerHTML = `${m.name} <em>·</em>`;
     document.title = `${m.name} · The Milk Society`;
 
-    // Update ticker
     document.querySelectorAll('#ticker-1, #ticker-2').forEach(el => {
         el.innerHTML = `
             <span class="ticker-item"><span class="ticker-star">★</span> ${m.name.toUpperCase()} · MANAGER PROFILE</span>
-            <span class="ticker-item"><span class="ticker-star">★</span> ${m.seasonsPlayed} SEASONS · ${m.totalGames} GAMES</span>
-            <span class="ticker-item"><span class="ticker-star">★</span> ${m.chips > 0 ? m.chips + ' CHIP' + (m.chips>1?'S':'') + ' · ' + m.chipYears.join(', ') : 'CHASING FIRST CHIP'}</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> ${m.seasons_played} SEASONS · ${m.total_games} GAMES</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> ${m.championships > 0 ? m.championships + ' CHIP' + (m.championships>1?'S':'') + ' · ' + m.championship_seasons.join(', ') : 'CHASING FIRST CHIP'}</span>
             <span class="ticker-item"><span class="ticker-star">★</span> THE MILK SOCIETY · EST. 2019</span>
         `;
     });
 
-    // Champion banner
+    // Banner
     let bannerHTML;
-    if (m.chips > 0) {
-        bannerHTML = `<div class="banner-row">${m.chipYears.map(y => miniSeal(y)).join('')}</div>`;
+    if (m.championships > 0) {
+        bannerHTML = `<div class="banner-row">${m.championship_seasons.map(y => miniSeal(y)).join('')}</div>`;
     } else {
         bannerHTML = `<div class="banner-row"><div class="banner-empty">— No championships yet —</div></div>`;
     }
 
     // Season ledger
     let ledgerHTML;
-    if (m.seasons && m.seasons.length > 0) {
+    if (m.season_ledger && m.season_ledger.length > 0) {
         ledgerHTML = `
             <div class="season-ledger">
                 <table>
@@ -548,15 +379,15 @@ function renderProfile() {
                         </tr>
                     </thead>
                     <tbody>
-                        ${m.seasons.map(s => `
+                        ${m.season_ledger.map(s => `
                             <tr>
                                 <td class="year">${s.year}</td>
-                                <td class="team">${s.teamName}</td>
-                                <td class="num finish ${finishClass(s.finalRank)}">${s.finalRank === 1 ? '★ 1st' : '#' + s.finalRank}</td>
-                                <td class="num">${s.regRank ?? '—'}</td>
-                                <td class="num">${s.regRecord}</td>
-                                <td class="num">${s.regPF.toFixed(1)}</td>
-                                <td class="num">${s.playoffRecord}</td>
+                                <td class="team">${s.team_name}</td>
+                                <td class="num finish ${finishClass(s.final_rank)}">${s.final_rank === 1 ? '★ 1st' : (s.final_rank ? '#' + s.final_rank : '—')}</td>
+                                <td class="num">${s.reg_season_rank ?? '—'}</td>
+                                <td class="num">${s.reg_record}</td>
+                                <td class="num">${s.reg_pf != null ? s.reg_pf.toFixed(1) : '—'}</td>
+                                <td class="num">${s.playoff_record}</td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -564,91 +395,90 @@ function renderProfile() {
             </div>
         `;
     } else {
-        ledgerHTML = `<p style="font-family: var(--serif); font-style: italic; color: var(--cream-mute); padding: 1rem;">Season-by-season ledger coming soon — pending data integration.</p>`;
+        ledgerHTML = `<p style="font-family: var(--serif); font-style: italic; color: var(--cream-mute); padding: 1rem;">No season data on file.</p>`;
     }
 
-    // H2H table
+    // H2H
     let h2hHTML;
     if (m.h2h && m.h2h.length > 0) {
-        // Sort by total games desc
-        const h2hSorted = [...m.h2h].sort((a, b) => b.totalGames - a.totalGames);
-        h2hHTML = `
-            <div class="h2h-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Opponent</th>
-                            <th class="num">Reg. Record</th>
-                            <th class="num">Playoffs</th>
-                            <th class="num">All-Time</th>
-                            <th class="num">Games</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${h2hSorted.map(h => `
+        const h2hWithGames = m.h2h.filter(h => h.total_games > 0);
+        if (h2hWithGames.length === 0) {
+            h2hHTML = `<p style="font-family: var(--serif); font-style: italic; color: var(--cream-mute); padding: 1rem;">No head-to-head matchups on file.</p>`;
+        } else {
+            h2hHTML = `
+                <div class="h2h-table">
+                    <table>
+                        <thead>
                             <tr>
-                                <td class="opp">${h.oppName}</td>
-                                <td class="num record ${recordClass(h.regRecord)}">${h.regRecord}</td>
-                                <td class="num record ${recordClass(h.playoffRecord)}">${h.playoffRecord}</td>
-                                <td class="num record ${recordClass(h.totalRecord)}">${h.totalRecord}</td>
-                                <td class="num">${h.totalGames}</td>
+                                <th>Opponent</th>
+                                <th class="num">Reg. Record</th>
+                                <th class="num">Playoffs</th>
+                                <th class="num">All-Time</th>
+                                <th class="num">Games</th>
                             </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
+                        </thead>
+                        <tbody>
+                            ${h2hWithGames.map(h => `
+                                <tr>
+                                    <td class="opp">${h.opp_name}</td>
+                                    <td class="num record ${recordClass(h.reg_record)}">${h.reg_record}</td>
+                                    <td class="num record ${recordClass(h.playoff_record)}">${h.playoff_record}</td>
+                                    <td class="num record ${recordClass(h.total_record)}">${h.total_record}</td>
+                                    <td class="num">${h.total_games}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
     } else {
-        h2hHTML = `<p style="font-family: var(--serif); font-style: italic; color: var(--cream-mute); padding: 1rem;">Head-to-head table coming soon — pending data integration.</p>`;
+        h2hHTML = `<p style="font-family: var(--serif); font-style: italic; color: var(--cream-mute); padding: 1rem;">No head-to-head data on file.</p>`;
     }
 
     document.getElementById('profile-body').innerHTML = `
-
-        <!-- PROFILE HEADER -->
         <div class="profile-header">
-            <div class="profile-kicker">★ ${m.seasonsPlayed} Seasons · ${m.chips} ${m.chips === 1 ? 'Chip' : 'Chips'} ★</div>
+            <div class="profile-kicker">★ ${m.seasons_played} Seasons · ${m.championships} ${m.championships === 1 ? 'Chip' : 'Chips'} ★</div>
             <h1 class="profile-name">${m.name}<em>.</em></h1>
             <p class="profile-tagline">${m.tagline}</p>
             ${bannerHTML}
         </div>
 
-        <!-- STAT STRIP -->
         <div class="section">
             <div class="stat-strip">
                 <div class="strip-item">
                     <div class="strip-label">Total Games</div>
-                    <div class="strip-value cream">${m.totalGames}</div>
-                    <div class="strip-detail">${m.seasonsPlayed} seasons</div>
+                    <div class="strip-value cream">${m.total_games}</div>
+                    <div class="strip-detail">${m.seasons_played} seasons</div>
                 </div>
                 <div class="strip-item">
                     <div class="strip-label">High Score</div>
-                    <div class="strip-value">${m.career.highScore.toFixed(1)}</div>
+                    <div class="strip-value">${m.high_score != null ? m.high_score.toFixed(1) : '—'}</div>
                     <div class="strip-detail">Career best</div>
                 </div>
                 <div class="strip-item">
                     <div class="strip-label">Avg PPG</div>
-                    <div class="strip-value">${m.career.avgPPG.toFixed(1)}</div>
+                    <div class="strip-value">${m.avg_ppg != null ? m.avg_ppg.toFixed(1) : '—'}</div>
                     <div class="strip-detail">All games</div>
                 </div>
                 <div class="strip-item">
                     <div class="strip-label">Top-3 Finishes</div>
-                    <div class="strip-value">${m.career.topThree}</div>
-                    <div class="strip-detail">${m.career.topThree ? 'In the hunt' : 'Still chasing'}</div>
+                    <div class="strip-value">${m.top_three_finishes}</div>
+                    <div class="strip-detail">${m.top_three_finishes ? 'In the hunt' : 'Still chasing'}</div>
                 </div>
                 <div class="strip-item">
                     <div class="strip-label">Longest Win Streak</div>
-                    <div class="strip-value">${m.streaks.longestWin.length}</div>
-                    <div class="strip-detail">${m.streaks.longestWin.when || '—'}</div>
+                    <div class="strip-value">${m.longest_win_streak.length}</div>
+                    <div class="strip-detail">${m.longest_win_streak.when || '—'}</div>
                 </div>
                 <div class="strip-item">
                     <div class="strip-label">Longest Loss Streak</div>
-                    <div class="strip-value">${m.streaks.longestLoss.length}</div>
-                    <div class="strip-detail">${m.streaks.longestLoss.when || '—'}</div>
+                    <div class="strip-value">${m.longest_loss_streak.length}</div>
+                    <div class="strip-detail">${m.longest_loss_streak.when || '—'}</div>
                 </div>
             </div>
         </div>
 
-        <!-- REG/PLAYOFF SPLIT -->
         <div class="section">
             <div class="section-header">
                 <span class="section-num">§ 01 · Career</span>
@@ -658,43 +488,40 @@ function renderProfile() {
             <div class="split-row">
                 <div class="split-col">
                     <div class="split-label">Regular Season</div>
-                    <div class="split-record">${m.regRecord}</div>
-                    <div class="split-pct">${m.regWinPct.toFixed(3).replace(/^0\./, '.')} win pct</div>
-                    <div class="split-pf">PF ${m.regPF.toFixed(0)} · PA ${m.regPA.toFixed(0)}</div>
+                    <div class="split-record">${m.reg_record}</div>
+                    <div class="split-pct">${fmtPct(m.reg_win_pct)} win pct</div>
+                    <div class="split-pf">PF ${Math.round(m.reg_pf)} · PA ${Math.round(m.reg_pa)}</div>
                 </div>
                 <div class="split-col playoff">
                     <div class="split-label">Playoffs</div>
-                    <div class="split-record">${m.playoffRecord}</div>
-                    <div class="split-pct">${m.playoffWinPct.toFixed(3).replace(/^0\./, '.')} win pct</div>
-                    <div class="split-pf">PF ${m.playoffPF.toFixed(0)} · PA ${m.playoffPA.toFixed(0)}</div>
+                    <div class="split-record">${m.playoff_record}</div>
+                    <div class="split-pct">${fmtPct(m.playoff_win_pct)} win pct</div>
+                    <div class="split-pf">PF ${Math.round(m.playoff_pf)} · PA ${Math.round(m.playoff_pa)}</div>
                 </div>
             </div>
         </div>
 
-        <!-- SEASON LEDGER -->
         <div class="section ledger-section">
             <div class="section-header">
                 <span class="section-num">§ 02 · Season Ledger</span>
                 <span class="section-title">Year by year —</span>
-                <span class="section-meta">${m.seasonsPlayed} seasons</span>
+                <span class="section-meta">${m.seasons_played} seasons</span>
             </div>
             ${ledgerHTML}
         </div>
 
-        <!-- H2H -->
-        <div class="section h2h-section">
+        <div class="section">
             <div class="section-header">
                 <span class="section-num">§ 03 · Rivalries</span>
                 <span class="section-title">Head-to-head —</span>
-                <span class="section-meta">vs the current 12</span>
+                <span class="section-meta">all opponents</span>
             </div>
             ${h2hHTML}
         </div>
-
     `;
 }
 
-renderProfile();
+loadProfile();
 </script>
 
 </body>

@@ -32,6 +32,11 @@ from _common import (
     save_json,
 )
 
+import sys
+from pathlib import Path as _Path
+sys.path.insert(0, str(_Path(__file__).resolve().parent))
+from playoff_logic import classify_playoff_matchups  # noqa: E402
+
 
 def load_json(path: Path):
     if not path.exists():
@@ -55,10 +60,27 @@ def empty_split_record():
     }
 
 
-def add_matchup_to_record(rec, m):
-    """Add a single matchup row to either the reg or post bucket of `rec`."""
-    is_playoff = config.is_playoff_week(m["season"], m["week"])
-    prefix = "post" if is_playoff else "reg"
+def add_matchup_to_record(rec, m, counts_playoff_fn=None):
+    """
+    Add a single matchup row to either the reg or post bucket of `rec`.
+
+    counts_playoff_fn(season, week, user_id) -> bool:
+        Optional helper that returns True if this matchup should count as a
+        real playoff game (vs consolation). If None, falls back to "any
+        playoff-week game counts as playoff".
+    """
+    is_playoff_week_on_calendar = config.is_playoff_week(m["season"], m["week"])
+    uid = m.get("user_id")
+
+    if counts_playoff_fn is not None and is_playoff_week_on_calendar:
+        is_real_playoff = counts_playoff_fn(m["season"], m["week"], uid)
+        if not is_real_playoff:
+            # It's a consolation game — skip it entirely from both buckets
+            return
+    else:
+        is_real_playoff = is_playoff_week_on_calendar
+
+    prefix = "post" if is_real_playoff else "reg"
     rec[f"{prefix}_games"] += 1
     if m["result"] == "W":
         rec[f"{prefix}_wins"] += 1
@@ -107,6 +129,41 @@ def main():
     my_owner_name = my_name_for(my_user_id, "Joey")
 
     # ============================================================
+    # Pre-compute playoff classification per (season, user_id)
+    # so reg/playoff splits know which playoff games actually count.
+    # ============================================================
+    reg_rank_lookup = {}
+    for s in standings:
+        rank = s.get("overall_rank_reg_season")
+        if rank is not None:
+            reg_rank_lookup[(s["season"], s["team_id"])] = rank
+
+    matchups_by_user_season = defaultdict(list)
+    for m in matchups:
+        uid = m.get("user_id")
+        if uid is None:
+            continue
+        matchups_by_user_season[(m["season"], uid)].append(m)
+
+    playoff_classification = {}
+    for (season, uid), mlist in matchups_by_user_season.items():
+        team_id = mlist[0]["team_id"] if mlist else None
+        reg_rank = reg_rank_lookup.get((season, team_id)) if team_id else None
+        info = classify_playoff_matchups(
+            season=season,
+            user_id=uid,
+            user_reg_rank=reg_rank,
+            user_matchups=sorted(mlist, key=lambda m: m["week"]),
+        )
+        playoff_classification[(season, uid)] = info
+
+    def counts_as_playoff(season: int, week: int, uid: int) -> bool:
+        info = playoff_classification.get((season, uid))
+        if not info:
+            return False
+        return week in info["counted_playoff_weeks"]
+
+    # ============================================================
     # Per-manager career summary (every user_id)
     # ============================================================
     per_user = defaultdict(empty_split_record)
@@ -119,7 +176,7 @@ def main():
         uid = m.get("user_id")
         if uid is None:
             continue
-        add_matchup_to_record(per_user[uid], m)
+        add_matchup_to_record(per_user[uid], m, counts_as_playoff)
         meta = per_user_meta[uid]
         meta["user_id"] = uid
         meta["owner"] = m.get("owner") or meta["owner"]
@@ -241,7 +298,7 @@ def main():
 
     my_rec = empty_split_record()
     for m in my_matchups:
-        add_matchup_to_record(my_rec, m)
+        add_matchup_to_record(my_rec, m, counts_as_playoff)
     my_split = finalize_split_record(my_rec)
 
     high = max((m["team_score"] for m in my_matchups if m["team_score"] is not None),
@@ -275,7 +332,7 @@ def main():
         opp = m.get("opp_user_id")
         if opp is None or opp not in h2h:
             continue
-        add_matchup_to_record(h2h[opp], m)
+        add_matchup_to_record(h2h[opp], m, counts_as_playoff)
 
     h2h_rows = []
     for uid, my_name, nfl_name in config.CURRENT_MEMBERS:
@@ -313,7 +370,7 @@ def main():
         season_matches = [m for m in my_matchups if m["season"] == s["season"]]
         sr = empty_split_record()
         for m in season_matches:
-            add_matchup_to_record(sr, m)
+            add_matchup_to_record(sr, m, counts_as_playoff)
         ss = finalize_split_record(sr)
         my_finishes.append({
             "season": s["season"],

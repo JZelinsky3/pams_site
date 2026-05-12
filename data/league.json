@@ -1,0 +1,27 @@
+{
+  "name": "The Milk Society",
+  "abbreviation": "PAMS",
+  "founded": 2019,
+  "current_season": 2025,
+  "total_matchups": 689,
+  "total_seasons": 7,
+  "current_members_count": 12,
+  "former_members_count": 5,
+  "all_seasons": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "defending_champion": {
+    "year": 2025,
+    "team_name": "Rizzlers",
+    "owner_name": "Mason",
+    "owner_user_id": 21679447,
+    "record": "10-4-0",
+    "points_for": 1771.46
+  }
+}

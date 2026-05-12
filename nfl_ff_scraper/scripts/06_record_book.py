@@ -47,6 +47,12 @@ from _common import (
     save_json,
 )
 
+# Add scripts dir to path so we can import sibling modules
+import sys
+from pathlib import Path as _Path
+sys.path.insert(0, str(_Path(__file__).resolve().parent))
+from playoff_logic import classify_playoff_matchups  # noqa: E402
+
 
 def load_json(path: Path):
     if not path.exists():
@@ -110,6 +116,58 @@ def main():
             season_team_to_uid[(m["season"], m["team_id"])] = m["user_id"]
 
     # ============================================================
+    # 0. Pre-compute playoff classification per (season, user_id)
+    # ============================================================
+    # For each user-season, figure out which playoff weeks COUNT toward
+    # their playoff record and which are consolation games.
+    #
+    # Returns dict: (season, user_id) -> set of week numbers that count
+    #
+    # Non-counted playoff-week games (consolation, eliminated-team games,
+    # missed-playoffs games) are treated as if they don't exist for
+    # playoff-record purposes — but they still count for league-wide
+    # weekly extremes (a 200pt game is a 200pt game).
+
+    # Map standings: (season, team_id) -> reg_season_rank
+    reg_rank_lookup = {}
+    for s in standings:
+        rank = s.get("overall_rank_reg_season")
+        if rank is not None:
+            reg_rank_lookup[(s["season"], s["team_id"])] = rank
+
+    # Group matchups by (season, user_id)
+    matchups_by_user_season = defaultdict(list)
+    for m in matchups:
+        uid = m.get("user_id")
+        if uid is None:
+            continue
+        matchups_by_user_season[(m["season"], uid)].append(m)
+
+    # For each (season, uid), call classify_playoff_matchups
+    playoff_classification = {}
+    for (season, uid), mlist in matchups_by_user_season.items():
+        # Find this user's reg-season rank for the season
+        team_id = mlist[0]["team_id"] if mlist else None
+        reg_rank = reg_rank_lookup.get((season, team_id)) if team_id else None
+
+        mlist_sorted = sorted(mlist, key=lambda m: m["week"])
+        info = classify_playoff_matchups(
+            season=season,
+            user_id=uid,
+            user_reg_rank=reg_rank,
+            user_matchups=mlist_sorted,
+        )
+        playoff_classification[(season, uid)] = info
+
+    def counts_as_playoff(season: int, week: int, uid: int) -> bool:
+        """Returns True if (season, week) counts as a real playoff game for this user."""
+        info = playoff_classification.get((season, uid))
+        if not info:
+            return False
+        return week in info["counted_playoff_weeks"]
+
+
+    # ============================================================
     # 1. Streaks — chronological game lists per user
     # ============================================================
     games_by_user = defaultdict(list)
@@ -159,8 +217,27 @@ def main():
         if uid is None:
             continue
         s = season_team_stats[(m["season"], uid)]
-        is_playoff = config.is_playoff_week(m["season"], m["week"])
-        prefix = "post" if is_playoff else "reg"
+        # Is this a playoff week on the calendar?
+        is_playoff_week_on_calendar = config.is_playoff_week(m["season"], m["week"])
+        # Does it actually COUNT as a playoff game for this team?
+        # (False for consolation, eliminated, or non-playoff teams)
+        is_counted_playoff = counts_as_playoff(m["season"], m["week"], uid)
+
+        # If it's a playoff week BUT doesn't count, skip it entirely from
+        # the team's record (don't dump into "reg" either — it's a consolation game).
+        if is_playoff_week_on_calendar and not is_counted_playoff:
+            # Still update high/low week tracking (the score happened), but
+            # don't add to either reg or playoff record buckets.
+            if m["team_score"] is not None:
+                if s["high_week"] is None or m["team_score"] > s["high_week"]:
+                    s["high_week"] = m["team_score"]
+                    s["high_week_info"] = {"week": m["week"], "opp": m.get("opp_owner", "")}
+                if s["low_week"] is None or m["team_score"] < s["low_week"]:
+                    s["low_week"] = m["team_score"]
+                    s["low_week_info"] = {"week": m["week"], "opp": m.get("opp_owner", "")}
+            continue
+
+        prefix = "post" if is_counted_playoff else "reg"
         s[f"{prefix}_games"] += 1
         if m["result"] == "W":
             s[f"{prefix}_wins"] += 1
@@ -178,6 +255,7 @@ def main():
                 s["low_week_info"] = {"week": m["week"], "opp": m.get("opp_owner", "")}
         if m["opp_score"] is not None:
             s[f"{prefix}_pa"] += m["opp_score"]
+
 
     # Build flat per-team-season rows
     season_rows = []
@@ -504,8 +582,20 @@ def main():
         b = m.get("opp_user_id")
         if a not in matrix or b not in matrix.get(a, {}):
             continue
-        is_playoff = config.is_playoff_week(m["season"], m["week"])
-        prefix = "post" if is_playoff else "reg"
+        is_playoff_week_on_calendar = config.is_playoff_week(m["season"], m["week"])
+        # For H2H purposes, count it as a playoff game ONLY if it counts for BOTH teams.
+        # (e.g. a 3rd-place game counts for both losers; a consolation game counts for neither)
+        is_counted_a = counts_as_playoff(m["season"], m["week"], a)
+        is_counted_b = counts_as_playoff(m["season"], m["week"], b)
+
+        # If it's a playoff week but doesn't count for either team, skip entirely
+        if is_playoff_week_on_calendar and not (is_counted_a or is_counted_b):
+            continue
+
+        # If both teams' game counts → real playoff
+        # If only one team's counts (shouldn't normally happen but defensive) → also playoff
+        is_real_playoff = is_playoff_week_on_calendar and (is_counted_a or is_counted_b)
+        prefix = "post" if is_real_playoff else "reg"
         cell = matrix[a][b]
         if m["result"] == "W": cell[f"{prefix}_w"] += 1
         elif m["result"] == "L": cell[f"{prefix}_l"] += 1
@@ -514,6 +604,7 @@ def main():
             cell[f"{prefix}_pf"] += m["team_score"]
         if m["opp_score"] is not None:
             cell[f"{prefix}_pa"] += m["opp_score"]
+
 
     # Build flat CSV (1 row per ordered pair) + nested JSON for matrix display
     h2h_flat = []

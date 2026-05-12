@@ -1,0 +1,60 @@
+{
+  "seasons": [
+    {
+      "year": 2019,
+      "champion_name": "Joey",
+      "champion_team_name": "On Jah",
+      "champion_user_id": 21679440,
+      "total_teams": 14,
+      "has_complete_data": true
+    },
+    {
+      "year": 2020,
+      "champion_name": "Andrew",
+      "champion_team_name": "Huntingforkickers",
+      "champion_user_id": 21680682,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2021,
+      "champion_name": "Chris",
+      "champion_team_name": "Stafford University",
+      "champion_user_id": 21680417,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2022,
+      "champion_name": "Isaac",
+      "champion_team_name": "Pat Bateman",
+      "champion_user_id": 25033943,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2023,
+      "champion_name": "Connie",
+      "champion_team_name": "Milk Man",
+      "champion_user_id": 21679454,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2024,
+      "champion_name": "Luke",
+      "champion_team_name": "The GLIZZYS",
+      "champion_user_id": 25036608,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2025,
+      "champion_name": "Mason",
+      "champion_team_name": "Rizzlers",
+      "champion_user_id": 21679447,
+      "total_teams": 12,
+      "has_complete_data": true
+    }
+  ]
+}
