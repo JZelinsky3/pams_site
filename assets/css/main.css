@@ -171,7 +171,7 @@ body {
    ============================================================ */
 .section {
     position: relative; z-index: 10;
-    max-width: 1200px; margin: 3rem auto 0;
+    max-width: 1370px; margin: 3rem auto 0;
     padding: 0 2rem;
 }
 .section-header {

@@ -134,12 +134,14 @@ def parse_regular_season(html):
             div_rank = None
             if rank_td:
                 spans = rank_td.find_all("span", class_=re.compile(r"\bteamRank\b"))
-                if len(spans) >= 1:
-                    div_rank = parse_int(clean_text(spans[0].get_text()))
                 if len(spans) >= 2:
+                    div_rank = parse_int(clean_text(spans[0].get_text()))
                     m = re.search(r"\((\d+)\)", spans[1].get_text())
                     if m:
                         overall_rank = int(m.group(1))
+                elif len(spans) == 1:
+                    overall_rank = parse_int(clean_text(spans[0].get_text()))
+                    div_rank = None
 
             out[team_id] = {
                 "team_id": team_id, "team_name": team_name, "division": division,

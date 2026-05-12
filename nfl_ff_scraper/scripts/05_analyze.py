@@ -132,11 +132,29 @@ def main():
     # Pre-compute playoff classification per (season, user_id)
     # so reg/playoff splits know which playoff games actually count.
     # ============================================================
+    # Build lookups for both reg_rank and final_rank — we may need either
+    # depending on the year's playoff seeding convention.
     reg_rank_lookup = {}
+    final_rank_lookup = {}
     for s in standings:
-        rank = s.get("overall_rank_reg_season")
-        if rank is not None:
-            reg_rank_lookup[(s["season"], s["team_id"])] = rank
+        reg = s.get("overall_rank_reg_season")
+        if reg is not None:
+            reg_rank_lookup[(s["season"], s["team_id"])] = reg
+        fin = s.get("final_rank")
+        if fin is not None:
+            final_rank_lookup[(s["season"], s["team_id"])] = fin
+
+    # Years where playoff seeding was custom (not based on reg-season rank)
+    # use final_rank as the playoff seed. For everything else, use reg_rank.
+    CUSTOM_SEEDING_YEARS = {2025}
+
+    def get_playoff_seed(season, team_id):
+        if season in CUSTOM_SEEDING_YEARS:
+            return final_rank_lookup.get((season, team_id))
+        # Default: use reg-season rank.
+        # Fall back to final_rank if reg_rank is missing (e.g. 2019 data quirk)
+        return (reg_rank_lookup.get((season, team_id))
+                or final_rank_lookup.get((season, team_id)))
 
     matchups_by_user_season = defaultdict(list)
     for m in matchups:
@@ -148,11 +166,11 @@ def main():
     playoff_classification = {}
     for (season, uid), mlist in matchups_by_user_season.items():
         team_id = mlist[0]["team_id"] if mlist else None
-        reg_rank = reg_rank_lookup.get((season, team_id)) if team_id else None
+        seed = get_playoff_seed(season, team_id) if team_id else None
         info = classify_playoff_matchups(
             season=season,
             user_id=uid,
-            user_reg_rank=reg_rank,
+            playoff_seed=seed,
             user_matchups=sorted(mlist, key=lambda m: m["week"]),
         )
         playoff_classification[(season, uid)] = info
@@ -162,6 +180,7 @@ def main():
         if not info:
             return False
         return week in info["counted_playoff_weeks"]
+
 
     # ============================================================
     # Per-manager career summary (every user_id)

@@ -174,17 +174,24 @@ def fetch_regular_season(session, season: int) -> dict[int, dict]:
             pa = parse_float(clean_text(pts_cells[1].get_text())) if len(pts_cells) >= 2 else None
 
             # Overall rank is the SECOND span inside td.teamRank, in parens: "(2)"
+            # (when divisions exist — like 2023+)
+            # For older seasons without divisions (like 2019), there's only ONE span
+            # and it IS the overall rank directly.
             overall_rank = None
             div_rank = None
             rank_td = tr.find("td", class_=re.compile(r"\bteamRank\b"))
             if rank_td:
                 spans = rank_td.find_all("span", class_=re.compile(r"\bteamRank\b"))
-                if len(spans) >= 1:
-                    div_rank = parse_int(clean_text(spans[0].get_text()))
                 if len(spans) >= 2:
+                    # Multi-table (division) layout: first span = div rank, second = overall
+                    div_rank = parse_int(clean_text(spans[0].get_text()))
                     m = re.search(r"\((\d+)\)", spans[1].get_text())
                     if m:
                         overall_rank = int(m.group(1))
+                elif len(spans) == 1:
+                    # Single-table layout (no divisions): the only rank IS the overall rank
+                    overall_rank = parse_int(clean_text(spans[0].get_text()))
+                    div_rank = None
 
             out[team_id] = {
                 "team_id": team_id,
