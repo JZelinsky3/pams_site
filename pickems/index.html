@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.95, viewport-fit=cover" />
+  <title>Pick'ems · PA Milk Society</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="./pickems.css" />
+</head>
+<body>
+  <div class="site-glow" aria-hidden="true"></div>
+
+  <div class="pe-app">
+
+    <!-- ── NAV ── -->
+    <nav class="pe-nav">
+      <a href="/index.html" class="pe-nav-back">← Hub</a>
+      <div class="pe-nav-center">
+        <div class="pe-nav-kicker">PA Milk Society · 2026</div>
+        <h1 class="pe-nav-title">Weekly Pick'ems</h1>
+      </div>
+      <button id="recordsBtn" class="pe-records-btn" type="button">Voting Records</button>
+    </nav>
+
+    <!-- ── AUTH ── -->
+    <div class="pe-auth" id="authBox">
+      <form id="loginForm" class="pe-login" novalidate>
+        <input type="text" id="username" placeholder="Name" required autocomplete="username" />
+        <input type="password" id="password" placeholder="PIN"
+               inputmode="numeric" pattern="[0-9]{3}" minlength="3" maxlength="3"
+               required autocomplete="one-time-code" />
+        <button class="pe-btn" type="submit">Login</button>
+      </form>
+      <div id="whoami" class="pe-pill" hidden></div>
+      <button id="logoutBtn" class="pe-btn pe-btn-ghost" hidden>Logout</button>
+    </div>
+
+    <!-- ── WEEK TABS ── -->
+    <div class="pe-tabs" id="weekTabs"></div>
+
+    <!-- ── WEEK VIEWS ── -->
+    <main class="pe-weeks" id="weekViews"></main>
+
+    <!-- ── SUBMIT BAR ── -->
+    <div class="pe-submitbar" id="submitBar">
+      <button id="submitPicks" class="pe-btn" disabled>Submit Picks</button>
+      <span class="pe-submit-hint" id="submitHint">Login to vote</span>
+    </div>
+
+    <footer class="pe-footer">
+      PA Milk Society · auto-updated from Sleeper every Tuesday
+    </footer>
+  </div>
+
+  <!-- ── RECORDS MODAL ── -->
+  <div id="recordsModal" class="records-modal" role="dialog" aria-modal="true"
+       aria-labelledby="recordsTitle" hidden>
+    <div class="records-modal-backdrop" data-close="1"></div>
+    <div class="records-modal-content" role="document">
+      <div class="records-modal-header">
+        <h2 id="recordsTitle">Voting Records</h2>
+        <button id="recordsClose" class="records-close" aria-label="Close">×</button>
+      </div>
+      <ol id="recordsList" class="records-list"></ol>
+    </div>
+  </div>
+
+  <script type="module" src="./pickems.js"></script>
+</body>
+</html>

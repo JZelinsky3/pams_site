@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Power Rankings · PA Milk Society</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="./powerrank.css" />
+</head>
+<body>
+  <div class="site-glow" aria-hidden="true"></div>
+
+  <div class="pr-app">
+
+    <!-- ── NAV ── -->
+    <nav class="pr-nav">
+      <a href="/index.html" class="pr-nav-back">← Hub</a>
+      <div class="pr-nav-center">
+        <div class="pr-nav-kicker">PA Milk Society · 2026</div>
+        <h1 class="pr-nav-title">Power Rankings</h1>
+      </div>
+      <div class="pr-nav-right">
+        <span class="pr-auto-badge">AUTO</span>
+      </div>
+    </nav>
+
+    <!-- ── PRE-SEASON STATE (hidden until JS checks) ── -->
+    <div id="preseason" class="pr-preseason" hidden>
+      <h2>Rankings Coming Week 1</h2>
+      <p>Power rankings will appear here after the first week of the season.<br>Updated automatically every Tuesday.</p>
+      <div class="pr-formula-preview">
+        <div class="pr-formula-title">How it's calculated</div>
+        <div class="pr-formula-grid">
+          <div class="pr-factor"><span class="pr-factor-pts">40</span><span class="pr-factor-label">Record</span><span class="pr-factor-note">blended with career history early season</span></div>
+          <div class="pr-factor"><span class="pr-factor-pts">30</span><span class="pr-factor-label">Points For</span><span class="pr-factor-note">percentile rank among all 12 teams</span></div>
+          <div class="pr-factor"><span class="pr-factor-pts">20</span><span class="pr-factor-label">Efficiency</span><span class="pr-factor-note">PF as % of total points scored in matchups</span></div>
+          <div class="pr-factor"><span class="pr-factor-pts">10</span><span class="pr-factor-label">Form</span><span class="pr-factor-note">win% in last 3 weeks</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MAIN CONTENT (filled by JS) ── -->
+    <div id="mainContent" hidden>
+
+      <!-- Week tabs -->
+      <div class="pr-week-tabs" id="weekTabs"></div>
+
+      <!-- View switcher: Overall / Whole / Skim -->
+      <div class="pr-view-tabs">
+        <button class="pr-view-tab active" data-view="overall">Overall</button>
+        <button class="pr-view-tab" data-view="whole">Whole Division</button>
+        <button class="pr-view-tab" data-view="skim">Skim Division</button>
+      </div>
+
+      <!-- Generated timestamp -->
+      <div class="pr-generated" id="generatedAt"></div>
+
+      <!-- Podium -->
+      <div class="pr-podium" id="podium"></div>
+
+      <!-- Rankings table -->
+      <div class="pr-table-wrap">
+        <table class="pr-table" id="rankTable">
+          <thead>
+            <tr>
+              <th class="col-rank">#</th>
+              <th class="col-team">Team</th>
+              <th class="col-record">Record</th>
+              <th class="col-pf">PF</th>
+              <th class="col-score">Score</th>
+              <th class="col-bars">Breakdown</th>
+            </tr>
+          </thead>
+          <tbody id="rankBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Formula explainer -->
+      <details class="pr-formula">
+        <summary>How it's calculated</summary>
+        <div class="pr-formula-grid">
+          <div class="pr-factor"><span class="pr-factor-pts">40</span><span class="pr-factor-label">Record</span><span class="pr-factor-note">blended with 7-season career win % early in the season — history weight fades to zero by week 5</span></div>
+          <div class="pr-factor"><span class="pr-factor-pts">30</span><span class="pr-factor-label">Points For</span><span class="pr-factor-note">percentile rank among all 12 teams this season</span></div>
+          <div class="pr-factor"><span class="pr-factor-pts">20</span><span class="pr-factor-label">Efficiency</span><span class="pr-factor-note">PF ÷ (PF + PA) — how dominant you are against your opponents</span></div>
+          <div class="pr-factor"><span class="pr-factor-pts">10</span><span class="pr-factor-label">Form</span><span class="pr-factor-note">win% over your last 3 completed weeks</span></div>
+        </div>
+        <p class="pr-formula-note">Conference tabs re-rank within each division only — formula stays the same.</p>
+      </details>
+
+    </div><!-- /mainContent -->
+
+  </div><!-- /pr-app -->
+
+  <script type="module" src="./powerrank.js"></script>
+</body>
+</html>

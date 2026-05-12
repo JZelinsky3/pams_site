@@ -1,0 +1,629 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+#wrap{font-family:var(--font-sans);user-select:none;-webkit-user-select:none;max-width:520px;margin:0 auto}
+canvas{display:block;touch-action:none;cursor:crosshair}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tval{font-size:19px;font-weight:500;letter-spacing:-1px}
+.tlabel{font-size:11px;color:var(--color-text-secondary)}
+.pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary)}
+.pill-red{border-color:#A32D2D;color:#A32D2D}
+.hint{font-size:11px;color:var(--color-text-secondary);text-align:center;padding:4px 8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;text-align:center}
+.screen.on{display:flex}
+.obtn{padding:11px 28px;border-radius:var(--border-radius-lg);font-size:14px;font-weight:500;cursor:pointer;border:none;background:var(--color-text-primary);color:var(--color-background-primary);margin:5px;transition:transform .1s}
+.obtn:active{transform:scale(.97)}
+.obtn-out{background:transparent;border:0.5px solid var(--color-border-secondary)!important;color:var(--color-text-primary)}
+.stat-row{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
+.stat{text-align:center}.sv{font-size:22px;font-weight:500}.sl{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.mw{height:7px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.mf{height:100%;border-radius:4px;transition:width .3s,background .3s}
+.pip{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--color-border-secondary);transition:background .15s}
+.pip.on{background:var(--color-text-primary);border-color:var(--color-text-primary)}
+#flash{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+.fp{position:absolute;font-size:13px;font-weight:500;pointer-events:none;animation:fp .75s ease forwards;white-space:nowrap;transform:translateX(-50%)}
+@keyframes fp{0%{opacity:1;top:var(--fy)}100%{opacity:0;top:calc(var(--fy) - 42px)}}
+#pause-overlay{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:10}
+#pause-overlay.show{display:flex}
+#pause-overlay .p-title{font-size:28px;font-weight:500;color:#fff;letter-spacing:-1px}
+#pause-overlay .p-sub{font-size:14px;color:rgba(255,255,255,0.7)}
+#countdown-overlay{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:11}
+#countdown-overlay.show{display:flex}
+#countdown-num{font-size:90px;font-weight:500;color:#fff;letter-spacing:-4px;animation:pulse 1s ease}
+@keyframes pulse{0%{transform:scale(1.3);opacity:0.5}100%{transform:scale(1);opacity:1}}
+</style>
+
+<div id="wrap">
+<div id="sc-start" class="screen on" style="min-height:580px">
+  <div style="font-size:38px;font-weight:500;letter-spacing:-2px;margin-bottom:10px">Gravity</div>
+  <p style="font-size:13px;color:var(--color-text-secondary);max-width:300px;line-height:1.9;margin-bottom:10px">
+    Guide balls onto the moving platform.<br>
+    Same numbers touch and <strong>merge</strong> — 3+3=6, 6+6=12…<br>
+    Balls roll and settle naturally into gaps.<br>
+    Stack hits the red line = game over.<br>
+    45s without a merge = game over.<br>
+    <span style="color:#A32D2D;font-weight:500">☠ Bombs</span> follow every 6th ball + give a bonus line.
+  </p>
+  <button class="obtn" style="margin-top:14px" onclick="startGame()">Play</button>
+</div>
+
+<div id="sc-game" style="display:none;flex-direction:column">
+  <div class="topbar">
+    <div><div class="tval" id="g-score">0</div><div class="tlabel">Best: <span id="g-best">0</span></div></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;margin:0 10px">
+      <div style="display:flex;justify-content:space-between;width:100%;max-width:190px">
+        <span style="font-size:11px;color:var(--color-text-secondary)">Merge timer</span>
+        <span style="font-size:11px;color:var(--color-text-secondary)">Lines: <span id="g-lcount">1</span></span>
+      </div>
+      <div class="mw" style="width:100%;max-width:190px"><div class="mf" id="g-meter" style="width:100%"></div></div>
+      <div style="display:flex;gap:4px" id="g-pips"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="text-align:right"><div class="tval" id="g-highest">—</div><div class="tlabel">highest</div></div>
+      <button class="pill" onclick="togglePause()" id="pause-btn">⏸</button>
+      <button class="pill pill-red" onclick="endGame(true)">✕</button>
+    </div>
+  </div>
+  <div class="hint">Draw lines to redirect balls &nbsp;|&nbsp; Only same numbers merge &nbsp;|&nbsp; Stack = danger</div>
+  <div style="position:relative">
+    <canvas id="gc"></canvas>
+    <div id="flash"></div>
+    <div id="pause-overlay">
+      <div class="p-title">Paused</div>
+      <div class="p-sub">Game is paused</div>
+      <button class="obtn" onclick="togglePause()">Resume</button>
+    </div>
+    <div id="countdown-overlay">
+      <div id="countdown-num">3</div>
+    </div>
+  </div>
+</div>
+
+<div id="sc-end" class="screen" style="min-height:580px">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:4px" id="go-reason">Game over</div>
+  <div style="font-size:46px;font-weight:500;letter-spacing:-2px;margin-bottom:2px" id="go-score">0</div>
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:18px">points</div>
+  <div class="stat-row">
+    <div class="stat"><div class="sv" id="go-high">—</div><div class="sl">highest</div></div>
+    <div class="stat"><div class="sv" id="go-merges">0</div><div class="sl">merges</div></div>
+    <div class="stat"><div class="sv" id="go-lost">0</div><div class="sl">lost</div></div>
+    <div class="stat"><div class="sv" id="go-best">0</div><div class="sl">best ever</div></div>
+  </div>
+  <div style="padding:10px 16px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;max-width:300px" id="go-share"></div>
+  <button class="obtn" onclick="startGame()">Play again</button>
+  <button class="obtn obtn-out" onclick="copyScore()">Share score</button>
+</div>
+</div>
+
+<script>
+const W=520,H=750;
+const GRAV=0.10;
+const BALL_R=21;
+const LINE_LIFE=2200;
+const MAX_LINE=275;
+const PLAT_H=14;
+const PLAT_W_FRAC=0.76;
+const WALL_W=10;
+const WALL_H=14;
+const LINE_CAP=4;
+const METER_FULL=100;
+const METER_DRAIN_MS=45000;
+const METER_LOSE=16;
+const BOMB_DRAIN=7;
+const BOMB_R=55;
+const BOMB_EVERY=6;
+const DANGER_Y=180;   // safe buffer — balls spawn at y=-BALL_R, only trigger once on platform
+const RESTITUTION=0.18;
+const FRICTION=0.75;
+const MERGE_COOLDOWN=400;
+
+const CLR={
+  3:{bg:"#2563EB",tx:"#fff"},
+  6:{bg:"#059669",tx:"#fff"},
+  12:{bg:"#DC2626",tx:"#fff"},
+  24:{bg:"#7C3AED",tx:"#fff"},
+  48:{bg:"#0891B2",tx:"#fff"},
+  96:{bg:"#D97706",tx:"#fff"},
+  192:{bg:"#DB2777",tx:"#fff"},
+  384:{bg:"#4F46E5",tx:"#fff"},
+  768:{bg:"#0D9488",tx:"#fff"},
+  1536:{bg:"#B45309",tx:"#fff"},
+  3072:{bg:"#be123c",tx:"#fff"},
+};
+function ballColor(v){return CLR[v]||{bg:"#1e293b",tx:"#f1f5f9"};}
+
+let canvas,ctx,balls=[],lines=[],explosions=[];
+let score=0,merges=0,lost=0,highest=0,meter=METER_FULL;
+let best=parseInt(localStorage.getItem("grav10_best")||"0");
+let drawing=false,curLine=null,lastPos=null;
+let spawnTimer=0,pendingBomb=false,bombDelay=0;
+let lastTime=0,raf=null,alive=false,paused=false,diff=1;
+let linesAvail=1,spawnMs=3400,ballCount=0;
+let plat={x:0,y:0,w:0,vx:0.4};
+
+function initPlat(){
+  plat.w=Math.round(W*PLAT_W_FRAC);
+  plat.x=(W-plat.w)/2;
+  plat.y=H-90;
+  plat.vx=0.4;
+}
+
+function randVal(){
+  const r=Math.random();
+  return r<0.42?3:r<0.80?6:12;
+}
+
+function spawnBall(isBomb){
+  const x=BALL_R*2+Math.random()*(W-BALL_R*4);
+  balls.push({
+    x,y:-BALL_R*2,
+    vx:(Math.random()-0.5)*0.45,
+    vy:isBomb?1.1:0.28+Math.random()*0.22,
+    val:isBomb?0:randVal(),
+    isBomb,r:BALL_R,
+    dead:false,merging:false,
+    flash:0,scale:1,
+    lastMerge:0,
+    onPlatform:false   // only true once fully landed
+  });
+  if(!isBomb){
+    linesAvail=Math.min(linesAvail+1,LINE_CAP);
+    ballCount++;
+    if(ballCount%BOMB_EVERY===0){pendingBomb=true;bombDelay=1400;}
+  } else {
+    linesAvail=Math.min(linesAvail+1,LINE_CAP);
+  }
+  renderPips();
+}
+
+function startGame(){
+  ['sc-start','sc-end'].forEach(id=>document.getElementById(id).classList.remove('on'));
+  document.getElementById('sc-game').style.display='flex';
+  document.getElementById('pause-overlay').classList.remove('show');
+  document.getElementById('countdown-overlay').style.display='none';
+  canvas=document.getElementById('gc');
+  canvas.width=W;canvas.height=H;
+  ctx=canvas.getContext('2d');
+  balls=[];lines=[];explosions=[];
+  score=0;merges=0;lost=0;highest=0;meter=METER_FULL;
+  diff=1;spawnTimer=0;pendingBomb=false;bombDelay=0;ballCount=0;
+  spawnMs=3400;linesAvail=1;paused=false;
+  document.getElementById('g-best').textContent=best.toLocaleString();
+  document.getElementById('pause-btn').textContent='⏸';
+  initPlat();setupInput();
+  alive=true;lastTime=performance.now();
+  spawnBall(false);renderPips();
+  cancelAnimationFrame(raf);
+  raf=requestAnimationFrame(loop);
+}
+
+function togglePause(){
+  if(!alive)return;
+  if(!paused){
+    paused=true;
+    document.getElementById('pause-overlay').classList.add('show');
+    document.getElementById('pause-btn').textContent='▶';
+  } else {
+    document.getElementById('pause-overlay').classList.remove('show');
+    startCountdown();
+  }
+}
+
+function startCountdown(){
+  const overlay=document.getElementById('countdown-overlay');
+  const num=document.getElementById('countdown-num');
+  overlay.style.display='flex';
+  let count=3;
+  num.textContent=count;
+  // force reflow to restart animation
+  num.style.animation='none';
+  num.offsetHeight;
+  num.style.animation='pulse 1s ease';
+  const tick=setInterval(()=>{
+    count--;
+    if(count<=0){
+      clearInterval(tick);
+      overlay.style.display='none';
+      paused=false;
+      document.getElementById('pause-btn').textContent='⏸';
+      lastTime=performance.now();
+      raf=requestAnimationFrame(loop);
+    } else {
+      num.textContent=count;
+      num.style.animation='none';
+      num.offsetHeight;
+      num.style.animation='pulse 1s ease';
+    }
+  },1000);
+}
+
+function renderPips(){
+  const c=document.getElementById('g-pips');
+  if(!c)return;
+  let h='';for(let i=0;i<LINE_CAP;i++)h+=`<div class="pip${i<linesAvail?' on':''}"></div>`;
+  c.innerHTML=h;
+  const el=document.getElementById('g-lcount');
+  if(el)el.textContent=linesAvail;
+}
+
+function loop(ts){
+  if(!alive||paused)return;
+  const dt=Math.min(ts-lastTime,50);
+  lastTime=ts;
+  spawnTimer+=dt;
+  spawnMs=Math.max(2100,3400-diff*36);
+  if(spawnTimer>spawnMs){spawnTimer=0;spawnBall(false);diff+=0.14;}
+  if(pendingBomb){bombDelay-=dt;if(bombDelay<=0){pendingBomb=false;spawnBall(true);}}
+  meter=Math.max(0,meter-(METER_FULL/METER_DRAIN_MS)*dt);
+  if(meter<=0){endGame(false,'Merge timer ran out!');return;}
+  update(dt);draw();
+  raf=requestAnimationFrame(loop);
+}
+
+function update(dt){
+  const now=Date.now();
+  lines=lines.filter(l=>now-l.born<LINE_LIFE);
+
+  plat.x+=plat.vx*(dt/16);
+  if(plat.x<=0){plat.x=0;plat.vx=Math.abs(plat.vx);}
+  if(plat.x+plat.w>=W){plat.x=W-plat.w;plat.vx=-Math.abs(plat.vx);}
+
+  const live=balls.filter(b=>!b.dead&&!b.merging);
+
+  // integrate
+  live.forEach(b=>{
+    b.vy+=GRAV*(dt/16);
+    b.vx*=Math.pow(0.999,dt/16);
+    b.x+=b.vx*(dt/16);
+    b.y+=b.vy*(dt/16);
+    if(b.flash>0)b.flash=Math.max(0,b.flash-dt/140);
+    if(b.scale>1)b.scale=Math.max(1,b.scale-0.06*(dt/16));
+  });
+
+  // ball-ball collisions
+  for(let iter=0;iter<3;iter++){
+    for(let i=0;i<live.length;i++){
+      for(let j=i+1;j<live.length;j++){
+        const a=live[i],b=live[j];
+        const dx=b.x-a.x,dy=b.y-a.y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        const minD=a.r+b.r;
+        if(dist>=minD||dist<0.001)continue;
+        const nx=dx/dist,ny=dy/dist;
+        const overlap=(minD-dist)*0.5;
+        a.x-=nx*overlap;a.y-=ny*overlap;
+        b.x+=nx*overlap;b.y+=ny*overlap;
+        const dvx=a.vx-b.vx,dvy=a.vy-b.vy;
+        const dot=dvx*nx+dvy*ny;
+        if(dot>0)continue;
+        const imp=dot*(1+RESTITUTION)*0.5;
+        a.vx-=imp*nx;a.vy-=imp*ny;
+        b.vx+=imp*nx;b.vy+=imp*ny;
+        const tx=-ny,ty=nx;
+        const tdot=dvx*tx+dvy*ty;
+        const fimp=tdot*FRICTION*0.05;
+        a.vx-=fimp*tx;a.vy-=fimp*ty;
+        b.vx+=fimp*tx;b.vy+=fimp*ty;
+      }
+    }
+  }
+
+  // platform & wall collisions
+  live.forEach(b=>{
+    collidePlat(b);
+    collideLines(b);
+    if(b.y>H+BALL_R*2){
+      b.dead=true;
+      if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE);flashPop(Math.min(W-10,Math.max(10,b.x)),H-30,"lost","#A32D2D");}
+    }
+    if(b.x<-BALL_R*6||b.x>W+BALL_R*6){
+      b.dead=true;
+      if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE*0.5);flashPop(b.x<0?36:W-36,H*0.6,"off edge","#A32D2D");}
+    }
+  });
+
+  checkBombs();
+  checkMerges();
+  balls=balls.filter(b=>!b.dead&&!b.merging);
+
+  // danger check — only for balls that have actually landed on the platform
+  for(const b of balls){
+    if(!b.dead&&!b.merging&&b.onPlatform&&b.y-b.r<DANGER_Y){
+      endGame(false,'Stack reached the danger line!');return;
+    }
+  }
+
+  explosions=explosions.filter(e=>{e.age+=dt;return e.age<600;});
+  updateUI();
+}
+
+function collidePlat(b){
+  const innerLeft=plat.x+WALL_W;
+  const innerRight=plat.x+plat.w-WALL_W;
+  const pTop=plat.y;
+
+  // top surface
+  if(b.x>innerLeft-b.r*0.3&&b.x<innerRight+b.r*0.3&&b.vy>0&&b.y+b.r>=pTop&&b.y+b.r<pTop+PLAT_H+6){
+    b.y=pTop-b.r;
+    const spd=Math.abs(b.vy);
+    b.vy=-spd*RESTITUTION;
+    b.vx*=FRICTION;
+    if(Math.abs(b.vy)<0.5)b.vy=0;
+    b.onPlatform=true;
+  }
+  // left wall inner face
+  if(b.x-b.r<innerLeft&&b.x+b.r>plat.x&&b.y+b.r>pTop-WALL_H&&b.y<pTop+PLAT_H){
+    b.x=innerLeft+b.r;
+    b.vx=Math.abs(b.vx)*RESTITUTION;
+  }
+  // right wall inner face
+  if(b.x+b.r>innerRight&&b.x-b.r<plat.x+plat.w&&b.y+b.r>pTop-WALL_H&&b.y<pTop+PLAT_H){
+    b.x=innerRight-b.r;
+    b.vx=-Math.abs(b.vx)*RESTITUTION;
+  }
+}
+
+function collideLines(b){
+  const all=curLine&&curLine.pts&&curLine.pts.length>1?[...lines,curLine]:lines;
+  all.forEach(line=>{
+    const pts=line.pts;
+    for(let i=0;i<pts.length-1;i++){
+      const ax=pts[i].x,ay=pts[i].y,ex=pts[i+1].x,ey=pts[i+1].y;
+      const ddx=ex-ax,ddy=ey-ay,len=Math.sqrt(ddx*ddx+ddy*ddy);
+      if(len<1)continue;
+      const nx=ddy/len,ny=-ddx/len;
+      const px=b.x-ax,py=b.y-ay;
+      const dot2=px*nx+py*ny;
+      const tx2=px-dot2*nx,ty2=py-dot2*ny;
+      const t=Math.max(0,Math.min(1,(tx2*ddx+ty2*ddy)/(len*len)));
+      const cx=ax+t*ddx,cy=ay+t*ddy;
+      const ex2=b.x-cx,ey2=b.y-cy;
+      const dist=Math.sqrt(ex2*ex2+ey2*ey2);
+      if(dist<b.r&&dist>0.001){
+        const ov=b.r-dist;
+        const enx=ex2/dist,eny=ey2/dist;
+        b.x+=enx*ov;b.y+=eny*ov;
+        const vd=b.vx*enx+b.vy*eny;
+        if(vd<0){
+          const mag=Math.abs(vd)*0.5;
+          b.vx+=enx*mag*2*RESTITUTION;
+          b.vy+=eny*mag*2*RESTITUTION;
+          b.vx*=FRICTION;
+        }
+      }
+    }
+  });
+}
+
+function checkBombs(){
+  balls.filter(b=>b.isBomb&&!b.dead).forEach(bomb=>{
+    let hit=false;
+    const innerLeft=plat.x+WALL_W,innerRight=plat.x+plat.w-WALL_W;
+    balls.forEach(b=>{
+      if(b===bomb||b.dead||b.isBomb)return;
+      const dx=b.x-bomb.x,dy=b.y-bomb.y;
+      if(Math.sqrt(dx*dx+dy*dy)<bomb.r+b.r)hit=true;
+    });
+    if(!hit&&bomb.x>innerLeft&&bomb.x<innerRight&&bomb.y+bomb.r>plat.y&&bomb.vy>0)hit=true;
+    if(hit)doBomb(bomb);
+  });
+}
+
+function doBomb(bomb){
+  if(bomb.dead)return;
+  bomb.dead=true;
+  explosions.push({x:bomb.x,y:bomb.y,age:0});
+  flashPop(bomb.x,bomb.y-36,"☠ BOOM!","#A32D2D");
+  balls.forEach(b=>{
+    if(b.dead||b.isBomb)return;
+    const dx=b.x-bomb.x,dy=b.y-bomb.y;
+    if(Math.sqrt(dx*dx+dy*dy)<BOMB_R+b.r){
+      const loss=b.val*5;
+      score=Math.max(0,score-loss);
+      meter=Math.max(0,meter-BOMB_DRAIN);
+      b.vx=(b.x-bomb.x)*0.07;
+      b.vy=-2.2-Math.random()*0.8;
+      b.onPlatform=false;
+      flashPop(b.x,b.y-22,"-"+loss,"#A32D2D");
+    }
+  });
+}
+
+function checkMerges(){
+  const now=Date.now();
+  const live=balls.filter(b=>!b.dead&&!b.merging&&!b.isBomb);
+  for(let i=0;i<live.length;i++){
+    const a=live[i];
+    if(a.dead||a.merging)continue;
+    if(now-a.lastMerge<MERGE_COOLDOWN)continue;
+    for(let j=i+1;j<live.length;j++){
+      const b=live[j];
+      if(b.dead||b.merging)continue;
+      if(now-b.lastMerge<MERGE_COOLDOWN)continue;
+      if(a.val!==b.val)continue;
+      const dx=a.x-b.x,dy=a.y-b.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist>a.r+b.r+2)continue;
+      const nv=a.val*2;
+      a.val=nv;
+      a.scale=1.35;a.flash=1;
+      a.lastMerge=now;
+      a.vx=(a.vx+b.vx)*0.3;
+      a.vy=Math.min(-0.3,(a.vy+b.vy)*0.3);
+      b.merging=true;
+      const pts=nv*6;
+      score+=pts;merges++;
+      if(nv>highest)highest=nv;
+      meter=METER_FULL;
+      flashPop(a.x,a.y-30,nv>=48?"NICE! +"+pts:"+"+pts,nv>=24?"#7C3AED":"#059669");
+      break;
+    }
+  }
+}
+
+function flashPop(x,y,txt,color){
+  const layer=document.getElementById('flash');
+  if(!layer||!canvas)return;
+  const cr=canvas.getBoundingClientRect();
+  const lr=layer.getBoundingClientRect();
+  const sx=x*(cr.width/W)+(cr.left-lr.left);
+  const sy=y*(cr.height/H);
+  const el=document.createElement('div');
+  el.className='fp';
+  el.style.cssText=`left:${sx}px;--fy:${sy}px;top:${sy}px;color:${color}`;
+  el.textContent=txt;
+  layer.appendChild(el);
+  setTimeout(()=>el.remove(),800);
+}
+
+function updateUI(){
+  document.getElementById('g-score').textContent=score.toLocaleString();
+  document.getElementById('g-highest').textContent=highest||'—';
+  const m=document.getElementById('g-meter');
+  m.style.width=meter+'%';
+  m.style.background=meter>55?'#059669':meter>28?'#D97706':'#DC2626';
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  // danger zone
+  ctx.fillStyle='rgba(220,38,38,0.055)';
+  ctx.fillRect(0,0,W,DANGER_Y);
+  ctx.setLineDash([5,5]);
+  ctx.strokeStyle='#DC2626';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(0,DANGER_Y);ctx.lineTo(W,DANGER_Y);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#DC2626';ctx.font='500 10px var(--font-sans)';
+  ctx.textAlign='left';ctx.fillText('DANGER — stack limit',8,DANGER_Y-5);
+
+  // platform
+  const pg=ctx.createLinearGradient(plat.x,plat.y,plat.x+plat.w,plat.y);
+  pg.addColorStop(0,'#3730A3');pg.addColorStop(0.5,'#4F46E5');pg.addColorStop(1,'#3730A3');
+  ctx.fillStyle=pg;
+  ctx.beginPath();ctx.roundRect(plat.x,plat.y,plat.w,PLAT_H,6);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,0.18)';
+  ctx.beginPath();ctx.roundRect(plat.x+4,plat.y+2,plat.w-8,4,3);ctx.fill();
+  // walls
+  ctx.fillStyle='#6366F1';
+  ctx.beginPath();ctx.roundRect(plat.x,plat.y-WALL_H,WALL_W,WALL_H+PLAT_H,3);ctx.fill();
+  ctx.beginPath();ctx.roundRect(plat.x+plat.w-WALL_W,plat.y-WALL_H,WALL_W,WALL_H+PLAT_H,3);ctx.fill();
+
+  // explosions
+  explosions.forEach(e=>{
+    const pr=e.age/600;
+    ctx.globalAlpha=(1-pr)*0.25;ctx.fillStyle='#E24B4A';
+    ctx.beginPath();ctx.arc(e.x,e.y,BOMB_R*pr,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
+  });
+
+  // lines
+  const now=Date.now();
+  const allL=curLine&&curLine.pts&&curLine.pts.length>1?[...lines,curLine]:lines;
+  allL.forEach(line=>{
+    const age=now-line.born;
+    const alpha=line===curLine?0.9:Math.max(0,1-age/LINE_LIFE);
+    if(alpha<=0)return;
+    ctx.globalAlpha=alpha;
+    ctx.strokeStyle=line===curLine?'#6366F1':'#A5B4FC';
+    ctx.lineWidth=line===curLine?3.5:3;
+    ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.beginPath();
+    const pts=line.pts;ctx.moveTo(pts[0].x,pts[0].y);
+    for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);
+    ctx.stroke();
+    ctx.globalAlpha=1;
+  });
+
+  // balls
+  balls.forEach(b=>{
+    if(b.dead||b.merging)return;
+    ctx.save();
+    ctx.translate(b.x,b.y);ctx.scale(b.scale,b.scale);
+    if(b.isBomb){
+      ctx.fillStyle='#0f172a';
+      ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#E24B4A';ctx.lineWidth=2.5;ctx.stroke();
+      const pulse=0.4+0.6*Math.sin(Date.now()/110);
+      ctx.globalAlpha=pulse*0.35;ctx.strokeStyle='#E24B4A';ctx.lineWidth=3;
+      ctx.beginPath();ctx.arc(0,0,b.r+7,0,Math.PI*2);ctx.stroke();
+      ctx.globalAlpha=1;
+      ctx.font=`${Math.round(b.r*0.95)}px serif`;
+      ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('☠',0,1);
+    } else {
+      const c=ballColor(b.val);
+      if(b.flash>0)ctx.globalAlpha=0.4+0.6*(1-b.flash);
+      ctx.fillStyle=c.bg;
+      ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=1;
+      ctx.fillStyle=c.tx;
+      const fs=b.val>=1000?9:b.val>=100?11:b.val>=10?13:15;
+      ctx.font=`600 ${fs}px var(--font-sans)`;
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(b.val,0,0);
+    }
+    ctx.restore();
+  });
+
+  if(linesAvail<=0){
+    ctx.fillStyle='rgba(220,38,38,0.05)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#DC2626';ctx.font='500 11px var(--font-sans)';
+    ctx.textAlign='center';ctx.fillText('No lines — wait for next ball',W/2,DANGER_Y+18);
+  }
+}
+
+function endGame(quit,reason){
+  alive=false;cancelAnimationFrame(raf);
+  if(score>best){best=score;localStorage.setItem('grav10_best',best);}
+  if(quit&&score===0){
+    document.getElementById('sc-game').style.display='none';
+    document.getElementById('sc-start').classList.add('on');return;
+  }
+  document.getElementById('sc-game').style.display='none';
+  document.getElementById('sc-end').classList.add('on');
+  document.getElementById('go-reason').textContent=reason||'Game over';
+  document.getElementById('go-score').textContent=score.toLocaleString();
+  document.getElementById('go-high').textContent=highest||'—';
+  document.getElementById('go-merges').textContent=merges;
+  document.getElementById('go-lost').textContent=lost;
+  document.getElementById('go-best').textContent=best.toLocaleString();
+  document.getElementById('go-share').textContent=`Gravity — highest: ${highest}, score: ${score.toLocaleString()}, ${merges} merges. Beat me?`;
+}
+
+function copyScore(){
+  const t=document.getElementById('go-share').textContent;
+  if(navigator.clipboard)navigator.clipboard.writeText(t);
+  document.getElementById('go-share').textContent='Copied!';
+  setTimeout(()=>document.getElementById('go-share').textContent=t,1800);
+}
+
+function getPos(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*(W/r.width),y:(e.clientY-r.top)*(H/r.height)};}
+function getTPos(e){const r=canvas.getBoundingClientRect();const t=e.touches[0];return{x:(t.clientX-r.left)*(W/r.width),y:(t.clientY-r.top)*(H/r.height)};}
+function lenOk(pts,np){
+  let len=0;
+  for(let i=1;i<pts.length;i++){const dx=pts[i].x-pts[i-1].x,dy=pts[i].y-pts[i-1].y;len+=Math.sqrt(dx*dx+dy*dy);}
+  const dx=np.x-pts[pts.length-1].x,dy=np.y-pts[pts.length-1].y;
+  return len+Math.sqrt(dx*dx+dy*dy)<=MAX_LINE;
+}
+function setupInput(){
+  canvas.onmousedown=e=>{if(!linesAvail||paused)return;drawing=true;curLine={pts:[getPos(e)],born:Date.now()};lastPos=getPos(e);};
+  canvas.onmousemove=e=>{
+    if(!drawing)return;const p=getPos(e);
+    if((p.x-lastPos.x)**2+(p.y-lastPos.y)**2>9&&lenOk(curLine.pts,p)){curLine.pts.push(p);lastPos=p;}
+  };
+  const endD=()=>{
+    if(drawing&&curLine&&curLine.pts.length>1){lines.push(curLine);linesAvail=Math.max(0,linesAvail-1);renderPips();}
+    drawing=false;curLine=null;
+  };
+  canvas.onmouseup=endD;canvas.onmouseleave=endD;
+  canvas.ontouchstart=e=>{e.preventDefault();if(!linesAvail||paused)return;drawing=true;curLine={pts:[getTPos(e)],born:Date.now()};lastPos=getTPos(e);};
+  canvas.ontouchmove=e=>{
+    e.preventDefault();if(!drawing)return;const p=getTPos(e);
+    if((p.x-lastPos.x)**2+(p.y-lastPos.y)**2>9&&lenOk(curLine.pts,p)){curLine.pts.push(p);lastPos=p;}
+  };
+  canvas.ontouchend=e=>{
+    if(drawing&&curLine&&curLine.pts.length>1){lines.push(curLine);linesAvail=Math.max(0,linesAvail-1);renderPips();}
+    drawing=false;curLine=null;
+  };
+}
+</script>

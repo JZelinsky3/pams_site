@@ -1,0 +1,288 @@
+/* ── powerrank.css — PA Milk Society Power Rankings ── */
+
+:root {
+  --ink:        #0e1620;
+  --ink-soft:   #16202c;
+  --ink-card:   #1a2532;
+  --ink-line:   #2a3645;
+  --cream:      #f4ebd8;
+  --cream-soft: #c9c0ad;
+  --cream-mute: #837b6a;
+  --gold:       #e8c889;
+  --gold-bright:#f4d9a4;
+  --gold-deep:  #a88a4a;
+  --rust:       #a04830;
+  --steel:      #6b8aa8;
+  --good:       #5d9e70;
+  --bad:        #c05050;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', system-ui, sans-serif;
+  --mono:       'JetBrains Mono', 'SF Mono', monospace;
+  --border:     rgba(232,200,137,.12);
+  --glow:       0 0 0 2px rgba(232,200,137,.15), 0 8px 24px rgba(160,72,48,.12);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ink); color: var(--cream); font-family: var(--sans); }
+
+/* ── App shell ── */
+.pr-app { max-width: 1000px; margin: 0 auto; padding: 12px 16px 40px; }
+
+/* ── Nav ── */
+.pr-nav {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: 8px;
+  padding: 10px 0 16px;
+  border-bottom: 1px solid var(--ink-line);
+  margin-bottom: 18px;
+}
+.pr-nav-back {
+  color: var(--gold); font-family: var(--mono); font-size: .7rem;
+  font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  text-decoration: none; border: 1px solid rgba(232,200,137,.3);
+  padding: 5px 10px; border-radius: 6px; transition: background .15s;
+  justify-self: start;
+}
+.pr-nav-back:hover { background: rgba(232,200,137,.08); }
+.pr-nav-center { text-align: center; }
+.pr-nav-kicker {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--cream-mute); margin-bottom: .2rem;
+}
+.pr-nav-title { font-family: var(--serif); font-size: 1.7rem; margin: 0; color: var(--cream); }
+.pr-nav-right { justify-self: end; }
+.pr-auto-badge {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .2em;
+  background: rgba(93,158,112,.15); color: var(--good);
+  border: 1px solid rgba(93,158,112,.3);
+  padding: 4px 8px; border-radius: 999px; font-weight: 700;
+}
+
+/* ── Pre-season state ── */
+.pr-preseason {
+  text-align: center; padding: 3rem 1rem;
+}
+.pr-preseason h2 { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: .75rem; }
+.pr-preseason p  { color: var(--cream-soft); font-size: .95rem; line-height: 1.6; margin-bottom: 2rem; }
+
+/* ── Week tabs ── */
+.pr-week-tabs {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;
+}
+.pr-week-tab {
+  padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border);
+  color: var(--cream-mute); cursor: pointer; background: rgba(255,255,255,.02);
+  font-size: 10px; font-family: var(--mono); letter-spacing: .06em;
+  transition: background .12s;
+}
+.pr-week-tab.active {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(90deg, rgba(232,200,137,.18), rgba(160,72,48,.18)) padding-box,
+    linear-gradient(90deg, var(--gold), var(--rust)) border-box;
+  color: var(--cream);
+  box-shadow: 0 0 0 2px rgba(232,200,137,.18);
+}
+
+/* ── View tabs ── */
+.pr-view-tabs {
+  display: flex; gap: 4px; margin-bottom: 14px;
+  border-bottom: 2px solid var(--ink-line); padding-bottom: 0;
+}
+.pr-view-tab {
+  padding: 8px 16px; background: transparent; border: none;
+  color: var(--cream-mute); cursor: pointer;
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 700; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: color .15s, border-color .15s;
+}
+.pr-view-tab.active   { color: var(--gold); border-bottom-color: var(--gold); }
+.pr-view-tab:hover:not(.active) { color: var(--cream-soft); }
+
+/* ── Generated timestamp ── */
+.pr-generated {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--cream-mute);
+  margin-bottom: 16px;
+}
+
+/* ── Podium ── */
+.pr-podium {
+  display: flex; gap: 12px; justify-content: center;
+  align-items: flex-end; margin-bottom: 24px; padding: 0 4px;
+}
+.podium-slot {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border-radius: 10px; padding: 12px 10px 10px; text-align: center;
+  flex: 0 0 auto;
+}
+.podium-slot.p1 {
+  background: linear-gradient(180deg, rgba(232,200,137,.18), rgba(168,138,74,.12));
+  border: 1px solid rgba(232,200,137,.35);
+  box-shadow: 0 0 30px rgba(232,200,137,.12);
+  min-width: 160px;
+}
+.podium-slot.p2 {
+  background: linear-gradient(180deg, rgba(107,138,168,.12), rgba(107,138,168,.06));
+  border: 1px solid rgba(107,138,168,.3);
+  min-width: 130px; transform: scale(.97);
+}
+.podium-slot.p3 {
+  background: linear-gradient(180deg, rgba(160,72,48,.12), rgba(160,72,48,.06));
+  border: 1px solid rgba(160,72,48,.3);
+  min-width: 130px; transform: scale(.95);
+}
+.podium-logo {
+  border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
+  background: rgba(0,0,0,.3); object-fit: cover;
+}
+.p1 .podium-logo { width: 72px; height: 72px; }
+.p2 .podium-logo, .p3 .podium-logo { width: 54px; height: 54px; border-radius: 6px; }
+.podium-place {
+  font-family: var(--mono); font-weight: 700; font-size: .65rem;
+  letter-spacing: .2em; text-transform: uppercase;
+}
+.p1 .podium-place { color: var(--gold); }
+.p2 .podium-place { color: var(--steel); }
+.p3 .podium-place { color: var(--rust); }
+.podium-name  { font-weight: 800; font-size: .85rem; line-height: 1.2; color: var(--cream); }
+.podium-mgr   { font-size: .72rem; color: var(--cream-mute); }
+.podium-rec   { font-size: .72rem; color: var(--cream-soft); font-weight: 600; }
+.podium-score {
+  font-family: var(--mono); font-size: .75rem; font-weight: 700;
+  color: var(--gold); margin-top: 2px;
+}
+
+/* ── Table ── */
+.pr-table-wrap { overflow-x: auto; margin-bottom: 20px; }
+.pr-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+}
+.pr-table th {
+  padding: 8px 10px; text-align: left;
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--cream-mute);
+  border-bottom: 2px solid var(--ink-line); white-space: nowrap;
+}
+.pr-table td {
+  padding: 10px; border-bottom: 1px solid var(--ink-line);
+  vertical-align: middle;
+}
+.pr-table tr:hover td { background: rgba(255,255,255,.02); }
+.pr-table tr.top-row td { border-bottom-color: rgba(232,200,137,.15); }
+
+/* Column sizing */
+.col-rank   { width: 52px; }
+.col-team   { min-width: 160px; }
+.col-record { width: 72px; white-space: nowrap; }
+.col-pf     { width: 80px; white-space: nowrap; }
+.col-score  { width: 72px; white-space: nowrap; }
+.col-bars   { width: 140px; }
+
+/* Rank cell */
+.rank-cell {
+  display: flex; align-items: center; gap: 4px;
+}
+.rank-num {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 400;
+  line-height: 1; color: var(--cream-soft); min-width: 22px;
+}
+.rank-delta {
+  font-size: 9px; font-weight: 800; font-family: var(--mono);
+  line-height: 1;
+}
+.delta-up   { color: var(--good); }
+.delta-down { color: var(--bad); }
+.delta-same { color: var(--ink-line); }
+
+/* Team cell */
+.team-cell { display: flex; align-items: center; gap: 8px; }
+.team-logo {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: 6px; overflow: hidden;
+  border: 1px solid var(--border); background: rgba(0,0,0,.3);
+  object-fit: cover;
+}
+.team-info {}
+.team-name-main { font-weight: 700; font-size: .9rem; line-height: 1.2; color: var(--cream); }
+.team-mgr  { font-size: .72rem; color: var(--cream-mute); }
+.conf-badge {
+  display: inline-block; font-size: .58rem; padding: 1px 5px;
+  border-radius: 999px; border: 1px solid var(--border);
+  font-family: var(--mono); letter-spacing: .1em; color: var(--cream-mute);
+  margin-left: 4px; vertical-align: middle;
+}
+
+/* Score cell */
+.score-cell { font-family: var(--mono); font-weight: 700; font-size: .85rem; color: var(--gold); }
+.pf-cell    { font-family: var(--mono); font-size: .82rem; color: var(--cream-soft); }
+.rec-cell   { font-family: var(--mono); font-size: .82rem; color: var(--cream-soft); font-weight: 600; }
+
+/* Factor mini-bars */
+.factor-bars { display: flex; flex-direction: column; gap: 2px; }
+.fbar-row    { display: flex; align-items: center; gap: 4px; }
+.fbar-label  { font-size: 8px; color: var(--cream-mute); font-family: var(--mono); width: 18px; text-align: right; }
+.fbar-track  { flex: 1; height: 4px; background: rgba(255,255,255,.07); border-radius: 999px; overflow: hidden; }
+.fbar-fill   { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--gold), var(--rust)); }
+.fbar-val    { font-size: 7px; color: var(--cream-mute); font-family: var(--mono); width: 22px; }
+
+/* ── Formula section ── */
+.pr-formula {
+  margin-top: 24px; padding: 14px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: linear-gradient(160deg, var(--ink-card), var(--ink-soft));
+}
+.pr-formula summary {
+  cursor: pointer; font-family: var(--mono); font-size: .7rem;
+  letter-spacing: .15em; text-transform: uppercase; color: var(--gold);
+  font-weight: 700; list-style: none;
+}
+.pr-formula summary::-webkit-details-marker { display: none; }
+.pr-formula summary::before { content: "▸ "; }
+details[open] .pr-formula summary::before { content: "▾ "; }
+.pr-formula-title {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px;
+}
+.pr-formula-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px; margin-top: 12px;
+}
+.pr-factor {
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.pr-factor-pts {
+  font-family: var(--serif); font-size: 1.6rem; line-height: 1;
+  color: var(--gold); font-weight: 400;
+}
+.pr-factor-label {
+  font-weight: 700; font-size: .82rem; color: var(--cream);
+}
+.pr-factor-note {
+  font-size: .72rem; color: var(--cream-mute); line-height: 1.4;
+}
+.pr-formula-note {
+  margin-top: 10px; font-size: .75rem; color: var(--cream-mute);
+  font-style: italic;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .pr-app { padding: 10px 12px 30px; }
+  .pr-nav-title { font-size: 1.3rem; }
+  .pr-nav-kicker { display: none; }
+  .pr-podium { gap: 8px; }
+  .p1 .podium-logo { width: 56px; height: 56px; }
+  .p2 .podium-logo, .p3 .podium-logo { width: 44px; height: 44px; }
+  .podium-slot.p1 { min-width: 120px; }
+  .podium-slot.p2, .podium-slot.p3 { min-width: 100px; }
+  .col-bars { display: none; }
+  .col-pf   { display: none; }
+  .rank-num { font-size: 1.1rem; }
+}
+@media (max-width: 400px) {
+  .pr-view-tab { padding: 6px 10px; font-size: .63rem; }
+}
