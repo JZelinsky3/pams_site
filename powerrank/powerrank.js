@@ -227,7 +227,7 @@ function renderProjections(teams) {
     const projWL  = pw !== null && pl !== null ? `${pw}–${pl}` : "—";
     const playStr = pp !== null ? pp + "%" : "—";
     const byeStr  = bp !== null ? bp + "%" : "—";
-    const barW    = pp !== null ? Math.min(100, (pp - 33) / 34 * 100) : 0; // normalize 33-67 range
+    const barW    = pp !== null ? Math.min(100, pp) : 0;
     const barCls  = pp >= 60 ? "bar-elite" : pp >= 50 ? "bar-good" : pp >= 38 ? "bar-mid" : "bar-low";
     return `
       <tr>
@@ -266,7 +266,7 @@ function renderConfTable(tbodyId, teams) {
   el.innerHTML = sorted.map((t, i) => {
     const cp    = t.conf_win_pct;
     const cpStr = cp + "%";
-    const barW  = Math.min(100, Math.max(0, (cp - 11) / 30 * 100)); // normalize ~11-41 range
+    const barW  = Math.min(100, cp || 0);
     const barCls = cp >= 30 ? "bar-elite" : cp >= 16 ? "bar-good" : "bar-low";
     return `
       <tr>
