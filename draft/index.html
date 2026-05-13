@@ -215,10 +215,10 @@ body { background: var(--dg-bg); }
 .board-empty { color: var(--cream-mute); text-align: center; vertical-align: middle; font-size: .65rem; }
 
 /* Position tinting for board cells */
-.board-cell.p-rb .board-player { color: var(--gold-bright); }
-.board-cell.p-rb .board-pos  { background: rgba(232,200,137,.15); color: var(--gold); }
-.board-cell.p-wr .board-player { color: #6dc28c; }
-.board-cell.p-wr .board-pos  { background: rgba(74,154,106,.2); color: #6dc28c; }
+.board-cell.p-rb .board-player { color: #6dc28c; }
+.board-cell.p-rb .board-pos  { background: rgba(74,154,106,.2); color: #6dc28c; }
+.board-cell.p-wr .board-player { color: var(--gold-bright); }
+.board-cell.p-wr .board-pos  { background: rgba(232,200,137,.15); color: var(--gold); }
 .board-cell.p-qb .board-player { color: #8aaccc; }
 .board-cell.p-qb .board-pos  { background: rgba(107,138,168,.2); color: #8aaccc; }
 .board-cell.p-te .board-player { color: #c4a3e8; }
@@ -241,8 +241,8 @@ body { background: var(--dg-bg); }
 .pos-dot {
     width: 8px; height: 8px; border-radius: 50%;
 }
-.dot-rb  { background: var(--gold); }
-.dot-wr  { background: #6dc28c; }
+.dot-rb  { background: #6dc28c; }
+.dot-wr  { background: var(--gold); }
 .dot-qb  { background: #8aaccc; }
 .dot-te  { background: #c4a3e8; }
 .dot-def { background: var(--cream-mute); }
@@ -313,8 +313,8 @@ body { background: var(--dg-bg); }
     padding: .1rem .28rem; border-radius: 2px;
 }
 .r1-empty-cell { text-align: center; color: var(--dg-line); font-size: 1rem; vertical-align: middle !important; }
-.r1-year-cell.p-rb .r1-pick-name { color: var(--gold-bright); }
-.r1-year-cell.p-wr .r1-pick-name { color: #6dc28c; }
+.r1-year-cell.p-rb .r1-pick-name { color: #6dc28c; }
+.r1-year-cell.p-wr .r1-pick-name { color: var(--gold-bright); }
 .r1-year-cell.p-qb .r1-pick-name { color: #8aaccc; }
 .r1-year-cell.p-te .r1-pick-name { color: #c4a3e8; }
 
@@ -456,8 +456,8 @@ body { background: var(--dg-bg); }
     margin-bottom: .6rem;
 }
 .dna-seg { height: 100%; transition: width .4s ease; }
-.dna-seg.rb  { background: var(--gold); }
-.dna-seg.wr  { background: #6dc28c; }
+.dna-seg.rb  { background: #6dc28c; }
+.dna-seg.wr  { background: var(--gold); }
 .dna-seg.qb  { background: #8aaccc; }
 .dna-seg.te  { background: #c4a3e8; }
 .dna-seg.k   { background: var(--cream-mute); }
@@ -570,9 +570,9 @@ body { background: var(--dg-bg); }
         <div class="year-tabs" id="yearTabs"></div>
 
         <div class="pos-legend">
+            <span class="pos-legend-item"><span class="pos-dot dot-qb"></span>QB</span>
             <span class="pos-legend-item"><span class="pos-dot dot-rb"></span>RB</span>
             <span class="pos-legend-item"><span class="pos-dot dot-wr"></span>WR</span>
-            <span class="pos-legend-item"><span class="pos-dot dot-qb"></span>QB</span>
             <span class="pos-legend-item"><span class="pos-dot dot-te"></span>TE</span>
             <span class="pos-legend-item"><span class="pos-dot dot-def"></span>K / DEF</span>
         </div>
@@ -629,9 +629,9 @@ body { background: var(--dg-bg); }
             <span class="section-note" id="valueNote">Loading rankings…</span>
         </div>
         <div class="value-pos-tabs" id="valueTabs" style="display:none">
-            <button class="value-pos-tab active" onclick="setValuePos('RB')">RB</button>
+            <button class="value-pos-tab active" onclick="setValuePos('QB')">QB</button>
+            <button class="value-pos-tab" onclick="setValuePos('RB')">RB</button>
             <button class="value-pos-tab" onclick="setValuePos('WR')">WR</button>
-            <button class="value-pos-tab" onclick="setValuePos('QB')">QB</button>
             <button class="value-pos-tab" onclick="setValuePos('TE')">TE</button>
         </div>
         <div id="valueContainer">
@@ -682,9 +682,9 @@ body { background: var(--dg-bg); }
         <div class="year-tabs" id="yearTabs"></div>
 
         <div class="pos-legend">
+            <span class="pos-legend-item"><span class="pos-dot dot-qb"></span>QB</span>
             <span class="pos-legend-item"><span class="pos-dot dot-rb"></span>RB</span>
             <span class="pos-legend-item"><span class="pos-dot dot-wr"></span>WR</span>
-            <span class="pos-legend-item"><span class="pos-dot dot-qb"></span>QB</span>
             <span class="pos-legend-item"><span class="pos-dot dot-te"></span>TE</span>
             <span class="pos-legend-item"><span class="pos-dot dot-def"></span>K / DEF</span>
         </div>
@@ -741,9 +741,9 @@ body { background: var(--dg-bg); }
             <span class="section-note" id="valueNote">Loading rankings…</span>
         </div>
         <div class="value-pos-tabs" id="valueTabs" style="display:none">
-            <button class="value-pos-tab active" onclick="setValuePos('RB')">RB</button>
+            <button class="value-pos-tab active" onclick="setValuePos('QB')">QB</button>
+            <button class="value-pos-tab" onclick="setValuePos('RB')">RB</button>
             <button class="value-pos-tab" onclick="setValuePos('WR')">WR</button>
-            <button class="value-pos-tab" onclick="setValuePos('QB')">QB</button>
             <button class="value-pos-tab" onclick="setValuePos('TE')">TE</button>
         </div>
         <div id="valueContainer">
@@ -763,14 +763,14 @@ body { background: var(--dg-bg); }
 // ── Config ─────────────────────────────────────────────────────────────────
 var YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
 var POS_COLORS = {
-    RB:  { bg: 'rgba(232,200,137,.15)', text: '#e8c889', swatch: '#e8c889' },
-    WR:  { bg: 'rgba(74,154,106,.2)',   text: '#6dc28c', swatch: '#6dc28c' },
     QB:  { bg: 'rgba(107,138,168,.2)',  text: '#8aaccc', swatch: '#8aaccc' },
+    RB:  { bg: 'rgba(74,154,106,.2)',   text: '#6dc28c', swatch: '#6dc28c' },
+    WR:  { bg: 'rgba(232,200,137,.15)', text: '#e8c889', swatch: '#e8c889' },
     TE:  { bg: 'rgba(155,123,184,.2)',  text: '#c4a3e8', swatch: '#c4a3e8' },
     K:   { bg: 'rgba(100,100,100,.15)', text: '#837b6a', swatch: '#666' },
     DEF: { bg: 'rgba(100,100,100,.15)', text: '#837b6a', swatch: '#5a6a60' },
 };
-var POS_ORDER = ['RB', 'WR', 'QB', 'TE', 'K', 'DEF'];
+var POS_ORDER = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
 
 // ── State ──────────────────────────────────────────────────────────────────
 var yearData      = {};   // year -> picks array
@@ -778,7 +778,7 @@ var rankData      = {};   // year -> normName -> { rank, pos_rank, position, fpt
 var draftPosRanks = {};   // year -> normName -> { pos_draft_rank, position, overall_pick, manager_name, player_name }
 var allPicks      = [];
 var activeYear    = null;
-var activeValuePos = 'RB';
+var activeValuePos = 'QB';
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 buildYearTabs();
@@ -1145,13 +1145,20 @@ function renderValue() {
             var takenFinal  = rankData[y][normName(taken.player_name)];
             if (!missedFinal) continue;
 
-            // Missed player must be elite: top 20 overall OR top 10 at their position
-            if (missedFinal.rank > 20 && (missedFinal.pos_rank == null || missedFinal.pos_rank > 10)) continue;
+            // Filter out injury cases: if the taken player finished outside top 200
+            // it was probably an injury, not a bad decision — focus on genuine misses
+            if (!takenFinal || takenFinal.rank > 200) continue;
 
-            // Gap between them must be meaningful (missed was substantially better)
-            var takenOverallRank = takenFinal ? takenFinal.rank : 600;
-            var gap = takenOverallRank - missedFinal.rank;
-            if (gap < 30) continue;
+            // Missed player must have been genuinely good: top 36 overall OR top 8 positional
+            if (missedFinal.rank > 36 && (missedFinal.pos_rank == null || missedFinal.pos_rank > 8)) continue;
+
+            // Missed player can't be a "bust" themselves — must finish within ~18 picks
+            // of their draft slot (e.g. taken at pick 2 and finishing 35th doesn't count)
+            if (missedFinal.rank > missed.overall_pick + 18) continue;
+
+            // Gap between taken and missed must be meaningful
+            var gap = takenFinal.rank - missedFinal.rank;
+            if (gap < 25) continue;
 
             window._hearts.push({
                 year:   y,
