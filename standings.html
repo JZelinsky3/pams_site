@@ -355,24 +355,12 @@ body { background: var(--cream); }
 </div>
 
 <!-- NAV -->
-<nav class="nav">
-    <a href="index.html" class="nav-back">← The Hub</a>
-    <div class="nav-center">
-        <div class="nav-kicker">CH. I · STANDINGS</div>
-        <div class="nav-title">The <em>Society.</em></div>
-    </div>
-    <div class="nav-drop" id="nav-drop">
-        <button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>
-        <div class="nav-drop-menu">
-            <span class="nav-drop-label">Go to</span>
-            <a href="index.html">The Hub</a>
-            <a href="standings.html" class="current">Standings</a>
-            <a href="managers/index.html">Managers</a>
-            <a href="seasons/index.html">Season Archives</a>
-            <a href="records.html">Record Book</a>
-        </div>
-    </div>
-</nav>
+<nav id="site-nav"
+     data-page="standings"
+     data-chapter="CH. I · STANDINGS"
+     data-back-label="← The Hub"
+     data-back-href="index.html"></nav>
+<script src="assets/js/nav.js"></script>
 
 <!-- PAGE HEADER -->
 <div class="page-header">
@@ -437,13 +425,6 @@ body { background: var(--cream); }
 
 
 <script>
-function toggleDrop() {
-    document.getElementById('nav-drop').classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-    const drop = document.getElementById('nav-drop');
-    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
-});
 
 let allManagers = [];
 let currentSort = 'winpct';

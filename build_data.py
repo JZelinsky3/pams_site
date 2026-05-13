@@ -634,6 +634,40 @@ print(f"  ✓ Saved {len(seasons_dir_entries)} seasons")
 
 
 # ============================================================
+# DRAFT DATA — copy from scraper output if available
+# ============================================================
+DRAFTS_SCRAPER = SCRAPER_DIR / "output" / "drafts"
+DRAFTS_OUT = DATA_DIR / "drafts"
+draft_files_copied = 0
+
+if DRAFTS_SCRAPER.exists():
+    print()
+    print("Building draft files ...")
+    DRAFTS_OUT.mkdir(parents=True, exist_ok=True)
+    years_index = []
+    for draft_file in sorted(DRAFTS_SCRAPER.glob("*.json")):
+        dest = DRAFTS_OUT / draft_file.name
+        data = json.loads(draft_file.read_text(encoding="utf-8"))
+        save(data, dest)
+        draft_files_copied += 1
+        year = data.get("year")
+        if year:
+            years_index.append({
+                "year": year,
+                "total_picks": len(data.get("picks", [])),
+                "rounds": max((p.get("round") or 0 for p in data.get("picks", [])), default=0),
+            })
+        print(f"  ✓ Saved data/drafts/{draft_file.name}")
+    if years_index:
+        save({"drafts": sorted(years_index, key=lambda x: x["year"])},
+             DRAFTS_OUT / "drafts_directory.json")
+        print(f"  ✓ Saved data/drafts/drafts_directory.json")
+else:
+    print()
+    print("  (Skipping draft files — run 07_scrape_drafts.py first)")
+
+
+# ============================================================
 # DONE
 # ============================================================
 print()
@@ -646,6 +680,8 @@ print(f"  data/managers_directory.json")
 print(f"  data/managers/*.json  ({saved_profiles} files)")
 print(f"  data/seasons_directory.json")
 print(f"  data/seasons/*.json  ({len(seasons_dir_entries)} files)")
+if draft_files_copied:
+    print(f"  data/drafts/*.json  ({draft_files_copied} files)")
 print()
 print("Next: refresh your pams_site pages in the browser.")
 print("They'll now load real data automatically.")

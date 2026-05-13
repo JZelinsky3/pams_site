@@ -572,6 +572,26 @@ table.data tbody tr.highlight {
     background: linear-gradient(180deg, rgba(26, 37, 50, .4) 0%, rgba(22, 32, 44, .2) 100%);
     border: 1px solid var(--ink-line);
 }
+.toc-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+}
+.toc-body::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 1px;
+    background: var(--ink-line-soft);
+    pointer-events: none;
+}
+.toc-body .toc-row:nth-last-child(-n+2) { border-bottom: none; }
+@media (max-width: 860px) {
+    .toc-body { grid-template-columns: 1fr; }
+    .toc-body::before { display: none; }
+    .toc-body .toc-row:nth-last-child(-n+2) { border-bottom: 1px solid var(--ink-line-soft); }
+    .toc-body .toc-row:last-child { border-bottom: none; }
+}
 .toc-header {
     padding: 1.25rem 2rem;
     background: var(--ink-soft);
@@ -773,24 +793,12 @@ table.data tbody tr.highlight {
 </div>
 
 <!-- NAV -->
-<nav class="nav">
-    <div class="nav-drop" id="nav-drop">
-        <button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>
-        <div class="nav-drop-menu">
-            <span class="nav-drop-label">Pages</span>
-            <a href="standings.html">Standings</a>
-            <a href="managers/index.html">Managers</a>
-            <a href="records.html">Record Book</a>
-            <a href="pickems/index.html">Pick'ems</a>
-            <a href="powerrank/index.html">Power Rankings</a>
-        </div>
-    </div>
-    <div class="nav-center">
-        <div class="nav-kicker">PA MILK SOCIETY · VOL. 02</div>
-        <div class="nav-title">The Milk <em>Society.</em></div>
-    </div>
-    <a href="seasons/index.html" class="nav-link">Seasons →</a>
-</nav>
+<nav id="site-nav"
+     data-page="hub"
+     data-chapter="PA MILK SOCIETY · VOL. 02"
+     data-right-label="Seasons →"
+     data-right-href="seasons/index.html"></nav>
+<script src="assets/js/nav.js"></script>
 
 <!-- HERO -->
 <div class="hero">
@@ -842,6 +850,8 @@ table.data tbody tr.highlight {
             <span class="toc-header-title">Vol. 02 · Index</span>
             <span class="toc-header-meta">Updated weekly</span>
         </div>
+
+        <div class="toc-body">
 
         <a href="standings.html" class="toc-row">
             <div class="toc-chapter">Ch. I</div>
@@ -903,6 +913,7 @@ table.data tbody tr.highlight {
             <div class="toc-arrow">→</div>
         </a>
 
+        </div>
     </div>
 </div>
 
@@ -1005,13 +1016,6 @@ table.data tbody tr.highlight {
        gameContext:   short mono line below the prose ONLY in hero spot
      ============================================================ -->
 <script>
-function toggleDrop() {
-    document.getElementById('nav-drop').classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-    const drop = document.getElementById('nav-drop');
-    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
-});
 
 const records = [
     {

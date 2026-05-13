@@ -386,24 +386,13 @@ table.season-standings tbody tr:hover { background: rgba(232,200,137,.03); }
 </div>
 
 <!-- NAV -->
-<nav class="nav">
-    <a href="index.html" class="nav-back" id="nav-back-link">← Season Archives</a>
-    <div class="nav-center">
-        <div class="nav-kicker">CH. III · ARCHIVES</div>
-        <div class="nav-title" id="nav-year">The <em>Society.</em></div>
-    </div>
-    <div class="nav-drop" id="nav-drop">
-        <button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>
-        <div class="nav-drop-menu">
-            <span class="nav-drop-label">Go to</span>
-            <a href="../index.html">The Hub</a>
-            <a href="index.html" class="current">Season Archives</a>
-            <a href="../managers/index.html">Managers</a>
-            <a href="../standings.html">Standings</a>
-            <a href="../records.html">Record Book</a>
-        </div>
-    </div>
-</nav>
+<nav id="site-nav"
+     data-page="seasons"
+     data-chapter="CH. III · ARCHIVES"
+     data-back-label="← Season Archives"
+     data-back-href="seasons/index.html"
+     data-title-id="nav-year"></nav>
+<script src="../assets/js/nav.js"></script>
 
 <!-- PAGE BODY (rendered by JS) -->
 <div id="page-body">
@@ -429,13 +418,6 @@ table.season-standings tbody tr:hover { background: rgba(232,200,137,.03); }
     }
 })();
 
-function toggleDrop() {
-    document.getElementById('nav-drop').classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-    const drop = document.getElementById('nav-drop');
-    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
-});
 
 const ALL_YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
 
