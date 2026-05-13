@@ -249,15 +249,18 @@ def compute_historical_score(slug):
     return win_pts + pf_pts + recent_pts + ped_pts
 
 
-def simulate_projections(scores, teams, n_weeks=13, playoff_spots=6, bye_spots=2, n_sims=8000):
+def simulate_projections(scores, teams, n_weeks=14, playoff_spots=6, bye_spots=2, n_sims=8000):
     """
     Monte Carlo season simulation. Returns per-team proj_wins, proj_losses,
     playoff_pct, bye_pct, and conf_win_pct.
+    Playoffs: top 3 from each division (not top 6 overall).
+    Byes: top 2 seeds overall.
     """
     team_ids   = list(scores.keys())
     n_teams    = len(team_ids)
     div_map    = {t["id"]: t["division"] for t in teams}
     divisions  = sorted(set(div_map.values()))
+    spots_per_div = playoff_spots // len(divisions)
 
     playoff_cnt  = {tid: 0 for tid in team_ids}
     bye_cnt      = {tid: 0 for tid in team_ids}
@@ -281,11 +284,19 @@ def simulate_projections(scores, teams, n_weeks=13, playoff_spots=6, bye_spots=2
                 pf_sim[a] += sa
                 pf_sim[b] += sb
 
-        sorted_t = sorted(team_ids, key=lambda t: (-wins[t], -pf_sim[t]))
-        for tid in sorted_t[:playoff_spots]:
-            playoff_cnt[tid] += 1
-        for tid in sorted_t[:bye_spots]:
+        # Playoffs: top N from each division
+        for div in divisions:
+            div_t = [tid for tid in team_ids if div_map.get(tid) == div]
+            sorted_div = sorted(div_t, key=lambda t: (-wins[t], -pf_sim[t]))
+            for tid in sorted_div[:spots_per_div]:
+                playoff_cnt[tid] += 1
+
+        # Byes: top 2 seeds overall by record
+        sorted_all = sorted(team_ids, key=lambda t: (-wins[t], -pf_sim[t]))
+        for tid in sorted_all[:bye_spots]:
             bye_cnt[tid] += 1
+
+        # Conference title: best record within each division
         for div in divisions:
             div_t = [tid for tid in team_ids if div_map.get(tid) == div]
             winner = max(div_t, key=lambda t: (wins[t], pf_sim[t]))
@@ -308,7 +319,7 @@ def simulate_projections(scores, teams, n_weeks=13, playoff_spots=6, bye_spots=2
 
 
 def compute_power_rankings(weekly_standings, teams, week_num,
-                           n_weeks=13, playoff_spots=6, bye_spots=2):
+                           n_weeks=14, playoff_spots=6, bye_spots=2):
     """
     Preseason (week 0): 100% history score (win%, PF avg, pedigree).
     Week 1-3:  blended history + current, history fades to 0 by week 4.
@@ -384,10 +395,17 @@ def compute_power_rankings(weekly_standings, teams, week_num,
             final[slug] = hist_w * hist_s + (1 - hist_w) * cur_score
 
     # ── Projections ───────────────────────────────────────────────────────
-    # Preseason: everyone gets equal simulation strength — no one has drafted yet
-    # so structural advantages shouldn't skew playoff odds beyond a few percent.
+    # Preseason: compress scores to [49, 51] so higher-ranked teams have modestly
+    # better odds (correlated with rank) without extreme spread. Conference-aware
+    # playoffs mean a tough conference still lowers your odds.
     if hist_w >= 1.0:
-        sim_scores  = {tid: 50.0 for tid in final}
+        min_s  = min(final.values())
+        max_s  = max(final.values())
+        spread = max_s - min_s
+        if spread > 0:
+            sim_scores = {tid: 49.7 + (final[tid] - min_s) / spread * 0.6 for tid in final}
+        else:
+            sim_scores = {tid: 50.0 for tid in final}
         projections = simulate_projections(sim_scores, teams, n_weeks, playoff_spots, bye_spots)
     else:
         projections = simulate_projections(final, teams, n_weeks, playoff_spots, bye_spots)

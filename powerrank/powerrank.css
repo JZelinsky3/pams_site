@@ -242,9 +242,9 @@ body {
 ══════════════════════════════════════════════════════ */
 .pr-table-wrap {
   background: var(--ink-card);
-  border: 1px solid var(--ink-line);
+  border: 2px solid rgba(14,22,32,.3);
   overflow-x: auto; margin-bottom: 4px;
-  box-shadow: 0 2px 16px rgba(14,22,32,.15);
+  box-shadow: 0 2px 16px rgba(14,22,32,.15), 0 0 0 1px rgba(139,109,56,.15);
 }
 .pr-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .pr-table th {

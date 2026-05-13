@@ -100,6 +100,13 @@ function render(data) {
     genEl.textContent = `Updated ${genFmt.format(new Date(data.generated))} ET`;
   }
 
+  const titleEl = byId("rankingsTitle");
+  if (titleEl) {
+    titleEl.textContent = data.week === 0
+      ? "Pre-Season Rankings"
+      : `Week ${data.week} Rankings`;
+  }
+
   renderPodium(teams.slice(0, 3));
   renderTable(teams, state.view !== "overall");
   renderProjections(data.overall);
