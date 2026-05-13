@@ -33,10 +33,14 @@
         { key: 'draft', label: 'Draft History', path: 'draft/index.html' },
     ];
 
-    // Determine how many levels deep the current page is
+    // Determine how many levels deep the current page is relative to the site root.
+    // On GitHub Pages the URL starts with /repo-name/ which is not part of the
+    // site's own directory structure, so skip that first segment.
     function getRoot() {
         var parts = window.location.pathname.split('/').filter(function (p) { return p.length > 0; });
-        var depth = parts.length > 1 ? parts.length - 1 : 0;
+        var skip  = window.location.hostname.endsWith('.github.io') ? 1 : 0;
+        var fileParts = parts.slice(skip);
+        var depth = fileParts.length > 1 ? fileParts.length - 1 : 0;
         var prefix = '';
         for (var i = 0; i < depth; i++) prefix += '../';
         return prefix;
