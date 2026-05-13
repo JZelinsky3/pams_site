@@ -1078,13 +1078,13 @@ function normName(name) {
 }
 
 // ── Position tab switching ─────────────────────────────────────────────────
-function setValuePos(pos) {
+window.setValuePos = function setValuePos(pos) {
     activeValuePos = pos;
     document.querySelectorAll('.value-pos-tab').forEach(function(btn) {
         btn.classList.toggle('active', btn.textContent === pos);
     });
     renderValuePos();
-}
+};
 
 function renderValue() {
     var yearsWithRanks = YEARS.filter(function(y){ return rankData[y] && Object.keys(rankData[y]).length > 0; });
