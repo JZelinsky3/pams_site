@@ -1,4 +1,10 @@
 {
   "season": 2026,
-  "weeks": []
+  "weeks": [
+    {
+      "id": "preseason",
+      "label": "Pre-Season",
+      "data": "weeks/preseason.json"
+    }
+  ]
 }

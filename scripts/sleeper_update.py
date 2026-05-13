@@ -16,6 +16,8 @@ Formula (score = 0–100):
 """
 
 import json
+import math
+import random
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -26,20 +28,20 @@ BASE = Path(__file__).resolve().parent.parent   # pams_site root
 PICKEMS_DIR   = BASE / "pickems"
 POWERRANK_DIR = BASE / "powerrank"
 
-# Sleeper user_id → manager slug (update when Chris and Luke join)
+# Sleeper user_id → manager slug (update when Luke and Charlie join)
 SLEEPER_TO_MANAGER = {
     "591884559361040384":  "joey",
     "458329320843112448":  "andrew",
     "609426003600670720":  "kyle",
     "728687640840372224":  "mason",
     "728702248099663872":  "sean",
-    "739747288599150592":  "charlie",
+    "739747288599150592":  "chris",
     "739751326224969728":  "isaac",
     "868712689332031488":  "connor",
     "1346560472878452736": "evan",
     "1358933101526409216": "connie",
-    # "??": "chris",   — add when they join
     # "??": "luke",    — add when they join
+    # "??": "charlie", — add when they join
 }
 
 DISPLAY_NAMES = {
@@ -49,20 +51,35 @@ DISPLAY_NAMES = {
     "connie": "Connie", "chris": "Chris", "luke": "Luke",
 }
 
-# Career win percentages from pams_site NFL.com historical data (7 seasons)
-CAREER_WIN_PCT = {
-    "joey":    0.5417,
-    "mason":   0.5694,
-    "sean":    0.4861,
-    "chris":   0.4583,
-    "isaac":   0.5556,
-    "kyle":    0.5278,
-    "connie":  0.4444,
-    "charlie": 0.5417,
-    "luke":    0.3889,
-    "evan":    0.4722,
-    "andrew":  0.5833,
-    "connor":  0.4444,
+LOGO_FALLBACK = {
+    "joey":    "/assets/images/logos/gooners.png",
+    "mason":   "/assets/images/logos/rizzlers2.png",
+    "sean":    "/assets/images/logos/thefamilyguy2.png",
+    "chris":   "/assets/images/logos/kylerthecreator.png",
+    "isaac":   "/assets/images/logos/childofgod2.png",
+    "kyle":    "/assets/images/logos/gingerninger2.png",
+    "connie":  "/assets/images/logos/tequilasunrise.png",
+    "charlie": "/assets/images/logos/moneygod2.png",
+    "luke":    "/assets/images/logos/theglizzys2.png",
+    "evan":    "/assets/images/logos/whiteboyfootball2.png",
+    "andrew":  "/assets/images/logos/bodix2.png",
+    "connor":  "/assets/images/logos/thepeoplestightend2.png",
+}
+
+# Historical stats from managers_directory.json (7 NFL.com seasons through 2025)
+HISTORICAL = {
+    "joey":    {"win_pct": 0.566,  "pf": 13621.96, "seasons": 7, "champs": 1, "top3": 4, "playoffs": 7},
+    "mason":   {"win_pct": 0.5728, "pf": 12732.62, "seasons": 7, "champs": 1, "top3": 2, "playoffs": 7},
+    "sean":    {"win_pct": 0.5673, "pf": 12954.28, "seasons": 7, "champs": 0, "top3": 2, "playoffs": 7},
+    "chris":   {"win_pct": 0.534,  "pf": 12883.44, "seasons": 7, "champs": 1, "top3": 2, "playoffs": 7},
+    "isaac":   {"win_pct": 0.5556, "pf": 11128.66, "seasons": 6, "champs": 1, "top3": 2, "playoffs": 6},
+    "kyle":    {"win_pct": 0.4571, "pf": 12446.44, "seasons": 7, "champs": 0, "top3": 0, "playoffs": 6},
+    "connie":  {"win_pct": 0.4904, "pf": 12661.06, "seasons": 7, "champs": 1, "top3": 3, "playoffs": 7},
+    "charlie": {"win_pct": 0.47,   "pf": 11722.4,  "seasons": 7, "champs": 0, "top3": 0, "playoffs": 7},
+    "luke":    {"win_pct": 0.4659, "pf": 10137.52, "seasons": 6, "champs": 1, "top3": 1, "playoffs": 6},
+    "evan":    {"win_pct": 0.3953, "pf": 4957.06,  "seasons": 3, "champs": 0, "top3": 0, "playoffs": 3},
+    "andrew":  {"win_pct": 0.4904, "pf": 12565.92, "seasons": 7, "champs": 1, "top3": 3, "playoffs": 7},
+    "connor":  {"win_pct": 0.44,   "pf": 12259.4,  "seasons": 7, "champs": 0, "top3": 1, "playoffs": 7},
 }
 
 # NOTE: 2026 NFL Week 1 Thursday is estimated as Sept 3, 2026.
@@ -125,7 +142,8 @@ def build_teams(rosters, users, league):
         user = user_map.get(owner_id, {})
         umeta = user.get("metadata") or {}
 
-        name = umeta.get("team_name") or user.get("display_name") or DISPLAY_NAMES.get(slug, slug.title())
+        # Use Sleeper team_name if set; otherwise fall back to manager's display name (not username)
+        name = umeta.get("team_name") or DISPLAY_NAMES.get(slug, slug.title())
 
         avatar = umeta.get("avatar") or user.get("avatar") or ""
         if avatar.startswith("http"):
@@ -133,7 +151,7 @@ def build_teams(rosters, users, league):
         elif avatar:
             logo = f"https://sleepercdn.com/avatars/{avatar}"
         else:
-            logo = "/assets/images/default_team.png"
+            logo = LOGO_FALLBACK.get(slug, "/assets/images/default_team.png")
 
         div = r["settings"].get("division", 1)
         teams.append({
@@ -202,62 +220,226 @@ def compute_winners(groups, teams_by_roster):
 
 # ── Power rankings ───────────────────────────────────────────────────────────
 
-def compute_power_rankings(weekly_standings, teams, week_num):
+def compute_historical_score(slug):
     """
-    Score formula (sums to ~100):
-      record     40 pts  blended career history (fades by week 5) + current win%
-      pts_for    30 pts  PF percentile rank among all 12 teams
-      efficiency 20 pts  PF / (PF + PA) — dominance over opponents
-      form       10 pts  win% in last 3 completed weeks
+    0-100 score based solely on career history.
+      Win%     33 pts  — all-time win percentage
+      PF Avg   33 pts  — percentile rank on avg points-per-season
+      Pedigree 34 pts  — championships (14) + top-3 rate (12) + playoff rate (8)
     """
-    slugs = [t["id"] for t in teams]
+    h = HISTORICAL.get(slug)
+    if not h:
+        return 50.0
 
+    all_pf_avgs = [d["pf"] / d["seasons"] for d in HISTORICAL.values()]
+    my_pf_avg   = h["pf"] / h["seasons"]
+    pf_pct_rank = sum(1 for x in all_pf_avgs if x <= my_pf_avg) / len(all_pf_avgs)
+
+    win_pts   = h["win_pct"] * 33
+    pf_pts    = pf_pct_rank * 33
+    ped_pts   = (min(h["champs"], 1) * 14
+                 + (h["top3"]    / h["seasons"]) * 12
+                 + (h["playoffs"] / h["seasons"]) * 8)
+
+    return win_pts + pf_pts + ped_pts
+
+
+def simulate_projections(scores, teams, n_weeks=13, playoff_spots=6, bye_spots=2, n_sims=8000):
+    """
+    Monte Carlo season simulation. Returns per-team proj_wins, proj_losses,
+    playoff_pct, bye_pct, and conf_win_pct.
+    """
+    team_ids   = list(scores.keys())
+    n_teams    = len(team_ids)
+    div_map    = {t["id"]: t["division"] for t in teams}
+    divisions  = sorted(set(div_map.values()))
+
+    playoff_cnt  = {tid: 0 for tid in team_ids}
+    bye_cnt      = {tid: 0 for tid in team_ids}
+    conf_win_cnt = {tid: 0 for tid in team_ids}
+
+    for _ in range(n_sims):
+        wins   = {tid: 0   for tid in team_ids}
+        pf_sim = {tid: 0.0 for tid in team_ids}
+
+        for _ in range(n_weeks):
+            pool = list(team_ids)
+            random.shuffle(pool)
+            for i in range(0, n_teams, 2):
+                a, b = pool[i], pool[i + 1]
+                sa = scores[a] * max(0.3, 1 + random.gauss(0, 0.15))
+                sb = scores[b] * max(0.3, 1 + random.gauss(0, 0.15))
+                if sa > sb:
+                    wins[a] += 1
+                else:
+                    wins[b] += 1
+                pf_sim[a] += sa
+                pf_sim[b] += sb
+
+        sorted_t = sorted(team_ids, key=lambda t: (-wins[t], -pf_sim[t]))
+        for tid in sorted_t[:playoff_spots]:
+            playoff_cnt[tid] += 1
+        for tid in sorted_t[:bye_spots]:
+            bye_cnt[tid] += 1
+        for div in divisions:
+            div_t = [tid for tid in team_ids if div_map.get(tid) == div]
+            winner = max(div_t, key=lambda t: (wins[t], pf_sim[t]))
+            conf_win_cnt[winner] += 1
+
+    # Analytical expected wins
+    proj = {}
+    for tid in team_ids:
+        opp = [scores[b] for b in team_ids if b != tid]
+        avg_wp = sum(scores[tid] / (scores[tid] + s) for s in opp) / len(opp)
+        pw_r = round(avg_wp * n_weeks)
+        proj[tid] = {
+            "proj_wins":    pw_r,
+            "proj_losses":  n_weeks - pw_r,
+            "playoff_pct":  round(playoff_cnt[tid]  / n_sims * 100, 1),
+            "bye_pct":      round(bye_cnt[tid]       / n_sims * 100, 1),
+            "conf_win_pct": round(conf_win_cnt[tid]  / n_sims * 100, 1),
+        }
+    return proj
+
+
+def compute_power_rankings(weekly_standings, teams, week_num,
+                           n_weeks=13, playoff_spots=6, bye_spots=2):
+    """
+    Preseason (week 0): 100% history score (win%, PF avg, pedigree).
+    Week 1-3:  blended history + current, history fades to 0 by week 4.
+    Week 4+:   record 35 + PF percentile 35 + form 15 + conference rank 15.
+    """
+    slugs  = [t["id"] for t in teams]
     all_pf = [weekly_standings.get(s, {}).get("pf", 0) for s in slugs]
     all_pf_s = sorted(all_pf)
-    pf_max = max(all_pf) if all_pf else 1
+    pf_max   = max(all_pf) if any(all_pf) else 1
 
     def pf_pct(pf):
         if pf_max == 0:
             return 0.5
-        rank = sum(1 for x in all_pf_s if x <= pf)
-        return rank / max(len(all_pf_s), 1)
+        return sum(1 for x in all_pf_s if x <= pf) / max(len(all_pf_s), 1)
 
-    # History weight: 1.0 at week 1 → 0.0 at week 5+
-    hist_w = max(0.0, 1.0 - (week_num - 1) / 4.0)
+    # History weight: 1.0 at week 0 (preseason), 0 at week 4+
+    hist_w = max(0.0, 1.0 - week_num / 4.0)
 
-    scored = []
+    # ── Pass 1: base scores (no conf component yet) ───────────────────────
+    base = {}
     for t in teams:
         slug = t["id"]
-        s = weekly_standings.get(slug, {})
+        s    = weekly_standings.get(slug, {})
         wins, losses = s.get("wins", 0), s.get("losses", 0)
-        pf, pa = s.get("pf", 0.0), s.get("pa", 0.0)
+        pf   = s.get("pf", 0.0)
         form = s.get("form", 0.5)
         games = wins + losses
 
-        career = CAREER_WIN_PCT.get(slug, 0.5)
-        cur_rec = wins / max(games, 1)
-        blended = career * hist_w + cur_rec * (1.0 - hist_w)
+        hist_s = compute_historical_score(slug)
+        if hist_w >= 1.0:
+            base[slug] = hist_s
+        else:
+            cur_rec    = (wins / games) if games else 0.0
+            cur_score  = cur_rec * 35 + pf_pct(pf) * 35 + form * 15 + 7.5  # conf placeholder
+            base[slug] = hist_w * hist_s + (1 - hist_w) * cur_score
 
-        eff = pf / (pf + pa) if (pf + pa) > 0 else 0.5
+    # ── Conference rank within each division ─────────────────────────────
+    div_teams = {}
+    for t in teams:
+        div_teams.setdefault(t["division"], []).append(t["id"])
+    conf_rank = {}
+    for div, members in div_teams.items():
+        for i, slug in enumerate(sorted(members, key=lambda s: -base[s])):
+            conf_rank[slug] = i + 1
 
-        score = blended * 40 + pf_pct(pf) * 30 + eff * 20 + form * 10
+    # ── Pass 2: final scores with real conf component ─────────────────────
+    final = {}
+    for t in teams:
+        slug  = t["id"]
+        s     = weekly_standings.get(slug, {})
+        wins, losses = s.get("wins", 0), s.get("losses", 0)
+        pf    = s.get("pf", 0.0)
+        form  = s.get("form", 0.5)
+        games = wins + losses
+        csize = len(div_teams[t["division"]])
 
+        if hist_w >= 1.0:
+            final[slug] = base[slug]
+        else:
+            hist_s   = compute_historical_score(slug)
+            cur_rec  = (wins / games) if games else 0.0
+            conf_pts = (1 - (conf_rank[slug] - 1) / max(csize - 1, 1)) * 15
+            cur_score = cur_rec * 35 + pf_pct(pf) * 35 + form * 15 + conf_pts
+            final[slug] = hist_w * hist_s + (1 - hist_w) * cur_score
+
+    # ── Projections ───────────────────────────────────────────────────────
+    projections = simulate_projections(final, teams, n_weeks, playoff_spots, bye_spots)
+
+    # Preseason: blend toward flat baseline (35–65% range) so early odds aren't extreme
+    if hist_w >= 1.0:
+        n_teams   = len(teams)
+        pl_base   = playoff_spots / n_teams * 100      # 50%
+        bye_base  = bye_spots / n_teams * 100          # 16.7%
+        conf_base = 100 / 6                            # 16.7%
+        W = 0.30
+        for tid, p in projections.items():
+            p["playoff_pct"]  = round(p["playoff_pct"]  * W + pl_base   * (1 - W), 1)
+            p["bye_pct"]      = round(p["bye_pct"]      * W + bye_base  * (1 - W), 1)
+            p["conf_win_pct"] = round(p["conf_win_pct"] * W + conf_base * (1 - W), 1)
+            p["proj_wins"]    = round(p["proj_wins"])
+            p["proj_losses"]  = n_weeks - round(p["proj_wins"])
+
+    # ── Assemble output ───────────────────────────────────────────────────
+    scored = []
+    for slug in sorted(final, key=lambda s: -final[s]):
+        t    = next(t for t in teams if t["id"] == slug)
+        s    = weekly_standings.get(slug, {})
+        wins, losses = s.get("wins", 0), s.get("losses", 0)
+        pf   = s.get("pf", 0.0)
+        pa   = s.get("pa", 0.0)
+        form = s.get("form", 0.5)
+        games = wins + losses
+        csize = len(div_teams[t["division"]])
+
+        if hist_w >= 1.0:
+            h = HISTORICAL.get(slug) or {}
+            if h:
+                all_pf_avgs  = [d["pf"] / d["seasons"] for d in HISTORICAL.values()]
+                my_pf_avg    = h["pf"] / h["seasons"]
+                pf_rank      = sum(1 for x in all_pf_avgs if x <= my_pf_avg) / len(all_pf_avgs)
+                factors = {
+                    "win_pct":  round(h["win_pct"] * 33, 2),
+                    "pf_avg":   round(pf_rank * 33, 2),
+                    "pedigree": round(min(h["champs"], 1) * 14
+                                      + (h["top3"] / h["seasons"]) * 12
+                                      + (h["playoffs"] / h["seasons"]) * 8, 2),
+                }
+            else:
+                factors = {"win_pct": 0, "pf_avg": 0, "pedigree": 0}
+        else:
+            cur_rec  = (wins / games) if games else 0.0
+            conf_pts = (1 - (conf_rank[slug] - 1) / max(csize - 1, 1)) * 15
+            factors = {
+                "record": round(cur_rec * 35, 2),
+                "pf":     round(pf_pct(pf) * 35, 2),
+                "form":   round(form * 15, 2),
+                "conf":   round(conf_pts, 2),
+            }
+
+        proj = projections.get(slug, {})
         scored.append({
-            "slug":    slug,
-            "score":   round(score, 3),
-            "wins":    wins,
-            "losses":  losses,
-            "pf":      round(pf, 2),
-            "pa":      round(pa, 2),
-            "factors": {
-                "record":     round(blended * 40, 2),
-                "pf":         round(pf_pct(pf) * 30, 2),
-                "efficiency": round(eff * 20, 2),
-                "form":       round(form * 10, 2),
-            },
+            "slug":         slug,
+            "score":        round(final[slug], 2),
+            "wins":         wins,
+            "losses":       losses,
+            "pf":           round(pf, 2),
+            "pa":           round(pa, 2),
+            "factors":      factors,
+            "is_preseason": hist_w >= 1.0,
+            "proj_wins":    proj.get("proj_wins",    "-"),
+            "proj_losses":  proj.get("proj_losses",  "-"),
+            "playoff_pct":  proj.get("playoff_pct",  "-"),
+            "bye_pct":      proj.get("bye_pct",      "-"),
+            "conf_win_pct": proj.get("conf_win_pct", "-"),
         })
 
-    scored.sort(key=lambda x: x["score"], reverse=True)
     return scored
 
 
@@ -285,9 +467,47 @@ def main():
     save({"season": season, "teams": teams}, PICKEMS_DIR / "teams.json")
 
     if status == "pre_draft":
-        print("  Pre-draft — saving teams.json and empty manifests.")
-        save({"season": season, "weeks": []}, PICKEMS_DIR   / "manifest.json")
-        save({"season": season, "weeks": []}, POWERRANK_DIR / "manifest.json")
+        print("  Pre-draft — generating pre-season power rankings.")
+        ranked = compute_power_rankings({}, teams, week_num=0)
+        full_ranked = []
+        for i, r in enumerate(ranked):
+            team = next((t for t in teams if t["id"] == r["slug"]), {})
+            full_ranked.append({
+                "rank":          i + 1,
+                "team_id":       r["slug"],
+                "team_name":     team.get("name", r["slug"]),
+                "manager":       team.get("manager", r["slug"].title()),
+                "logo":          team.get("logo", ""),
+                "division":      team.get("division", 1),
+                "division_name": team.get("division_name", "Whole"),
+                "wins":          0,
+                "losses":        0,
+                "pf":            0.0,
+                "pa":            0.0,
+                "score":         r["score"],
+                "delta":         0,
+                "factors":       r["factors"],
+                "is_preseason":  True,
+                "proj_wins":     r["proj_wins"],
+                "proj_losses":   r["proj_losses"],
+                "playoff_pct":   r["playoff_pct"],
+                "bye_pct":       r["bye_pct"],
+                "conf_win_pct":  r["conf_win_pct"],
+            })
+        pr_data = {
+            "week":      0,
+            "label":     "Pre-Season",
+            "season":    season,
+            "generated": datetime.now(tz=timezone.utc).isoformat(),
+            "overall":   full_ranked,
+            "whole":     [r for r in full_ranked if r["division"] == 1],
+            "skim":      [r for r in full_ranked if r["division"] == 2],
+        }
+        save(pr_data, POWERRANK_DIR / "weeks" / "preseason.json")
+        save({"season": season, "weeks": []}, PICKEMS_DIR / "manifest.json")
+        save({"season": season, "weeks": [
+            {"id": "preseason", "label": "Pre-Season", "data": "weeks/preseason.json"}
+        ]}, POWERRANK_DIR / "manifest.json")
         return
 
     # ── Fetch all matchup weeks ───────────────────────────────────────────
@@ -420,10 +640,13 @@ def main():
 
             ranked = compute_power_rankings(weekly_standings, teams, wk)
 
-            # Load previous week's ranks for delta
+            # Load previous week's ranks for delta (week 1 uses preseason as baseline)
             prev_ranks = {}
-            prev_path  = POWERRANK_DIR / "weeks" / f"week-{wk-1:02d}.json"
-            if wk > 1 and prev_path.exists():
+            if wk == 1:
+                prev_path = POWERRANK_DIR / "weeks" / "preseason.json"
+            else:
+                prev_path = POWERRANK_DIR / "weeks" / f"week-{wk-1:02d}.json"
+            if prev_path.exists():
                 with open(prev_path) as f:
                     for r in json.load(f).get("overall", []):
                         prev_ranks[r["team_id"]] = r["rank"]
@@ -448,6 +671,12 @@ def main():
                     "score":         r["score"],
                     "delta":         delta,
                     "factors":       r["factors"],
+                    "is_preseason":  r["is_preseason"],
+                    "proj_wins":     r["proj_wins"],
+                    "proj_losses":   r["proj_losses"],
+                    "playoff_pct":   r["playoff_pct"],
+                    "bye_pct":       r["bye_pct"],
+                    "conf_win_pct":  r["conf_win_pct"],
                 })
 
             pr_data = {
