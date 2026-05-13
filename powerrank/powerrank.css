@@ -1,80 +1,80 @@
 /* ── powerrank.css — PA Milk Society Power Rankings ── */
 
 :root {
-  --border: rgba(232,200,137,.12);
-  --glow:   0 0 0 2px rgba(232,200,137,.15), 0 8px 24px rgba(160,72,48,.12);
+  --border: rgba(14,22,32,.18);
+  --glow:   0 2px 12px rgba(0,0,0,.18);
+  --good:   #4a9c5c;
+  --bad:    #c05a4a;
 }
 
 body {
-  background: linear-gradient(160deg, #0c1a10 0%, #0d1520 55%, #0b1018 100%);
+  background: #f0e5c8;
 }
 
-.site-glow {
-  background-image:
-    radial-gradient(circle at 85% 5%,  rgba(93,158,112,.18) 0%, transparent 45%),
-    radial-gradient(circle at 10% 80%, rgba(232,200,137,.10) 0%, transparent 40%);
-}
+/* Hide the dark atmospheric glow — doesn't belong on a light page */
+.site-glow { display: none; }
 
 /* ── App shell ── */
 .pr-app {
   position: relative; z-index: 10;
   max-width: 1400px; margin: 0 auto;
   padding: 1.5rem 2rem 5rem;
+  color: var(--ink);
 }
 
 /* ── AUTO badge ── */
 .pr-auto-badge {
   justify-self: end;
   font-family: var(--mono); font-size: .6rem; letter-spacing: .2em;
-  background: rgba(93,158,112,.12); color: var(--good);
-  border: 1px solid rgba(93,158,112,.25);
+  background: rgba(139,109,56,.12); color: #7a5a18;
+  border: 1px solid rgba(139,109,56,.32);
   padding: 4px 8px; border-radius: 2px; font-weight: 700;
 }
 
 /* ── Pre-season state ── */
 .pr-preseason { text-align: center; padding: 3rem 1rem; }
-.pr-preseason h2 { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: .75rem; }
-.pr-preseason p  { color: var(--cream-soft); font-size: .95rem; line-height: 1.6; margin-bottom: 2rem; }
+.pr-preseason h2 { font-family: var(--serif); font-size: 1.8rem; color: var(--gold-deep); margin-bottom: .75rem; }
+.pr-preseason p  { color: var(--ink-soft); font-size: .95rem; line-height: 1.6; margin-bottom: 2rem; }
 
 /* ── Week tabs ── */
 .pr-week-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .pr-week-tab {
-  padding: 4px 10px; border-radius: 2px; border: 1px solid var(--ink-line);
-  color: var(--cream-mute); cursor: pointer; background: rgba(255,255,255,.02);
+  padding: 4px 10px; border-radius: 2px;
+  border: 1px solid rgba(14,22,32,.2);
+  color: #837b6a; cursor: pointer;
+  background: rgba(14,22,32,.05);
   font-size: 10px; font-family: var(--mono); letter-spacing: .06em;
   transition: background .12s;
 }
 .pr-week-tab.active {
-  border: 1px solid transparent;
-  background:
-    linear-gradient(90deg, rgba(232,200,137,.18), rgba(160,72,48,.18)) padding-box,
-    linear-gradient(90deg, var(--gold), var(--rust)) border-box;
-  color: var(--cream);
+  border: 1px solid rgba(139,109,56,.5);
+  background: rgba(139,109,56,.14);
+  color: #5c3e0e;
 }
 
 /* ── View tabs ── */
 .pr-view-tabs {
   display: flex; gap: 0; margin-bottom: 16px;
-  border-bottom: 2px solid var(--ink-line);
+  border-bottom: 2px solid rgba(14,22,32,.15);
 }
 .pr-view-tab {
   padding: 8px 18px; background: transparent; border: none;
-  color: var(--cream-mute); cursor: pointer;
+  color: #837b6a; cursor: pointer;
   font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
   font-weight: 700; border-bottom: 2px solid transparent;
   margin-bottom: -2px; transition: color .15s, border-color .15s;
 }
-.pr-view-tab.active   { color: var(--gold); border-bottom-color: var(--gold); }
-.pr-view-tab:hover:not(.active) { color: var(--cream-soft); }
+.pr-view-tab.active   { color: var(--gold-deep); border-bottom-color: var(--gold-deep); }
+.pr-view-tab:hover:not(.active) { color: var(--ink-soft); }
 
 /* ── Generated timestamp ── */
 .pr-generated {
   font-family: var(--mono); font-size: .6rem; letter-spacing: .15em;
-  text-transform: uppercase; color: var(--cream-mute); margin-bottom: 20px;
+  text-transform: uppercase; color: #837b6a; margin-bottom: 20px;
 }
 
 /* ══════════════════════════════════════════════════════
-   PODIUM — editorial card design
+   PODIUM — dark cards on parchment: instant contrast
 ══════════════════════════════════════════════════════ */
 .pr-podium { margin-bottom: 2rem; }
 
@@ -83,7 +83,7 @@ body {
   display: flex; justify-content: space-between; align-items: center;
   background: linear-gradient(160deg, var(--ink-card), var(--ink-soft));
   border: 1px solid rgba(232,200,137,.35);
-  box-shadow: 0 0 40px rgba(232,200,137,.07), inset 0 1px 0 rgba(232,200,137,.1);
+  box-shadow: 0 4px 24px rgba(14,22,32,.2), inset 0 1px 0 rgba(232,200,137,.1);
   padding: 1.5rem 1.75rem;
   margin-bottom: 10px;
   position: relative;
@@ -153,6 +153,7 @@ body {
   border: 1px solid var(--ink-line);
   padding: 1rem 1.2rem 1rem 1.4rem;
   position: relative; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(14,22,32,.15);
 }
 .podium-runner::before {
   content: ''; position: absolute; top: 0; left: 0;
@@ -199,35 +200,35 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════
-   SECTION HEADERS — pams editorial style
+   SECTION HEADERS
 ══════════════════════════════════════════════════════ */
 .pr-section { margin-top: 2.5rem; }
 .pr-section-header {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
   gap: .75rem; padding-bottom: .85rem; margin-bottom: 1.25rem;
-  border-bottom: 3px double var(--ink-line);
+  border-bottom: 3px double rgba(14,22,32,.2);
 }
 .pr-section-num {
   font-family: var(--mono); font-weight: 700;
   font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-deep);
 }
 .pr-section-title {
   font-family: var(--serif); font-style: italic;
   font-size: clamp(1.3rem, 2.5vw, 1.8rem); letter-spacing: -.01em;
-  color: var(--cream); margin: 0;
+  color: var(--ink); margin: 0;
 }
 .pr-section-meta {
   font-family: var(--mono);
   font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--cream-mute);
+  color: #837b6a;
 }
 
 /* ── Rankings section header ── */
 .pr-rankings-header {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
   gap: .75rem; padding-bottom: .85rem; margin-bottom: 1.25rem;
-  border-bottom: 3px double var(--ink-line);
+  border-bottom: 3px double rgba(14,22,32,.2);
 }
 
 /* ── Conference grid (2-col) ── */
@@ -237,12 +238,13 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════
-   TABLES
+   TABLES — dark cards on parchment page
 ══════════════════════════════════════════════════════ */
 .pr-table-wrap {
   background: var(--ink-card);
   border: 1px solid var(--ink-line);
   overflow-x: auto; margin-bottom: 4px;
+  box-shadow: 0 2px 16px rgba(14,22,32,.15);
 }
 .pr-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .pr-table th {
@@ -265,7 +267,7 @@ body {
 .col-record { width: 72px; white-space: nowrap; }
 .col-pf     { width: 80px; white-space: nowrap; }
 .col-score  { width: 72px; white-space: nowrap; }
-.col-bars   { width: 140px; }
+.col-bars   { width: 160px; }
 
 /* Rank cell */
 .rank-cell  { display: flex; align-items: center; gap: 4px; }
@@ -287,7 +289,7 @@ body {
 .team-name-main { font-weight: 700; font-size: .9rem; line-height: 1.2; color: var(--cream); }
 .team-mgr       { font-size: .72rem; color: var(--cream-mute); }
 
-/* Conf badges — colored by division */
+/* Conf badges */
 .conf-badge {
   display: inline-block; font-size: .57rem; padding: 1px 5px;
   border-radius: 2px; border: 1px solid;
@@ -313,7 +315,7 @@ body {
 /* Factor mini-bars */
 .factor-bars { display: flex; flex-direction: column; gap: 2px; }
 .fbar-row    { display: flex; align-items: center; gap: 4px; }
-.fbar-label  { font-size: 8px; color: var(--cream-mute); font-family: var(--mono); width: 18px; text-align: right; }
+.fbar-label  { font-size: 8px; color: var(--cream-mute); font-family: var(--mono); width: 22px; text-align: right; }
 .fbar-track  { flex: 1; height: 4px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
 .fbar-fill   { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--gold), var(--rust)); }
 .fbar-val    { font-size: 7px; color: var(--cream-mute); font-family: var(--mono); width: 22px; }
@@ -354,7 +356,7 @@ body {
   color: var(--steel); font-size: .78rem;
   padding: 0 2px; vertical-align: middle; transition: color .15s;
 }
-.formula-info-btn:hover { color: var(--gold); }
+.formula-info-btn:hover { color: var(--gold-deep); }
 
 /* ── Formula popup ── */
 .formula-popup[hidden] { display: none; }
@@ -364,15 +366,15 @@ body {
 }
 .formula-popup-backdrop {
   position: absolute; inset: 0;
-  background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+  background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
 }
 .formula-popup-card {
   position: relative; z-index: 1;
   background: var(--ink-card);
   border: 1px solid rgba(232,200,137,.2);
   padding: 1.5rem;
-  max-width: 480px; width: 100%;
-  box-shadow: 0 24px 60px rgba(0,0,0,.7);
+  max-width: 500px; width: 100%;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
   max-height: 85vh; overflow-y: auto;
 }
 .formula-popup-header {
@@ -411,6 +413,12 @@ body {
 .pr-factor-note  { font-size: .7rem; color: var(--cream-mute); line-height: 1.4; }
 .pr-formula-note {
   margin-top: 8px; font-size: .74rem; color: var(--cream-mute); font-style: italic;
+}
+
+/* ── Site footer override for light page ── */
+.site-footer {
+  color: #837b6a;
+  border-top-color: rgba(14,22,32,.15);
 }
 
 /* ── Responsive ── */

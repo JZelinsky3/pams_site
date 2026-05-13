@@ -124,18 +124,53 @@ body {
 }
 .nav-title em { font-style: italic; color: var(--gold); }
 
-/* Secondary nav links (when the back link isn't needed) */
-.nav-links {
-    display: flex; gap: 1.5rem;
+/* Nav dropdown */
+.nav-drop {
+    position: relative;
     justify-self: start;
 }
-.nav-links a {
-    color: var(--cream-soft); text-decoration: none;
-    font-family: var(--mono); font-weight: 500;
-    font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+.nav-drop-btn {
+    color: var(--gold);
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    background: none; border: none; cursor: pointer; padding: 0;
     transition: color .2s;
+    display: flex; align-items: center; gap: .4rem;
 }
-.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+.nav-drop-btn:hover { color: var(--gold-bright); }
+.nav-drop-btn .drop-arrow {
+    font-size: .9rem; transition: transform .2s;
+    display: inline-block;
+}
+.nav-drop.open .drop-arrow { transform: rotate(180deg); }
+.nav-drop-menu {
+    display: none;
+    position: absolute; top: calc(100% + .75rem); left: 0;
+    background: rgba(14,22,32,.97);
+    border: 1px solid var(--ink-line);
+    border-radius: 3px;
+    min-width: 190px;
+    backdrop-filter: blur(12px);
+    z-index: 50;
+    overflow: hidden;
+}
+.nav-drop.open .nav-drop-menu { display: block; }
+.nav-drop-menu a {
+    display: block; padding: .7rem 1.1rem;
+    color: var(--cream-soft); text-decoration: none;
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    border-bottom: 1px solid var(--ink-line-soft);
+    transition: background .15s, color .15s;
+}
+.nav-drop-menu a:last-child { border-bottom: none; }
+.nav-drop-menu a:hover { background: rgba(232,200,137,.07); color: var(--gold); }
+.nav-drop-label {
+    display: block; padding: .45rem 1.1rem .3rem;
+    font-family: var(--mono); font-size: .55rem;
+    letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute); border-bottom: 1px solid var(--ink-line-soft);
+}
 
 /* ============================================================
    HERO
@@ -666,6 +701,50 @@ table.data tbody tr.highlight {
 .champion-link:hover { color: var(--gold-bright); }
 .champion-link:hover .arrow { transform: translateX(4px); }
 .arrow { transition: transform .25s ease; display: inline-block; }
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .nav { padding: .9rem 1.25rem; gap: .5rem; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .section { padding: 0 1.25rem; margin-top: 2rem; }
+    .toc-row { padding: 1.2rem 1.5rem; gap: 1rem; }
+    .toc-title { font-size: 1.4rem; }
+    .stat-bar { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+    .nav { padding: .75rem 1rem; }
+    .nav-title { font-size: 1.2rem; }
+    .nav-kicker { font-size: .5rem; letter-spacing: .2em; }
+    .nav-link { font-size: .62rem; letter-spacing: .12em; }
+    .nav-drop-btn { font-size: .62rem; }
+
+    .hero { padding: 2.5rem 1rem 2rem; }
+    .hero-sub { font-size: 1rem; }
+
+    .section { padding: 0 1rem; margin-top: 1.5rem; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: .3rem; padding-bottom: .75rem; margin-bottom: 1.25rem; }
+    .section-title { font-size: 1.35rem; }
+
+    .toc-row {
+        grid-template-columns: auto 1fr auto;
+        padding: 1rem 1.1rem;
+        gap: .6rem;
+    }
+    .toc-badge { display: none; }
+    .toc-desc  { display: none; }
+    .toc-title { font-size: 1.15rem; }
+    .toc-chapter { min-width: 3.5rem; font-size: .56rem; }
+    .toc-arrow { font-size: 1.2rem; min-width: 1.2rem; }
+
+    .hero-stat-value { font-size: clamp(4.5rem, 20vw, 11rem); }
+    .hero-stat-detail { font-size: 1.05rem; }
+
+    .stat-bar { grid-template-columns: 1fr; }
+    .champion-seal { width: 150px; height: 150px; }
+    .champion-name { font-size: clamp(2rem, 7vw, 3.8rem); }
+}
 </style>
 </head>
 <body>
@@ -695,12 +774,16 @@ table.data tbody tr.highlight {
 
 <!-- NAV -->
 <nav class="nav">
-    <div class="nav-links">
-        <a href="standings.html">Standings</a>
-        <a href="managers/index.html">Managers</a>
-        <a href="records.html">Records</a>
-        <a href="pickems/index.html">Pick'ems</a>
-        <a href="powerrank/index.html">Power Rankings</a>
+    <div class="nav-drop" id="nav-drop">
+        <button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>
+        <div class="nav-drop-menu">
+            <span class="nav-drop-label">Pages</span>
+            <a href="standings.html">Standings</a>
+            <a href="managers/index.html">Managers</a>
+            <a href="records.html">Record Book</a>
+            <a href="pickems/index.html">Pick'ems</a>
+            <a href="powerrank/index.html">Power Rankings</a>
+        </div>
     </div>
     <div class="nav-center">
         <div class="nav-kicker">PA MILK SOCIETY · VOL. 02</div>
@@ -922,6 +1005,14 @@ table.data tbody tr.highlight {
        gameContext:   short mono line below the prose ONLY in hero spot
      ============================================================ -->
 <script>
+function toggleDrop() {
+    document.getElementById('nav-drop').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+    const drop = document.getElementById('nav-drop');
+    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+});
+
 const records = [
     {
         label: "Highest Single-Week Score",

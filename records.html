@@ -264,6 +264,31 @@ table.career-table tbody tr:hover { background: rgba(232,200,137,.03); }
     font-family: var(--serif); font-style: italic;
     color: var(--cream-mute);
 }
+
+/* ── Full-page gold override ── */
+body { background: var(--gold); }
+.site-glow, .site-grain { display: none; }
+
+.page-kicker { color: var(--gold-deep); }
+.page-title  { color: var(--ink); }
+.page-title em { color: var(--gold-deep); }
+.page-sub    { color: var(--ink-soft); }
+
+.rec-section-num   { color: var(--gold-deep); }
+.rec-section-title { color: var(--ink); }
+.rec-section-note  { color: var(--ink-soft); }
+.rec-section-header { border-bottom-color: rgba(14,22,32,.18); }
+
+.loading-state { color: var(--ink-soft); }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    .page-header { padding: 2.5rem 1rem 1.5rem; }
+    .section { padding: 0 1.25rem; }
+    .rec-cells { gap: .75rem; }
+    .rec-cell { padding: 1.1rem 1.25rem; }
+    .rec-section { margin-bottom: 2.5rem; }
+}
 </style>
 </head>
 <body>

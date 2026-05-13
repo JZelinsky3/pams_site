@@ -323,6 +323,20 @@ print(f"  ✓ Saved {len(hub_records)} hub records")
 # 3. MANAGERS_DIRECTORY.JSON — list for managers/index.html
 # ============================================================
 
+# Compute playoff appearances from standings.
+# 2020 used a top-8 bracket; every other season used top-6.
+_PO_CUTOFF = {2020: 8}
+uid_playoff_apps: dict = defaultdict(int)
+for _s in standings:
+    _rank = _s.get("final_rank")
+    if _rank is None:
+        continue
+    _cutoff = _PO_CUTOFF.get(_s["season"], 6)
+    if _rank <= _cutoff:
+        _uid = season_team_to_uid(_s["season"], _s["team_id"])
+        if _uid:
+            uid_playoff_apps[_uid] += 1
+
 print("Building data/managers_directory.json ...")
 
 # Build a quick uid -> career_extras lookup
@@ -373,7 +387,7 @@ def build_directory_entry(uid, name, nfl_display, is_current):
         "championships": summary.get("championships", 0),
         "championship_seasons": [int(y) for y in str(summary.get("championship_seasons", "")).split(",") if y],
         "top_three_finishes": summary.get("top_3_finishes", 0),
-        "playoff_appearances": extras.get("playoff_appearances", 0),
+        "playoff_appearances": uid_playoff_apps.get(uid, 0),
     }
 
 for uid, name, nfl_display in config.CURRENT_MEMBERS:
@@ -501,7 +515,7 @@ def build_profile(uid: int, name: str, nfl_display: str, is_current: bool) -> di
         "championships": summary.get("championships", 0),
         "championship_seasons": chip_seasons,
         "top_three_finishes": summary.get("top_3_finishes", 0),
-        "playoff_appearances": extras.get("playoff_appearances", 0),
+        "playoff_appearances": uid_playoff_apps.get(uid, 0),
 
         "reg_record": fmt_record(reg_wins, reg_losses, reg_ties),
         "reg_win_pct": round(reg_wins / reg_g, 4) if reg_g else 0,

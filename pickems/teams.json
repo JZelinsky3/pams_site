@@ -1,0 +1,125 @@
+{
+  "season": 2026,
+  "teams": [
+    {
+      "id": "joey",
+      "name": "Joey",
+      "manager": "Joey",
+      "roster_id": 1,
+      "sleeper_user_id": "591884559361040384",
+      "division": 1,
+      "division_name": "Whole",
+      "logo": "https://sleepercdn.com/avatars/1ffd2d498b7769e2062665ef5e4fa0ef"
+    },
+    {
+      "id": "sean",
+      "name": "Sean",
+      "manager": "Sean",
+      "roster_id": 2,
+      "sleeper_user_id": "728702248099663872",
+      "division": 1,
+      "division_name": "Whole",
+      "logo": "https://sleepercdn.com/uploads/59c887fa8cee822a71b1bb0292960c60.jpg"
+    },
+    {
+      "id": "kyle",
+      "name": "Kyle",
+      "manager": "Kyle",
+      "roster_id": 3,
+      "sleeper_user_id": "609426003600670720",
+      "division": 1,
+      "division_name": "Whole",
+      "logo": "https://sleepercdn.com/avatars/441a0cdf6792efae341e600e62b6d183"
+    },
+    {
+      "id": "andrew",
+      "name": "Big Yahu\u2019s Promised Team ",
+      "manager": "Andrew",
+      "roster_id": 4,
+      "sleeper_user_id": "458329320843112448",
+      "division": 2,
+      "division_name": "Skim",
+      "logo": "https://sleepercdn.com/avatars/b90085b8fce696503d0e83e00136659a"
+    },
+    {
+      "id": "chris",
+      "name": "Chris",
+      "manager": "Chris",
+      "roster_id": 5,
+      "sleeper_user_id": "739747288599150592",
+      "division": 2,
+      "division_name": "Skim",
+      "logo": "https://sleepercdn.com/avatars/82aec8e811b839b8ec25d7b458afd57b"
+    },
+    {
+      "id": "evan",
+      "name": "Evan",
+      "manager": "Evan",
+      "roster_id": 6,
+      "sleeper_user_id": "1346560472878452736",
+      "division": 1,
+      "division_name": "Whole",
+      "logo": "https://sleepercdn.com/avatars/33239bae17699d5b98a1543b690ea205"
+    },
+    {
+      "id": "isaac",
+      "name": "Isaac",
+      "manager": "Isaac",
+      "roster_id": 7,
+      "sleeper_user_id": "739751326224969728",
+      "division": 2,
+      "division_name": "Skim",
+      "logo": "https://sleepercdn.com/avatars/f0ab2ff431d6e5fb3b8c9835a7b2acb4"
+    },
+    {
+      "id": "connor",
+      "name": "Connor",
+      "manager": "Connor",
+      "roster_id": 8,
+      "sleeper_user_id": "868712689332031488",
+      "division": 1,
+      "division_name": "Whole",
+      "logo": "https://sleepercdn.com/avatars/b319fdf8b7b5b0359d3c78622ba4d70c"
+    },
+    {
+      "id": "mason",
+      "name": "Rizzlers",
+      "manager": "Mason",
+      "roster_id": 9,
+      "sleeper_user_id": "728687640840372224",
+      "division": 2,
+      "division_name": "Skim",
+      "logo": "https://sleepercdn.com/avatars/d78226e25ec51bbf53f4b24cdc1fdc20"
+    },
+    {
+      "id": "connie",
+      "name": "Retards",
+      "manager": "Connie",
+      "roster_id": 10,
+      "sleeper_user_id": "1358933101526409216",
+      "division": 1,
+      "division_name": "Whole",
+      "logo": "https://sleepercdn.com/uploads/53107c4d41ceab91305b4f1e7aa783be.jpg"
+    },
+    {
+      "id": "team11",
+      "name": "Team11",
+      "manager": "Team11",
+      "roster_id": 11,
+      "sleeper_user_id": "",
+      "division": 2,
+      "division_name": "Skim",
+      "logo": "/assets/images/default_team.png"
+    },
+    {
+      "id": "team12",
+      "name": "Team12",
+      "manager": "Team12",
+      "roster_id": 12,
+      "sleeper_user_id": "",
+      "division": 2,
+      "division_name": "Skim",
+      "logo": "/assets/images/default_team.png"
+    }
+  ]
+}

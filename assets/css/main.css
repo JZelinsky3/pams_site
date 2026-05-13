@@ -457,3 +457,51 @@ table.data tbody tr.highlight {
 .text-serif { font-family: var(--serif); }
 .text-gold { color: var(--gold); }
 .text-cream-mute { color: var(--cream-mute); }
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .nav { padding: .9rem 1.25rem; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: .62rem; letter-spacing: .12em; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .section { padding: 0 1.25rem; margin-top: 2rem; }
+    .card-grid { grid-template-columns: 1fr; }
+    .stat-bar { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 520px) {
+    .nav { padding: .7rem 1rem; gap: .5rem; }
+    .nav-title { font-size: 1.2rem; }
+    .nav-kicker { font-size: .5rem; letter-spacing: .2em; }
+    .nav-back, .nav-link { font-size: .62rem; letter-spacing: .12em; }
+    .nav-links { display: none; }
+    .nav-drop-btn { font-size: .62rem; letter-spacing: .12em; }
+
+    .hero { padding: 2.5rem 1rem 2rem; }
+    .hero-sub { font-size: 1rem; }
+
+    .section { padding: 0 1rem; margin-top: 1.5rem; }
+    .section-header {
+        flex-direction: column; align-items: flex-start;
+        gap: .3rem; padding-bottom: .75rem; margin-bottom: 1.25rem;
+    }
+    .section-title { font-size: 1.4rem; }
+    .section-meta { font-size: .6rem; }
+
+    .stat-bar { grid-template-columns: 1fr; }
+
+    .ticker { height: 34px; }
+    .ticker-item { font-size: .6rem; letter-spacing: .12em; }
+
+    .toc-row {
+        grid-template-columns: auto 1fr auto;
+        padding: 1rem 1.25rem;
+        gap: .75rem;
+    }
+    .toc-badge { display: none; }
+    .toc-title { font-size: 1.3rem; }
+    .toc-chapter { min-width: 4rem; font-size: .58rem; }
+}

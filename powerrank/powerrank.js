@@ -121,7 +121,7 @@ function renderPodium(top3) {
       </div>
       <div class="podium-hero-right">
         <img class="podium-hero-logo" src="${esc(t.logo)}" alt="${esc(t.team_name)}"
-             onerror="this.src='/assets/images/default_team.png'" />
+             onerror="this.src='../assets/images/default_team.png'" />
         <div class="podium-hero-score">${t.score.toFixed(1)}</div>
         <div class="podium-hero-delta">${deltaHTML(t.delta)}</div>
       </div>
@@ -131,7 +131,7 @@ function renderPodium(top3) {
     <div class="podium-runner ${cls}">
       <div class="podium-runner-top">
         <img class="podium-runner-logo" src="${esc(t.logo)}" alt="${esc(t.team_name)}"
-             onerror="this.src='/assets/images/default_team.png'" />
+             onerror="this.src='../assets/images/default_team.png'" />
         <div class="podium-runner-info">
           <div class="podium-runner-label">${label}</div>
           <div class="podium-runner-name">${esc(t.team_name)}</div>
@@ -168,7 +168,7 @@ function renderTable(teams, confView) {
         <td class="col-team">
           <div class="team-cell">
             <img class="team-logo" src="${esc(t.logo)}" alt="${esc(t.team_name)}"
-                 onerror="this.src='/assets/images/default_team.png'" />
+                 onerror="this.src='../assets/images/default_team.png'" />
             <div class="team-info">
               <div class="team-name-main">${esc(t.team_name)}</div>
               <div class="team-mgr">${esc(t.manager)}${confBadge(t.division_name)}</div>
@@ -194,8 +194,9 @@ function buildFactorBars(factors) {
   const isPreseason = "win_pct" in factors;
   const items = isPreseason
     ? [
-        { key: "win_pct",  label: "Win%", max: 33 },
-        { key: "pf_avg",   label: "PF",   max: 33 },
+        { key: "win_pct",  label: "Win%", max: 20 },
+        { key: "pf_avg",   label: "PF",   max: 20 },
+        { key: "recent",   label: "Rec3", max: 26 },
         { key: "pedigree", label: "Ped",  max: 34 },
       ]
     : [
@@ -234,7 +235,7 @@ function renderProjections(teams) {
         <td class="col-team">
           <div class="team-cell">
             <img class="team-logo" src="${esc(t.logo)}" alt="${esc(t.team_name)}"
-                 onerror="this.src='/assets/images/default_team.png'" />
+                 onerror="this.src='../assets/images/default_team.png'" />
             <div class="team-info">
               <div class="team-name-main">${esc(t.team_name)}</div>
               <div class="team-mgr">${esc(t.manager)}${confBadge(t.division_name)}</div>
@@ -274,7 +275,7 @@ function renderConfTable(tbodyId, teams) {
         <td class="col-team">
           <div class="team-cell">
             <img class="team-logo" src="${esc(t.logo)}" alt="${esc(t.team_name)}"
-                 onerror="this.src='/assets/images/default_team.png'" />
+                 onerror="this.src='../assets/images/default_team.png'" />
             <div class="team-info">
               <div class="team-name-main">${esc(t.team_name)}</div>
               <div class="team-mgr">${esc(t.manager)}</div>

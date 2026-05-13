@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Power Rankings · PA Milk Society</title>
-  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="../assets/css/main.css" />
   <link rel="stylesheet" href="./powerrank.css" />
 </head>
 <body>
@@ -26,8 +26,9 @@
       <h2>Rankings Coming Week 1</h2>
       <p>Power rankings will appear here after the first week of the season.<br>Updated automatically every Tuesday.</p>
       <div class="pr-formula-grid" style="margin-top:1.5rem">
-        <div class="pr-factor"><span class="pr-factor-pts">33</span><span class="pr-factor-label">Win %</span><span class="pr-factor-note">all-time career win percentage</span></div>
-        <div class="pr-factor"><span class="pr-factor-pts">33</span><span class="pr-factor-label">PF Avg</span><span class="pr-factor-note">average points per season, percentile ranked</span></div>
+        <div class="pr-factor"><span class="pr-factor-pts">20</span><span class="pr-factor-label">Win %</span><span class="pr-factor-note">all-time career win percentage</span></div>
+        <div class="pr-factor"><span class="pr-factor-pts">20</span><span class="pr-factor-label">PF Avg</span><span class="pr-factor-note">average points per season, percentile ranked</span></div>
+        <div class="pr-factor"><span class="pr-factor-pts">26</span><span class="pr-factor-label">Recent</span><span class="pr-factor-note">avg finish over last 3 seasons (2023–2025)</span></div>
         <div class="pr-factor"><span class="pr-factor-pts">34</span><span class="pr-factor-label">Pedigree</span><span class="pr-factor-note">championships · top-3 finishes · playoff appearances</span></div>
       </div>
     </div>
@@ -158,16 +159,17 @@
         <button id="formulaClose" class="formula-popup-close" type="button">×</button>
       </div>
 
-      <p class="pr-formula-note" style="margin:0 0 12px">Pre-season uses career history only. In-season blends history (fades to zero by week 4) with current stats.</p>
+      <p class="pr-formula-note" style="margin:0 0 12px">Pre-season uses career history only. History blends in weeks 1–3 (30% / 20% / 10%) then fully in-season from week 4.</p>
 
       <div class="formula-popup-label">Pre-Season</div>
       <div class="pr-formula-grid" style="margin-bottom:14px">
-        <div class="pr-factor"><span class="pr-factor-pts">33</span><span class="pr-factor-label">Win %</span><span class="pr-factor-note">all-time career win percentage</span></div>
-        <div class="pr-factor"><span class="pr-factor-pts">33</span><span class="pr-factor-label">PF Avg</span><span class="pr-factor-note">average points per season, percentile ranked vs all managers</span></div>
+        <div class="pr-factor"><span class="pr-factor-pts">20</span><span class="pr-factor-label">Win %</span><span class="pr-factor-note">all-time career win percentage</span></div>
+        <div class="pr-factor"><span class="pr-factor-pts">20</span><span class="pr-factor-label">PF Avg</span><span class="pr-factor-note">average points per season, percentile ranked vs all managers</span></div>
+        <div class="pr-factor"><span class="pr-factor-pts">26</span><span class="pr-factor-label">Recent</span><span class="pr-factor-note">avg finish 2023–2025 (playoff rank if made playoffs, reg-season rank if not)</span></div>
         <div class="pr-factor"><span class="pr-factor-pts">34</span><span class="pr-factor-label">Pedigree</span><span class="pr-factor-note">championships (14) + top-3 finishes (12) + playoff appearances (8)</span></div>
       </div>
 
-      <div class="formula-popup-label">In-Season (Weeks 4+)</div>
+      <div class="formula-popup-label">In-Season (Week 4+)</div>
       <div class="pr-formula-grid">
         <div class="pr-factor"><span class="pr-factor-pts">35</span><span class="pr-factor-label">Record</span><span class="pr-factor-note">current season win percentage</span></div>
         <div class="pr-factor"><span class="pr-factor-pts">35</span><span class="pr-factor-label">Points For</span><span class="pr-factor-note">percentile rank among all 12 teams this season</span></div>

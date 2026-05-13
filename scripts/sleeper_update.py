@@ -67,19 +67,21 @@ LOGO_FALLBACK = {
 }
 
 # Historical stats from managers_directory.json (7 NFL.com seasons through 2025)
+# recent_finishes: [2023 finish, 2024 finish, 2025 finish]
+# Playoff finish if they made playoffs that year, regular-season rank if they didn't.
 HISTORICAL = {
-    "joey":    {"win_pct": 0.566,  "pf": 13621.96, "seasons": 7, "champs": 1, "top3": 4, "playoffs": 7},
-    "mason":   {"win_pct": 0.5728, "pf": 12732.62, "seasons": 7, "champs": 1, "top3": 2, "playoffs": 7},
-    "sean":    {"win_pct": 0.5673, "pf": 12954.28, "seasons": 7, "champs": 0, "top3": 2, "playoffs": 7},
-    "chris":   {"win_pct": 0.534,  "pf": 12883.44, "seasons": 7, "champs": 1, "top3": 2, "playoffs": 7},
-    "isaac":   {"win_pct": 0.5556, "pf": 11128.66, "seasons": 6, "champs": 1, "top3": 2, "playoffs": 6},
-    "kyle":    {"win_pct": 0.4571, "pf": 12446.44, "seasons": 7, "champs": 0, "top3": 0, "playoffs": 6},
-    "connie":  {"win_pct": 0.4904, "pf": 12661.06, "seasons": 7, "champs": 1, "top3": 3, "playoffs": 7},
-    "charlie": {"win_pct": 0.47,   "pf": 11722.4,  "seasons": 7, "champs": 0, "top3": 0, "playoffs": 7},
-    "luke":    {"win_pct": 0.4659, "pf": 10137.52, "seasons": 6, "champs": 1, "top3": 1, "playoffs": 6},
-    "evan":    {"win_pct": 0.3953, "pf": 4957.06,  "seasons": 3, "champs": 0, "top3": 0, "playoffs": 3},
-    "andrew":  {"win_pct": 0.4904, "pf": 12565.92, "seasons": 7, "champs": 1, "top3": 3, "playoffs": 7},
-    "connor":  {"win_pct": 0.44,   "pf": 12259.4,  "seasons": 7, "champs": 0, "top3": 1, "playoffs": 7},
+    "joey":    {"win_pct": 0.566,  "pf": 13621.96, "seasons": 7, "champs": 1, "top3": 4, "playoffs": 7, "recent_finishes": [12, 8, 6]},
+    "mason":   {"win_pct": 0.5728, "pf": 12732.62, "seasons": 7, "champs": 1, "top3": 2, "playoffs": 7, "recent_finishes": [8, 12, 1]},
+    "sean":    {"win_pct": 0.5673, "pf": 12954.28, "seasons": 7, "champs": 0, "top3": 2, "playoffs": 7, "recent_finishes": [3, 4, 10]},
+    "chris":   {"win_pct": 0.534,  "pf": 12883.44, "seasons": 7, "champs": 1, "top3": 2, "playoffs": 7, "recent_finishes": [9, 5, 9]},
+    "isaac":   {"win_pct": 0.5556, "pf": 11128.66, "seasons": 6, "champs": 1, "top3": 2, "playoffs": 6, "recent_finishes": [2, 11, 5]},
+    "kyle":    {"win_pct": 0.4571, "pf": 12446.44, "seasons": 7, "champs": 0, "top3": 0, "playoffs": 6, "recent_finishes": [11, 9, 4]},
+    "connie":  {"win_pct": 0.4904, "pf": 12661.06, "seasons": 7, "champs": 1, "top3": 3, "playoffs": 7, "recent_finishes": [1, 6, 2]},
+    "charlie": {"win_pct": 0.47,   "pf": 11722.4,  "seasons": 7, "champs": 0, "top3": 0, "playoffs": 7, "recent_finishes": [4, 7, 6]},
+    "luke":    {"win_pct": 0.4659, "pf": 10137.52, "seasons": 6, "champs": 1, "top3": 1, "playoffs": 6, "recent_finishes": [6, 1, 12]},
+    "evan":    {"win_pct": 0.3953, "pf": 4957.06,  "seasons": 3, "champs": 0, "top3": 0, "playoffs": 3, "recent_finishes": [5, 10, 11]},
+    "andrew":  {"win_pct": 0.4904, "pf": 12565.92, "seasons": 7, "champs": 1, "top3": 3, "playoffs": 7, "recent_finishes": [10, 2, 3]},
+    "connor":  {"win_pct": 0.44,   "pf": 12259.4,  "seasons": 7, "champs": 0, "top3": 1, "playoffs": 7, "recent_finishes": [7, 3, 5]},
 }
 
 # NOTE: 2026 NFL Week 1 Thursday is estimated as Sept 3, 2026.
@@ -223,9 +225,10 @@ def compute_winners(groups, teams_by_roster):
 def compute_historical_score(slug):
     """
     0-100 score based solely on career history.
-      Win%     33 pts  — all-time win percentage
-      PF Avg   33 pts  — percentile rank on avg points-per-season
-      Pedigree 34 pts  — championships (14) + top-3 rate (12) + playoff rate (8)
+      Win%        20 pts  — all-time win percentage
+      PF Avg      20 pts  — percentile rank on avg points-per-season
+      Recent      26 pts  — avg finish over last 3 seasons (2023–2025)
+      Pedigree    34 pts  — championships (14) + top-3 rate (12) + playoff rate (8)
     """
     h = HISTORICAL.get(slug)
     if not h:
@@ -235,13 +238,15 @@ def compute_historical_score(slug):
     my_pf_avg   = h["pf"] / h["seasons"]
     pf_pct_rank = sum(1 for x in all_pf_avgs if x <= my_pf_avg) / len(all_pf_avgs)
 
-    win_pts   = h["win_pct"] * 33
-    pf_pts    = pf_pct_rank * 33
-    ped_pts   = (min(h["champs"], 1) * 14
-                 + (h["top3"]    / h["seasons"]) * 12
-                 + (h["playoffs"] / h["seasons"]) * 8)
+    avg_finish  = sum(h["recent_finishes"]) / len(h["recent_finishes"])
+    win_pts     = h["win_pct"] * 20
+    pf_pts      = pf_pct_rank * 20
+    recent_pts  = (12 - avg_finish) / 11 * 26
+    ped_pts     = (min(h["champs"], 1) * 14
+                   + (h["top3"]    / h["seasons"]) * 12
+                   + (h["playoffs"] / h["seasons"]) * 8)
 
-    return win_pts + pf_pts + ped_pts
+    return win_pts + pf_pts + recent_pts + ped_pts
 
 
 def simulate_projections(scores, teams, n_weeks=13, playoff_spots=6, bye_spots=2, n_sims=8000):
@@ -319,8 +324,17 @@ def compute_power_rankings(weekly_standings, teams, week_num,
             return 0.5
         return sum(1 for x in all_pf_s if x <= pf) / max(len(all_pf_s), 1)
 
-    # History weight: 1.0 at week 0 (preseason), 0 at week 4+
-    hist_w = max(0.0, 1.0 - week_num / 4.0)
+    # History weight: full preseason, fades each week, gone by week 4
+    if week_num == 0:
+        hist_w = 1.0
+    elif week_num == 1:
+        hist_w = 0.30
+    elif week_num == 2:
+        hist_w = 0.20
+    elif week_num == 3:
+        hist_w = 0.10
+    else:
+        hist_w = 0.0
 
     # ── Pass 1: base scores (no conf component yet) ───────────────────────
     base = {}
@@ -370,21 +384,13 @@ def compute_power_rankings(weekly_standings, teams, week_num,
             final[slug] = hist_w * hist_s + (1 - hist_w) * cur_score
 
     # ── Projections ───────────────────────────────────────────────────────
-    projections = simulate_projections(final, teams, n_weeks, playoff_spots, bye_spots)
-
-    # Preseason: blend toward flat baseline (35–65% range) so early odds aren't extreme
+    # Preseason: everyone gets equal simulation strength — no one has drafted yet
+    # so structural advantages shouldn't skew playoff odds beyond a few percent.
     if hist_w >= 1.0:
-        n_teams   = len(teams)
-        pl_base   = playoff_spots / n_teams * 100      # 50%
-        bye_base  = bye_spots / n_teams * 100          # 16.7%
-        conf_base = 100 / 6                            # 16.7%
-        W = 0.30
-        for tid, p in projections.items():
-            p["playoff_pct"]  = round(p["playoff_pct"]  * W + pl_base   * (1 - W), 1)
-            p["bye_pct"]      = round(p["bye_pct"]      * W + bye_base  * (1 - W), 1)
-            p["conf_win_pct"] = round(p["conf_win_pct"] * W + conf_base * (1 - W), 1)
-            p["proj_wins"]    = round(p["proj_wins"])
-            p["proj_losses"]  = n_weeks - round(p["proj_wins"])
+        sim_scores  = {tid: 50.0 for tid in final}
+        projections = simulate_projections(sim_scores, teams, n_weeks, playoff_spots, bye_spots)
+    else:
+        projections = simulate_projections(final, teams, n_weeks, playoff_spots, bye_spots)
 
     # ── Assemble output ───────────────────────────────────────────────────
     scored = []
@@ -404,15 +410,17 @@ def compute_power_rankings(weekly_standings, teams, week_num,
                 all_pf_avgs  = [d["pf"] / d["seasons"] for d in HISTORICAL.values()]
                 my_pf_avg    = h["pf"] / h["seasons"]
                 pf_rank      = sum(1 for x in all_pf_avgs if x <= my_pf_avg) / len(all_pf_avgs)
+                avg_finish   = sum(h["recent_finishes"]) / len(h["recent_finishes"])
                 factors = {
-                    "win_pct":  round(h["win_pct"] * 33, 2),
-                    "pf_avg":   round(pf_rank * 33, 2),
+                    "win_pct":  round(h["win_pct"] * 20, 2),
+                    "pf_avg":   round(pf_rank * 20, 2),
+                    "recent":   round((12 - avg_finish) / 11 * 26, 2),
                     "pedigree": round(min(h["champs"], 1) * 14
                                       + (h["top3"] / h["seasons"]) * 12
                                       + (h["playoffs"] / h["seasons"]) * 8, 2),
                 }
             else:
-                factors = {"win_pct": 0, "pf_avg": 0, "pedigree": 0}
+                factors = {"win_pct": 0, "pf_avg": 0, "recent": 0, "pedigree": 0}
         else:
             cur_rec  = (wins / games) if games else 0.0
             conf_pts = (1 - (conf_rank[slug] - 1) / max(csize - 1, 1)) * 15

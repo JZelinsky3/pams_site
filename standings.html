@@ -308,6 +308,29 @@ body { background: var(--cream); }
 .total-label  { color: #837b6a; }
 .total-value  { color: var(--gold-deep); }
 .loading-state { color: #837b6a; }
+
+/* ── Chip badges on cream background — need dark amber for contrast ── */
+.chip-badge {
+    color: #5c3e0e;
+    background: rgba(139,109,56,.14);
+    border-color: rgba(139,109,56,.42);
+    font-weight: 900;
+}
+.chip-count-zero { color: #9a9080; }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    .page-header { padding: 2.5rem 1rem 1.5rem; }
+    .sort-bar { gap: .75rem; padding: 1rem 0; }
+    .sort-option { font-size: .58rem; padding: .4rem .6rem; }
+    .league-totals { grid-template-columns: repeat(3, 1fr); }
+    table.standings th,
+    table.standings td { padding: .7rem .65rem; }
+}
+@media (max-width: 400px) {
+    .league-totals { grid-template-columns: 1fr 1fr; }
+    .sort-options { gap: .15rem; }
+}
 </style>
 </head>
 <body>
