@@ -106,10 +106,10 @@
       "name": "Team11",
       "manager": "Team11",
       "roster_id": 11,
-      "sleeper_user_id": "",
+      "sleeper_user_id": "1360402900567728128",
       "division": 2,
       "division_name": "Skim",
-      "logo": "/assets/images/default_team.png"
+      "logo": "https://sleepercdn.com/avatars/a7bc9096de0bb100ab37914c1cbc69f4"
     },
     {
       "id": "team12",
