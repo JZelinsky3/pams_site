@@ -482,8 +482,15 @@ body { background: var(--dg-bg); }
     background: var(--dg-line);
     border: 1px solid var(--dg-line);
 }
-@media (max-width: 700px) { .bw-grid { grid-template-columns: 1fr; } }
 .bw-card { background: var(--dg-card); padding: 1rem 1.25rem; }
+@media (max-width: 640px) {
+    .bw-card { padding: .7rem .8rem; }
+    .bw-year { font-size: .55rem; letter-spacing: .15em; margin-bottom: .65rem; padding-bottom: .35rem; }
+    .bw-pick { margin-bottom: .5rem; }
+    .bw-label { font-size: .46rem; letter-spacing: .18em; }
+    .bw-player { font-size: .78rem; }
+    .bw-meta { font-size: .54rem; }
+}
 .bw-year {
     font-family: var(--mono); font-weight: 700;
     font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;

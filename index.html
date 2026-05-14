@@ -546,8 +546,13 @@ table.data tbody tr.highlight {
     transform: translateX(-50%);
 }
 @media (max-width: 720px) {
-    .stat-grid { grid-template-columns: 1fr; column-gap: 0; }
+    .stat-grid { column-gap: 1.25rem; }
     .stat-grid::before { display: none; }
+    .stat-row { gap: .75rem; padding: 1.1rem 0; }
+    .stat-row-num { font-size: 1.9rem; min-width: 4rem; }
+    .stat-row-name { font-size: .92rem; }
+    .stat-row-detail { font-size: .58rem; }
+    .stat-row-label { font-size: .52rem; letter-spacing: .18em; }
 }
 
 .stat-row {
@@ -563,6 +568,7 @@ table.data tbody tr.highlight {
     .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: none; }
 }
 @media (max-width: 720px) {
+    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: none; }
     .stat-grid .stat-row:last-child { border-bottom: none; }
 }
 
@@ -820,8 +826,8 @@ table.data tbody tr.highlight {
 <nav id="site-nav"
      data-page="hub"
      data-chapter="PA MILK SOCIETY · VOL. 02"
-     data-right-label="Seasons →"
-     data-right-href="seasons/index.html"></nav>
+     data-right-label="Standings"
+     data-right-href="standings.html"></nav>
 <script src="assets/js/nav.js"></script>
 
 <!-- HERO -->

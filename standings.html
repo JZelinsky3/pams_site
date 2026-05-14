@@ -88,7 +88,7 @@ table.standings thead {
 table.standings th {
     padding: .9rem 1rem;
     font-family: var(--mono); font-weight: 700;
-    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    font-size: .57rem; letter-spacing: .18em; text-transform: uppercase;
     color: #837b6a;
     text-align: left;
     white-space: nowrap;
@@ -150,9 +150,9 @@ table.standings td.name-cell a {
 table.standings td.name-cell a:hover { color: var(--gold-deep); }
 table.standings td.team-cell {
     font-family: var(--mono);
-    font-size: .63rem; letter-spacing: .12em; text-transform: uppercase;
+    font-size: .6rem; letter-spacing: .07em; text-transform: uppercase;
     color: #837b6a;
-    min-width: 140px;
+    min-width: 100px;
 }
 
 /* Record split columns — use deeper tones for cream-bg readability */
@@ -606,7 +606,7 @@ function render() {
                         ${th('pf', 'Points For')}
                         ${th('ppg', 'PPG')}
                         ${th('seasons', 'Seasons')}
-                        ${th('playoffs', 'Playoff Apps')}
+                        ${th('playoffs', 'PA')}
                         ${th('avgfinish', 'Avg Finish')}
                         ${th('chips', 'Championships')}
                     </tr>
