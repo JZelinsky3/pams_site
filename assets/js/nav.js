@@ -54,7 +54,6 @@
         var currentPage = nav.dataset.page      || '';
         var chapter     = nav.dataset.chapter   || 'PA MILK SOCIETY';
         var backLabel   = nav.dataset.backLabel  || '';
-        var backHref    = nav.dataset.backHref   ? root + nav.dataset.backHref  : '';
         var rightLabel  = nav.dataset.rightLabel || '';
         var rightHref   = nav.dataset.rightHref  ? root + nav.dataset.rightHref : '';
         var titleId     = nav.dataset.titleId    || 'nav-title';
@@ -72,7 +71,7 @@
             + '</div></div>';
 
         var leftSlot  = backLabel
-            ? '<a href="' + backHref + '" class="nav-back">' + backLabel + '</a>'
+            ? '<button class="nav-back" onclick="history.back()">← Back</button>'
             : dropMenu;
 
         var rightSlot = backLabel
@@ -83,7 +82,9 @@
         nav.innerHTML = leftSlot
             + '<div class="nav-center">'
             + '<div class="nav-kicker">' + chapter + '</div>'
-            + '<div class="nav-title" id="' + titleId + '">The Milk <em>Society.</em></div>'
+            + (currentPage === 'hub'
+                ? '<div class="nav-title" id="' + titleId + '">The Milk <em>Society.</em></div>'
+                : '<a class="nav-title" id="' + titleId + '" href="' + root + 'index.html">The Milk <em>Society.</em></a>')
             + '</div>'
             + rightSlot;
 
