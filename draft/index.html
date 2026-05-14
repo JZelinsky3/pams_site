@@ -658,6 +658,17 @@ body { background: var(--dg-bg); }
 }
 .value-pos-tab:hover { background: var(--dg-card-hover); color: var(--cream); }
 .value-pos-tab.active { background: var(--dg-accent); border-color: var(--dg-accent); color: var(--dg-bg); }
+
+@media (max-width: 640px) {
+    .coveted-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .coveted-card { padding: .55rem .6rem; }
+    .coveted-count { font-size: 1.4rem; margin-bottom: .1rem; }
+    .coveted-count span { display: none; }
+    .coveted-name { font-size: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .coveted-pos { font-size: .48rem; padding: .08rem .25rem; margin-bottom: .3rem; }
+    .coveted-years { font-size: .5rem; letter-spacing: 0; line-height: 1.5; }
+    .coveted-yr-dot { width: 4px; height: 4px; margin-right: .2rem; }
+}
 </style>
 </head>
 <body>

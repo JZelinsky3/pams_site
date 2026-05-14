@@ -131,18 +131,12 @@ body {
 }
 .nav-drop-btn {
     color: var(--gold);
-    font-family: var(--mono); font-weight: 700;
-    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
-    background: none; border: none; cursor: pointer; padding: 0;
+    background: none; border: none; cursor: pointer; padding: 2px;
     transition: color .2s;
-    display: flex; align-items: center; gap: .4rem;
+    display: flex; align-items: center; line-height: 1;
 }
 .nav-drop-btn:hover { color: var(--gold-bright); }
-.nav-drop-btn .drop-arrow {
-    font-size: .9rem; transition: transform .2s;
-    display: inline-block;
-}
-.nav-drop.open .drop-arrow { transform: rotate(180deg); }
+.nav-icon { display: block; }
 .nav-drop-menu {
     display: none;
     position: absolute; top: calc(100% + .75rem); left: 0;
@@ -769,7 +763,6 @@ table.data tbody tr.highlight {
     .nav-title { font-size: 1.2rem; }
     .nav-kicker { font-size: .5rem; letter-spacing: .2em; }
     .nav-link { font-size: .62rem; letter-spacing: .12em; }
-    .nav-drop-btn { font-size: .62rem; }
 
     .hero { padding: 2.5rem 1rem 2rem; }
     .hero-sub { font-size: 1rem; }

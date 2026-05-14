@@ -396,6 +396,10 @@ body { background: var(--cream); }
             <div class="total-label">Total Points Scored</div>
             <div class="total-value" id="tot-pf">—</div>
         </div>
+        <div class="total-item">
+            <div class="total-label">Total Prize Pool</div>
+            <div class="total-value">$3,440</div>
+        </div>
     </div>
 
     <!-- Sort bar -->
@@ -408,6 +412,7 @@ body { background: var(--cream); }
             <button class="sort-option" data-sort="pf">Total Points</button>
             <button class="sort-option" data-sort="seasons">Seasons Played</button>
             <button class="sort-option" data-sort="playoffs">Playoff Apps</button>
+            <button class="sort-option" data-sort="avgfinish">Avg Final Finish</button>
             <button class="sort-option" data-sort="name">Alphabetical</button>
         </div>
     </div>
@@ -429,6 +434,17 @@ body { background: var(--cream); }
 let allManagers = [];
 let currentSort = 'winpct';
 let sortAsc = false;
+
+function correctedFinalRank(season) {
+    const cutoff = season.year === 2020 ? 8 : 6;
+    return season.reg_season_rank > cutoff ? season.reg_season_rank : season.final_rank;
+}
+
+function computeAvgFinalFinish(ledger) {
+    if (!ledger || ledger.length === 0) return null;
+    const total = ledger.reduce((sum, s) => sum + correctedFinalRank(s), 0);
+    return total / ledger.length;
+}
 
 async function loadData() {
     try {
@@ -454,6 +470,7 @@ async function loadData() {
                 playoff_record: d.playoff_record || '—',
                 reg_win_pct:   d.reg_win_pct   ?? null,
                 playoff_win_pct: d.playoff_win_pct ?? null,
+                avg_final_finish: computeAvgFinalFinish(d.season_ledger),
             };
         });
 
@@ -484,10 +501,11 @@ function getSortValue(m) {
         case 'wins':     return m.wins;
         case 'pf':       return m.total_pf;
         case 'ppg':      return m.total_pf / ((m.wins + m.losses + m.ties) || 1);
-        case 'seasons':  return m.seasons_played;
-        case 'playoffs': return m.playoff_appearances;
-        case 'name':     return m.name.toLowerCase();
-        default:         return m.win_pct;
+        case 'seasons':   return m.seasons_played;
+        case 'playoffs':  return m.playoff_appearances;
+        case 'avgfinish': return -(m.avg_final_finish ?? 999);
+        case 'name':      return m.name.toLowerCase();
+        default:          return m.win_pct;
     }
 }
 
@@ -535,6 +553,7 @@ function buildRow(m, displayRank, isFormer) {
             <td class="num">${((m.wins + m.losses + m.ties) ? m.total_pf / (m.wins + m.losses + m.ties) : 0).toFixed(1)}</td>
             <td class="num">${m.seasons_played}</td>
             <td class="num">${m.playoff_appearances}</td>
+            <td class="num">${m.avg_final_finish != null ? m.avg_final_finish.toFixed(1) : '—'}</td>
             <td>${chipBadges(m)}</td>
         </tr>
     `;
@@ -572,7 +591,7 @@ function render() {
                         <th colspan="1" class="group-reg num">Reg Season</th>
                         <th colspan="1" class="group-po num">Playoffs</th>
                         <th colspan="1" class="group-all num">All-Time</th>
-                        <th colspan="6"></th>
+                        <th colspan="7"></th>
                     </tr>
                     <tr>
                         <th class="num" style="cursor:default;">#</th>
@@ -588,6 +607,7 @@ function render() {
                         ${th('ppg', 'PPG')}
                         ${th('seasons', 'Seasons')}
                         ${th('playoffs', 'Playoff Apps')}
+                        ${th('avgfinish', 'Avg Finish')}
                         ${th('chips', 'Championships')}
                     </tr>
                 </thead>
@@ -595,7 +615,7 @@ function render() {
                     ${currentRows}
                     ${former.length > 0 ? `
                         <tr class="divider-row">
-                            <td colspan="12">★ Former Members · Alumni</td>
+                            <td colspan="13">★ Former Members · Alumni</td>
                         </tr>
                         ${formerRows}
                     ` : ''}

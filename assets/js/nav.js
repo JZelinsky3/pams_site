@@ -93,7 +93,7 @@
         }).join('');
 
         var dropMenu = '<div class="nav-drop" id="nav-drop">'
-            + '<button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>'
+            + '<button class="nav-drop-btn" onclick="toggleDrop()" aria-label="Navigate"><svg class="nav-icon" viewBox="0 0 20 14" width="20" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="0" y1="1" x2="20" y2="1"/><line x1="0" y1="7" x2="20" y2="7"/><line x1="0" y1="13" x2="20" y2="13"/></svg></button>'
             + '<div class="nav-drop-menu">'
             + '<span class="nav-drop-label">Go to</span>'
             + links
