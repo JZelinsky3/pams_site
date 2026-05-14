@@ -570,34 +570,77 @@ body { background: var(--dg-bg); }
 }
 .badge-good { background: rgba(232,200,137,.18); color: var(--gold-bright); }
 .badge-bad  { background: rgba(160,72,48,.18); color: #d48070; }
-.heartbreak-section { background: var(--dg-card); border: 1px solid var(--dg-line); }
+/* ── Heartbreaker (2-col card grid) ── */
 .heartbreak-section-hdr {
-    padding: .8rem 1.1rem; border-bottom: 1px solid var(--dg-line);
+    padding: .8rem 1.1rem;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-line); border-bottom: none;
     font-family: var(--mono); font-weight: 700;
     font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
     color: var(--dg-accent);
 }
-.heartbreak-item {
-    padding: .85rem 1.1rem;
+.hb-two-col {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px; background: var(--dg-line);
+    border: 1px solid var(--dg-line); border-top: none;
+}
+@media (max-width: 960px) { .hb-two-col { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .hb-two-col { grid-template-columns: 1fr; } }
+.hb-card2 { background: var(--dg-card); padding: 1rem 1.15rem; }
+.hb-card2-header {
+    display: flex; align-items: center; gap: .5rem;
+    margin-bottom: .7rem; padding-bottom: .55rem;
     border-bottom: 1px solid var(--dg-line-soft);
 }
-.heartbreak-item:last-child { border-bottom: none; }
-.hb-year {
+.hb-card2-year {
     font-family: var(--mono); font-weight: 700;
-    font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: .5rem;
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold);
 }
-.hb-picks { display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; }
-.hb-card { padding: .45rem .7rem; min-width: 110px; background: var(--dg-soft); border: 1px solid var(--dg-line); }
-.hb-card.hb-missed { border-color: rgba(200,112,96,.35); }
-.hb-label { font-family: var(--mono); font-size: .52rem; letter-spacing: .15em; text-transform: uppercase; color: var(--cream-mute); margin-bottom: .2rem; }
-.hb-player { font-weight: 600; font-size: .8rem; color: var(--cream); }
-.hb-rank { font-family: var(--mono); font-size: .6rem; color: var(--cream-mute); margin-top: .1rem; }
-.hb-arrow { font-size: 1.1rem; color: var(--dg-line); }
-.hb-gap { font-family: var(--mono); font-weight: 700; font-size: .65rem; color: #c87060; white-space: nowrap; }
-.hb-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--dg-line); border: 1px solid var(--dg-line); }
-@media (max-width: 760px) { .hb-two-col { grid-template-columns: 1fr; } }
-.hb-two-col .heartbreak-item { background: var(--dg-card); }
+.hb-card2-picks {
+    font-family: var(--sans); font-size: .72rem; font-weight: 600;
+    color: var(--cream-soft);
+}
+.hb-card2-gap {
+    margin-left: auto;
+    font-family: var(--mono); font-weight: 700; font-size: .72rem;
+    color: #c87060; background: rgba(160,72,48,.15);
+    padding: .18rem .45rem; border-radius: 2px;
+}
+.hb-card2-versus {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 0;
+}
+.hb-card2-label {
+    font-family: var(--mono); font-size: .52rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .2rem;
+}
+.hb-card2-player { font-weight: 700; font-size: .9rem; line-height: 1.2; }
+.hb-card2-info { font-family: var(--mono); font-size: .6rem; color: var(--cream-mute); margin-top: .15rem; }
+.hb-card2-arrow { color: var(--dg-line); font-size: 1rem; padding: 1.2rem .35rem 0; flex-shrink: 0; }
+
+/* ── Alumni / Retired separator ── */
+.alumni-divider td {
+    background: var(--dg-soft) !important;
+    border-top: 2px solid rgba(232,200,137,.18) !important;
+    border-bottom: 2px solid rgba(232,200,137,.18) !important;
+    padding: .32rem 1rem;
+    font-family: var(--mono); font-size: .5rem;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--dg-mute);
+}
+.alumni-row { opacity: 0.65; }
+.mgr-dna-divider {
+    grid-column: 1 / -1;
+    padding: .38rem 1.25rem;
+    background: var(--dg-soft);
+    border-top: 2px solid rgba(232,200,137,.18);
+    border-bottom: 1px solid var(--dg-line);
+    font-family: var(--mono); font-size: .5rem;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--dg-mute);
+}
+.alumni-dna-row { opacity: 0.65; }
 
 .value-pos-tabs {
     display: flex; gap: .4rem; flex-wrap: wrap;
@@ -841,6 +884,9 @@ var draftPosRanks = {};
 var allPicks      = [];
 var activeYear    = null;
 var activeValuePos = 'QB';
+
+var RETIRED = ['John', 'Krish', 'Ari', 'CJ', 'Costigan'];
+function isRetired(mgr) { return RETIRED.indexOf(mgr) >= 0; }
 
 // ── Tab navigation ────────────────────────────────────────────────────────
 window.setTab = function setTab(name) {
@@ -1088,19 +1134,27 @@ function renderR1Table() {
     });
     var seen = {};
     allMgrs = allMgrs.filter(function(m){ return seen[m] ? false : (seen[m]=true); });
-    allMgrs.sort(function(a,b){
+    var sortFn = function(a, b) {
         var as = Object.keys(pivot[a]||{}).length;
         var bs = Object.keys(pivot[b]||{}).length;
         return bs - as || a.localeCompare(b);
-    });
+    };
+    var activeMgrs  = allMgrs.filter(function(m){ return !isRetired(m); }).sort(sortFn);
+    var retiredMgrs = allMgrs.filter(function(m){ return  isRetired(m); }).sort(sortFn);
+    allMgrs = activeMgrs.concat(retiredMgrs);
 
     var html = '<div class="r1-pivot-wrap"><table class="r1-pivot"><thead><tr>'
              + '<th>Manager</th>';
     YEARS.forEach(function(y){ html += '<th>' + y + '</th>'; });
     html += '</tr></thead><tbody>';
 
+    var sep = false;
     allMgrs.forEach(function(mgr) {
-        html += '<tr>';
+        if (!sep && isRetired(mgr)) {
+            sep = true;
+            html += '<tr class="alumni-divider"><td colspan="' + (YEARS.length + 1) + '">— Alumni —</td></tr>';
+        }
+        html += '<tr' + (isRetired(mgr) ? ' class="alumni-row"' : '') + '>';
         html += '<td class="r1-mgr-cell">' + esc(mgr) + '</td>';
         YEARS.forEach(function(y) {
             var p = pivot[mgr] && pivot[mgr][y];
@@ -1141,21 +1195,26 @@ function renderDraftOrderHistory() {
     });
     var seen = {};
     allMgrs = allMgrs.filter(function(m){ return seen[m] ? false : (seen[m]=true); });
-    // Sort by average pick slot ascending
-    allMgrs.sort(function(a,b){
-        var aVals = Object.values(pivot[a]||{});
-        var bVals = Object.values(pivot[b]||{});
-        var aAvg = aVals.length ? aVals.reduce(function(s,v){return s+v;},0)/aVals.length : 99;
-        var bAvg = bVals.length ? bVals.reduce(function(s,v){return s+v;},0)/bVals.length : 99;
-        return aAvg - bAvg || a.localeCompare(b);
-    });
+    var avgOf = function(m) {
+        var vals = Object.values(pivot[m]||{});
+        return vals.length ? vals.reduce(function(s,v){return s+v;},0)/vals.length : 99;
+    };
+    var sortFn = function(a, b) { return avgOf(a) - avgOf(b) || a.localeCompare(b); };
+    var activeMgrs  = allMgrs.filter(function(m){ return !isRetired(m); }).sort(sortFn);
+    var retiredMgrs = allMgrs.filter(function(m){ return  isRetired(m); }).sort(sortFn);
+    allMgrs = activeMgrs.concat(retiredMgrs);
 
     var html = '<table class="do-table"><thead><tr><th>Manager</th>';
     YEARS.forEach(function(y){ html += '<th>' + y + '</th>'; });
     html += '<th>Avg</th></tr></thead><tbody>';
 
+    var sep = false;
     allMgrs.forEach(function(mgr) {
-        html += '<tr>';
+        if (!sep && isRetired(mgr)) {
+            sep = true;
+            html += '<tr class="alumni-divider"><td colspan="' + (YEARS.length + 2) + '">— Alumni —</td></tr>';
+        }
+        html += '<tr' + (isRetired(mgr) ? ' class="alumni-row"' : '') + '>';
         html += '<td class="do-mgr">' + esc(mgr) + '</td>';
         var vals = [];
         YEARS.forEach(function(y) {
@@ -1192,15 +1251,15 @@ function renderDNA() {
         var pos = (p.position || '?').toUpperCase();
         mgrs[m][pos] = (mgrs[m][pos] || 0) + 1;
     });
-    var sortedMgrs = Object.keys(mgrs).sort(function(a,b){
-        return mgrs[b].total - mgrs[a].total || a.localeCompare(b);
-    });
+    var sortFn = function(a, b) { return mgrs[b].total - mgrs[a].total || a.localeCompare(b); };
+    var allMgrKeys = Object.keys(mgrs);
+    var activeMgrs  = allMgrKeys.filter(function(m){ return !isRetired(m); }).sort(sortFn);
+    var retiredMgrs = allMgrKeys.filter(function(m){ return  isRetired(m); }).sort(sortFn);
 
-    var html = '';
-    sortedMgrs.forEach(function(mgr) {
+    function buildCard(mgr, dimmed) {
         var data = mgrs[mgr];
         var total = data.total;
-        html += '<div class="mgr-dna-row">';
+        var html = '<div class="mgr-dna-row' + (dimmed ? ' alumni-dna-row' : '') + '">';
         html += '<div class="mgr-dna-header">'
               + '<span class="mgr-dna-name">' + esc(mgr) + '</span>'
               + '<span class="mgr-dna-total">' + total + ' picks</span>'
@@ -1225,7 +1284,14 @@ function renderDNA() {
                   + '</span>';
         });
         html += '</div></div>';
-    });
+        return html;
+    }
+
+    var html = activeMgrs.map(function(m){ return buildCard(m, false); }).join('');
+    if (retiredMgrs.length) {
+        html += '<div class="mgr-dna-divider">— Alumni —</div>';
+        html += retiredMgrs.map(function(m){ return buildCard(m, true); }).join('');
+    }
     container.innerHTML = html;
 }
 
@@ -1253,7 +1319,11 @@ function renderMgrTendencies() {
         });
     });
 
-    var mgrs = Object.keys(firstRounds).sort(function(a,b){ return a.localeCompare(b); });
+    var alphaSort = function(a, b) { return a.localeCompare(b); };
+    var allMgrKeys = Object.keys(firstRounds);
+    var activeMgrs  = allMgrKeys.filter(function(m){ return !isRetired(m); }).sort(alphaSort);
+    var retiredMgrs = allMgrKeys.filter(function(m){ return  isRetired(m); }).sort(alphaSort);
+    var mgrs = activeMgrs.concat(retiredMgrs);
 
     var html = '<table class="tend-table"><thead><tr>';
     html += '<th style="text-align:left;padding-left:1rem">Manager</th>';
@@ -1263,15 +1333,19 @@ function renderMgrTendencies() {
     });
     html += '</tr></thead><tbody>';
 
+    var sep = false;
     mgrs.forEach(function(mgr) {
-        html += '<tr>';
+        if (!sep && isRetired(mgr)) {
+            sep = true;
+            html += '<tr class="alumni-divider"><td colspan="' + (CORE.length + 1) + '">— Alumni —</td></tr>';
+        }
+        html += '<tr' + (isRetired(mgr) ? ' class="alumni-row"' : '') + '>';
         html += '<td class="tend-mgr">' + esc(mgr) + '</td>';
         CORE.forEach(function(pos) {
             var rounds = (firstRounds[mgr]||{})[pos] || [];
             if (rounds.length) {
                 var avg = (rounds.reduce(function(s,v){return s+v;},0) / rounds.length).toFixed(1);
                 var pc = POS_COLORS[pos];
-                // shade: early = brighter
                 var avgNum = parseFloat(avg);
                 var opacity = avgNum <= 3 ? 1 : avgNum <= 6 ? .8 : .6;
                 html += '<td style="color:' + pc.text + ';opacity:' + opacity + ';font-weight:700">' + avg + '</td>';
@@ -1524,7 +1598,7 @@ function renderValue() {
         }
     });
     window._hearts.sort(function(a,b){ return b.gap - a.gap; });
-    window._hearts = window._hearts.slice(0, 10);
+    window._hearts = window._hearts.slice(0, 15);
     renderValuePos();
 }
 
@@ -1543,7 +1617,7 @@ function renderValuePos() {
 
     var hearts = window._hearts || [];
     if (hearts.length) {
-        html += '<div class="heartbreak-section" style="margin-top:1.5rem">';
+        html += '<div style="margin-top:1.75rem">';
         html += '<div class="heartbreak-section-hdr">Heartbreakers — One Pick Too Late · Rounds 1–7</div>';
         html += '<div class="hb-two-col">';
         hearts.forEach(function(h) {
@@ -1553,22 +1627,26 @@ function renderValuePos() {
             var posB = (h.missed.position || '').toUpperCase();
             var pcA = POS_COLORS[posA] || POS_COLORS['K'];
             var pcB = POS_COLORS[posB] || POS_COLORS['K'];
-            html += '<div class="heartbreak-item">';
-            html += '<div class="hb-year">' + h.year + ' · Pick ' + h.taken.overall_pick + ' → ' + h.missed.overall_pick + '</div>';
-            html += '<div class="hb-picks">';
-            html += '<div class="hb-card hb-taken">'
-                  + '<div class="hb-label">Taken &nbsp;<span style="color:' + pcA.text + '">' + posA + '</span></div>'
-                  + '<div class="hb-player">' + esc(h.taken.player_name) + '</div>'
-                  + '<div class="hb-rank">' + esc(h.taken.manager_name) + ' · '
-                  + (takenFinal ? 'Finished #' + takenFinal.rank : 'No data') + '</div>'
+            html += '<div class="hb-card2">';
+            html += '<div class="hb-card2-header">'
+                  + '<span class="hb-card2-year">' + h.year + '</span>'
+                  + '<span class="hb-card2-picks">Picks ' + h.taken.overall_pick + ' → ' + h.missed.overall_pick + '</span>'
+                  + '<span class="hb-card2-gap">+' + h.gap + ' spots</span>'
                   + '</div>';
-            html += '<div class="hb-arrow">→</div>';
-            html += '<div class="hb-card hb-missed">'
-                  + '<div class="hb-label">Missed <span style="color:' + pcB.text + '">' + posB + '</span></div>'
-                  + '<div class="hb-player">' + esc(h.missed.player_name) + '</div>'
-                  + '<div class="hb-rank">' + esc(h.missed.manager_name) + ' · Finished #' + missedFinal.rank + '</div>'
+            html += '<div class="hb-card2-versus">';
+            html += '<div>'
+                  + '<div class="hb-card2-label">Took · <span style="color:' + pcA.text + '">' + posA + '</span></div>'
+                  + '<div class="hb-card2-player">' + esc(h.taken.player_name) + '</div>'
+                  + '<div class="hb-card2-info">' + esc(h.taken.manager_name)
+                  + ' · ' + (takenFinal ? 'Finished #' + takenFinal.rank : 'No data') + '</div>'
                   + '</div>';
-            html += '<div class="hb-gap">+' + h.gap + ' spots better</div>';
+            html += '<div class="hb-card2-arrow">→</div>';
+            html += '<div>'
+                  + '<div class="hb-card2-label">Missed · <span style="color:' + pcB.text + '">' + posB + '</span></div>'
+                  + '<div class="hb-card2-player" style="color:#c87060">' + esc(h.missed.player_name) + '</div>'
+                  + '<div class="hb-card2-info">' + esc(h.missed.manager_name)
+                  + ' · Finished #' + missedFinal.rank + '</div>'
+                  + '</div>';
             html += '</div></div>';
         });
         html += '</div></div>';
