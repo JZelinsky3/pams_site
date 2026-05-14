@@ -23,11 +23,11 @@
   "avg_ppg": 119.4,
   "longest_win_streak": {
     "length": 6,
-    "when": "W8 2021 → W13 2021"
+    "when": "W8 2021 \u2192 W13 2021"
   },
   "longest_loss_streak": {
     "length": 7,
-    "when": "W5 2019 → W11 2019"
+    "when": "W5 2019 \u2192 W11 2019"
   },
   "season_ledger": [
     {
@@ -97,7 +97,7 @@
     {
       "year": 2023,
       "team_name": "Ginger Ninger",
-      "final_rank": 9,
+      "final_rank": 11,
       "reg_season_rank": 11,
       "reg_record": "5-9-0",
       "reg_pf": 1576.02,
@@ -113,7 +113,7 @@
     {
       "year": 2024,
       "team_name": "Devin Singularity",
-      "final_rank": 8,
+      "final_rank": 9,
       "reg_season_rank": 9,
       "reg_record": "5-9-0",
       "reg_pf": 1615.76,

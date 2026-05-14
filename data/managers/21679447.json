@@ -25,11 +25,11 @@
   "avg_ppg": 123.22,
   "longest_win_streak": {
     "length": 7,
-    "when": "W4 2025 → W10 2025"
+    "when": "W4 2025 \u2192 W10 2025"
   },
   "longest_loss_streak": {
     "length": 4,
-    "when": "W9 2024 → W12 2024"
+    "when": "W9 2024 \u2192 W12 2024"
   },
   "season_ledger": [
     {
@@ -99,7 +99,7 @@
     {
       "year": 2023,
       "team_name": "Luh TD lickr",
-      "final_rank": 7,
+      "final_rank": 8,
       "reg_season_rank": 8,
       "reg_record": "7-7-0",
       "reg_pf": 1706.76,

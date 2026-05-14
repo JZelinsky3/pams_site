@@ -25,11 +25,11 @@
   "avg_ppg": 113.08,
   "longest_win_streak": {
     "length": 5,
-    "when": "W6 2020 → W10 2020"
+    "when": "W6 2020 \u2192 W10 2020"
   },
   "longest_loss_streak": {
     "length": 6,
-    "when": "W13 2020 → W2 2021"
+    "when": "W13 2020 \u2192 W2 2021"
   },
   "season_ledger": [
     {
@@ -51,7 +51,7 @@
     {
       "year": 2021,
       "team_name": "The GLIZZYS",
-      "final_rank": 9,
+      "final_rank": 7,
       "reg_season_rank": 7,
       "reg_record": "7-7-0",
       "reg_pf": 1641.78,
@@ -67,7 +67,7 @@
     {
       "year": 2022,
       "team_name": "The GLIZZYS",
-      "final_rank": 12,
+      "final_rank": 10,
       "reg_season_rank": 10,
       "reg_record": "4-10-0",
       "reg_pf": 1534.14,
@@ -115,7 +115,7 @@
     {
       "year": 2025,
       "team_name": "The GLIZZYS",
-      "final_rank": 11,
+      "final_rank": 12,
       "reg_season_rank": 12,
       "reg_record": "4-10-0",
       "reg_pf": 1438.14,

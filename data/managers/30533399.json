@@ -23,11 +23,11 @@
   "avg_ppg": 119.33,
   "longest_win_streak": {
     "length": 4,
-    "when": "W5 2023 → W8 2023"
+    "when": "W5 2023 \u2192 W8 2023"
   },
   "longest_loss_streak": {
     "length": 4,
-    "when": "W7 2024 → W10 2024"
+    "when": "W7 2024 \u2192 W10 2024"
   },
   "season_ledger": [
     {
@@ -49,7 +49,7 @@
     {
       "year": 2024,
       "team_name": "WHITEBOY FOOTBALL",
-      "final_rank": 7,
+      "final_rank": 10,
       "reg_season_rank": 10,
       "reg_record": "5-9-0",
       "reg_pf": 1509.74,
@@ -65,7 +65,7 @@
     {
       "year": 2025,
       "team_name": "WHITEBOY FOOTBALL",
-      "final_rank": 8,
+      "final_rank": 11,
       "reg_season_rank": 11,
       "reg_record": "5-9-0",
       "reg_pf": 1592.04,

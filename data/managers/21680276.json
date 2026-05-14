@@ -23,11 +23,11 @@
   "avg_ppg": 113.56,
   "longest_win_streak": {
     "length": 4,
-    "when": "W4 2020 → W7 2020"
+    "when": "W4 2020 \u2192 W7 2020"
   },
   "longest_loss_streak": {
     "length": 9,
-    "when": "W6 2021 → W14 2021"
+    "when": "W6 2021 \u2192 W14 2021"
   },
   "season_ledger": [
     {
@@ -65,7 +65,7 @@
     {
       "year": 2021,
       "team_name": "Saquon I STFG",
-      "final_rank": 8,
+      "final_rank": 12,
       "reg_season_rank": 12,
       "reg_record": "2-12-0",
       "reg_pf": 1420.3,
@@ -81,7 +81,7 @@
     {
       "year": 2022,
       "team_name": "Roofie My Kupp",
-      "final_rank": 7,
+      "final_rank": 11,
       "reg_season_rank": 11,
       "reg_record": "4-10-0",
       "reg_pf": 1478.4,

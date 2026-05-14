@@ -25,17 +25,17 @@
   "avg_ppg": 120.11,
   "longest_win_streak": {
     "length": 7,
-    "when": "W12 2020 → W2 2021"
+    "when": "W12 2020 \u2192 W2 2021"
   },
   "longest_loss_streak": {
     "length": 6,
-    "when": "W8 2023 → W13 2023"
+    "when": "W8 2023 \u2192 W13 2023"
   },
   "season_ledger": [
     {
       "year": 2019,
       "team_name": "Huntingforkickers",
-      "final_rank": 7,
+      "final_rank": 12,
       "reg_season_rank": 12,
       "reg_record": "4-9-0",
       "reg_pf": 1418.28,
@@ -67,7 +67,7 @@
     {
       "year": 2021,
       "team_name": "McKittle",
-      "final_rank": 5,
+      "final_rank": 10,
       "reg_season_rank": 10,
       "reg_record": "5-9-0",
       "reg_pf": 1574.3,
@@ -99,7 +99,7 @@
     {
       "year": 2023,
       "team_name": "KIM JOE UN",
-      "final_rank": 12,
+      "final_rank": 10,
       "reg_season_rank": 10,
       "reg_record": "5-9-0",
       "reg_pf": 1547.68,

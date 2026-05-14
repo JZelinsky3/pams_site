@@ -25,17 +25,17 @@
   "avg_ppg": 124.7,
   "longest_win_streak": {
     "length": 7,
-    "when": "W10 2021 → W17 2021"
+    "when": "W10 2021 \u2192 W17 2021"
   },
   "longest_loss_streak": {
     "length": 5,
-    "when": "W15 2019 → W3 2020"
+    "when": "W15 2019 \u2192 W3 2020"
   },
   "season_ledger": [
     {
       "year": 2019,
       "team_name": "Prestige Worldwide",
-      "final_rank": 10,
+      "final_rank": 8,
       "reg_season_rank": 8,
       "reg_record": "7-6-0",
       "reg_pf": 1448.96,
@@ -99,7 +99,7 @@
     {
       "year": 2023,
       "team_name": "Mao Zelinskdong",
-      "final_rank": 11,
+      "final_rank": 9,
       "reg_season_rank": 9,
       "reg_record": "6-8-0",
       "reg_pf": 1603.32,
@@ -131,7 +131,7 @@
     {
       "year": 2025,
       "team_name": "Kyler the Creator",
-      "final_rank": 10,
+      "final_rank": 9,
       "reg_season_rank": 9,
       "reg_record": "6-8-0",
       "reg_pf": 1785.2,

@@ -25,17 +25,17 @@
   "avg_ppg": 122.97,
   "longest_win_streak": {
     "length": 7,
-    "when": "W6 2025 → W12 2025"
+    "when": "W6 2025 \u2192 W12 2025"
   },
   "longest_loss_streak": {
     "length": 8,
-    "when": "W17 2023 → W7 2024"
+    "when": "W17 2023 \u2192 W7 2024"
   },
   "season_ledger": [
     {
       "year": 2020,
       "team_name": "The I Sack Shake",
-      "final_rank": 10,
+      "final_rank": 11,
       "reg_season_rank": 11,
       "reg_record": "5-8-0",
       "reg_pf": 1458.1,

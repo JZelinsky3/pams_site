@@ -25,11 +25,11 @@
   "avg_ppg": 128.37,
   "longest_win_streak": {
     "length": 8,
-    "when": "W9 2021 → W16 2021"
+    "when": "W9 2021 \u2192 W16 2021"
   },
   "longest_loss_streak": {
     "length": 9,
-    "when": "W2 2023 → W10 2023"
+    "when": "W2 2023 \u2192 W10 2023"
   },
   "season_ledger": [
     {
@@ -99,7 +99,7 @@
     {
       "year": 2023,
       "team_name": "Win Streak",
-      "final_rank": 10,
+      "final_rank": 12,
       "reg_season_rank": 12,
       "reg_record": "4-10-0",
       "reg_pf": 1578.08,
@@ -115,7 +115,7 @@
     {
       "year": 2024,
       "team_name": "PWD",
-      "final_rank": 9,
+      "final_rank": 8,
       "reg_season_rank": 8,
       "reg_record": "5-9-0",
       "reg_pf": 1681.14,
@@ -131,7 +131,7 @@
     {
       "year": 2025,
       "team_name": "Building Rome",
-      "final_rank": 7,
+      "final_rank": 8,
       "reg_season_rank": 6,
       "reg_record": "7-7-0",
       "reg_pf": 1666.52,

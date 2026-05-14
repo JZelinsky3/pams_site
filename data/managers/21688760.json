@@ -23,17 +23,17 @@
   "avg_ppg": 122.03,
   "longest_win_streak": {
     "length": 6,
-    "when": "W3 2021 → W8 2021"
+    "when": "W3 2021 \u2192 W8 2021"
   },
   "longest_loss_streak": {
     "length": 7,
-    "when": "W10 2019 → W1 2020"
+    "when": "W10 2019 \u2192 W1 2020"
   },
   "season_ledger": [
     {
       "year": 2019,
       "team_name": "dumb thots",
-      "final_rank": 12,
+      "final_rank": 9,
       "reg_season_rank": 9,
       "reg_record": "7-6-0",
       "reg_pf": 1441.1,
@@ -129,7 +129,7 @@
     {
       "year": 2025,
       "team_name": "The Family Guy",
-      "final_rank": 12,
+      "final_rank": 10,
       "reg_season_rank": 10,
       "reg_record": "6-8-0",
       "reg_pf": 1703.24,

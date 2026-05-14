@@ -25,17 +25,17 @@
   "avg_ppg": 120.9,
   "longest_win_streak": {
     "length": 7,
-    "when": "W13 2023 → W3 2024"
+    "when": "W13 2023 \u2192 W3 2024"
   },
   "longest_loss_streak": {
     "length": 9,
-    "when": "W11 2021 → W3 2022"
+    "when": "W11 2021 \u2192 W3 2022"
   },
   "season_ledger": [
     {
       "year": 2019,
       "team_name": "THICCCCFILA",
-      "final_rank": 8,
+      "final_rank": 10,
       "reg_season_rank": 10,
       "reg_record": "6-7-0",
       "reg_pf": 1430.96,
@@ -67,7 +67,7 @@
     {
       "year": 2021,
       "team_name": "4th Quarter Hurts",
-      "final_rank": 12,
+      "final_rank": 11,
       "reg_season_rank": 11,
       "reg_record": "3-11-0",
       "reg_pf": 1695.98,
@@ -83,7 +83,7 @@
     {
       "year": 2022,
       "team_name": "Short Bus Express",
-      "final_rank": 10,
+      "final_rank": 7,
       "reg_season_rank": 7,
       "reg_record": "7-7-0",
       "reg_pf": 1646.88,

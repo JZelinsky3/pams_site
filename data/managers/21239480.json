@@ -23,11 +23,11 @@
   "avg_ppg": 119.96,
   "longest_win_streak": {
     "length": 4,
-    "when": "W8 2019 → W11 2019"
+    "when": "W8 2019 \u2192 W11 2019"
   },
   "longest_loss_streak": {
     "length": 5,
-    "when": "W5 2022 → W9 2022"
+    "when": "W5 2022 \u2192 W9 2022"
   },
   "season_ledger": [
     {
@@ -49,7 +49,7 @@
     {
       "year": 2020,
       "team_name": "bolsh",
-      "final_rank": 11,
+      "final_rank": 10,
       "reg_season_rank": 10,
       "reg_record": "5-8-0",
       "reg_pf": 1504.98,
@@ -65,7 +65,7 @@
     {
       "year": 2021,
       "team_name": "Gage is gay",
-      "final_rank": 11,
+      "final_rank": 8,
       "reg_season_rank": 8,
       "reg_record": "6-8-0",
       "reg_pf": 1630.72,
@@ -81,7 +81,7 @@
     {
       "year": 2022,
       "team_name": "the people's tight end",
-      "final_rank": 11,
+      "final_rank": 12,
       "reg_season_rank": 12,
       "reg_record": "2-12-0",
       "reg_pf": 1489.34,
@@ -97,7 +97,7 @@
     {
       "year": 2023,
       "team_name": "CR North Indians",
-      "final_rank": 8,
+      "final_rank": 7,
       "reg_season_rank": 7,
       "reg_record": "7-7-0",
       "reg_pf": 1734.12,
@@ -129,7 +129,7 @@
     {
       "year": 2025,
       "team_name": "The people's TightEnd",
-      "final_rank": 9,
+      "final_rank": 7,
       "reg_season_rank": 5,
       "reg_record": "7-7-0",
       "reg_pf": 1902.42,
