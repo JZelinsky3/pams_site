@@ -699,6 +699,16 @@ table.data tbody tr.highlight {
     color: var(--steel);
     background: rgba(107, 138, 168, .08);
 }
+.toc-badge.sage {
+    border-color: rgba(107, 154, 110, .35);
+    color: #7aad8e;
+    background: rgba(107, 154, 110, .08);
+}
+.toc-badge.warm {
+    border-color: rgba(168, 112, 80, .35);
+    color: #c08060;
+    background: rgba(168, 112, 80, .08);
+}
 .toc-arrow {
     color: var(--gold);
     font-family: var(--serif);
@@ -790,6 +800,17 @@ table.data tbody tr.highlight {
 
     .hero-stat-value { font-size: clamp(4.5rem, 20vw, 11rem); }
     .hero-stat-detail { font-size: 1.05rem; }
+
+    /* Records grid — single column so stats have room to breathe */
+    .stat-grid {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+    }
+    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: 1px dotted var(--ink-line); }
+    .stat-grid .stat-row:last-child { border-bottom: none; }
+    .stat-row { gap: 1rem; padding: 1.25rem 0; }
+    .stat-row-num { font-size: 2.4rem; min-width: 5rem; }
+    .stat-row-name { font-size: 1rem; }
 
     .stat-bar { grid-template-columns: 1fr; }
     .champion-seal { width: 150px; height: 150px; }
@@ -909,7 +930,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">Season <em>Archives.</em></div>
                 <div class="toc-desc">Year by year — standings, champions, and the games that defined each campaign.</div>
             </div>
-            <span class="toc-badge">7 Years</span>
+            <span class="toc-badge sage">7 Years</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -919,7 +940,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">Record <em>Book.</em></div>
                 <div class="toc-desc">Career, season, and weekly marks. Shootouts, snoozers, and unluckiest losses.</div>
             </div>
-            <span class="toc-badge">The Book</span>
+            <span class="toc-badge warm">The Book</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -949,7 +970,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">Draft <em>History.</em></div>
                 <div class="toc-desc">Every pick from every draft since 2019. Round-by-round breakdowns across all seven seasons.</div>
             </div>
-            <span class="toc-badge">Archive</span>
+            <span class="toc-badge sage">Archive</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -959,7 +980,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">The <em>Rivalries.</em></div>
                 <div class="toc-desc">Six assigned feuds. All-time head-to-head records, dominance bars, and key moments.</div>
             </div>
-            <span class="toc-badge">6 Feuds</span>
+            <span class="toc-badge warm">6 Feuds</span>
             <div class="toc-arrow">→</div>
         </a>
 
