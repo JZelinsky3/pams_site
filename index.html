@@ -171,6 +171,38 @@ body {
     letter-spacing: .25em; text-transform: uppercase;
     color: var(--cream-mute); border-bottom: 1px solid var(--ink-line-soft);
 }
+.nav-drop-group { position: relative; }
+.nav-drop-group-lbl {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .42rem 1.1rem .38rem;
+    font-family: var(--mono); font-size: .75rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cream-mute);
+    border-bottom: 1px solid var(--ink-line-soft);
+    cursor: default; user-select: none;
+    transition: color .15s;
+}
+.nav-drop-group:hover .nav-drop-group-lbl { color: var(--gold); }
+.nav-group-arr { display: inline-block; font-size: .75rem; transition: transform .15s; }
+.nav-drop-group:hover .nav-group-arr { transform: rotate(90deg); }
+.nav-drop-sub {
+    max-height: 0; overflow: hidden;
+    background: rgba(0,0,0,.12);
+    transition: max-height .18s ease;
+}
+.nav-drop-group:hover .nav-drop-sub { max-height: 200px; border-bottom: 1px solid var(--ink-line-soft); }
+.nav-drop-sub a {
+    display: block; padding: .65rem 1.1rem .65rem 1.65rem;
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-soft); text-decoration: none;
+    border-bottom: 1px solid var(--ink-line-soft);
+    border-left: 2px solid rgba(232,200,137,.12);
+    transition: background .15s, color .15s, border-left-color .15s;
+}
+.nav-drop-sub a:last-child { border-bottom: none; }
+.nav-drop-sub a:hover { background: rgba(232,200,137,.07); color: var(--gold); border-left-color: rgba(232,200,137,.4); }
+.nav-drop-group:last-child .nav-drop-group-lbl { border-bottom: none; }
 
 /* ============================================================
    HERO
@@ -617,12 +649,11 @@ table.data tbody tr.highlight {
     text-decoration: none;
     color: inherit;
     border-bottom: 1px solid var(--ink-line-soft);
-    transition: background .2s, padding-left .25s ease;
+    transition: background .2s;
 }
 .toc-row:last-child { border-bottom: none; }
 .toc-row:hover {
     background: rgba(232, 200, 137, .03);
-    padding-left: 2.5rem;
 }
 .toc-row:hover .toc-arrow { transform: translateX(4px); color: var(--gold-bright); }
 .toc-row:hover .toc-title { color: var(--gold); }
@@ -842,7 +873,7 @@ table.data tbody tr.highlight {
     <div class="section-header">
         <span class="section-num">§ 02 · The Almanac</span>
         <span class="section-title">Table of contents —</span>
-        <span class="section-meta">four chapters</span>
+        <span class="section-meta">eight chapters</span>
     </div>
 
     <div class="toc">
@@ -910,6 +941,26 @@ table.data tbody tr.highlight {
                 <div class="toc-desc">Auto-calculated each week using record, points for, efficiency, recent form, and 7-season history.</div>
             </div>
             <span class="toc-badge steel">Formula</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="draft/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. VII</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Draft <em>History.</em></div>
+                <div class="toc-desc">Every pick from every draft since 2019. Round-by-round breakdowns across all seven seasons.</div>
+            </div>
+            <span class="toc-badge">Archive</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="rivalries/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. VIII</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">The <em>Rivalries.</em></div>
+                <div class="toc-desc">Six assigned feuds. All-time head-to-head records, dominance bars, and key moments.</div>
+            </div>
+            <span class="toc-badge">6 Feuds</span>
             <div class="toc-arrow">→</div>
         </a>
 

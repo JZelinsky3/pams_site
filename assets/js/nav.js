@@ -23,14 +23,30 @@
 
     // ── Page registry — add new pages here ──────────────────────────────────
     var PAGES = [
-        { key: 'hub',       label: 'The Hub',          path: 'index.html' },
-        { key: 'standings', label: 'Standings',         path: 'standings.html' },
-        { key: 'managers',  label: 'Managers',          path: 'managers/index.html' },
-        { key: 'seasons',   label: 'Season Archives',   path: 'seasons/index.html' },
-        { key: 'records',   label: 'Record Book',       path: 'records.html' },
-        { key: 'pickems',   label: "Pick'ems",          path: 'pickems/index.html' },
-        { key: 'powerrank', label: 'Power Rankings',    path: 'powerrank/index.html' },
-        { key: 'draft', label: 'Draft History', path: 'draft/index.html' },
+        { key: 'hub',       label: 'Hub',        path: 'index.html' },
+        { key: 'standings', label: 'Standings',       path: 'standings.html' },
+        {
+            isGroup: true, label: 'Season Odds',
+            items: [
+                { key: 'pickems',   label: "Pick'ems",       path: 'pickems/index.html' },
+                { key: 'powerrank', label: 'Power Rankings', path: 'powerrank/index.html' },
+            ]
+        },
+        {
+            isGroup: true, label: 'The Society',
+            items: [
+                { key: 'managers',  label: 'Managers',  path: 'managers/index.html' },
+                { key: 'rivalries', label: 'Rivalries', path: 'rivalries/index.html' },
+            ]
+        },
+        {
+            isGroup: true, label: 'League History',
+            items: [
+                { key: 'seasons', label: 'Season Archives', path: 'seasons/index.html' },
+                { key: 'records', label: 'Record Book',     path: 'records.html' },
+                { key: 'draft',   label: 'Draft History',   path: 'draft/index.html' },
+            ]
+        },
     ];
 
     // Determine how many levels deep the current page is relative to the site root.
@@ -58,10 +74,23 @@
         var rightHref   = nav.dataset.rightHref  ? root + nav.dataset.rightHref : '';
         var titleId     = nav.dataset.titleId    || 'nav-title';
 
-        // Build dropdown links — skip the page you're already on
-        var links = PAGES.filter(function (p) { return p.key !== currentPage; }).map(function (p) {
+        // Build dropdown links — groups expand on hover; skip current page
+        var links = PAGES.map(function (p) {
+            if (p.isGroup) {
+                var visible = p.items.filter(function (i) { return i.key !== currentPage; });
+                if (visible.length === 0) return '';
+                var sub = visible.map(function (i) {
+                    return '<a href="' + root + i.path + '">' + i.label + '</a>';
+                }).join('');
+                return '<div class="nav-drop-group">'
+                    + '<span class="nav-drop-group-lbl">' + p.label
+                    + ' <span class="nav-group-arr">›</span></span>'
+                    + '<div class="nav-drop-sub">' + sub + '</div>'
+                    + '</div>';
+            }
+            if (p.key === currentPage) return '';
             return '<a href="' + root + p.path + '">' + p.label + '</a>';
-        }).join('\n');
+        }).join('');
 
         var dropMenu = '<div class="nav-drop" id="nav-drop">'
             + '<button class="nav-drop-btn" onclick="toggleDrop()">Navigate <span class="drop-arrow">▾</span></button>'

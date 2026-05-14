@@ -483,6 +483,7 @@ function getSortValue(m) {
         case 'chips':    return m.championships * 1000 + m.win_pct;
         case 'wins':     return m.wins;
         case 'pf':       return m.total_pf;
+        case 'ppg':      return m.total_pf / ((m.wins + m.losses + m.ties) || 1);
         case 'seasons':  return m.seasons_played;
         case 'playoffs': return m.playoff_appearances;
         case 'name':     return m.name.toLowerCase();
@@ -531,6 +532,7 @@ function buildRow(m, displayRank, isFormer) {
             <td class="all-record num">${m.wins}–${m.losses}${m.ties ? '–' + m.ties : ''}</td>
             <td class="winpct-cell num" title="Overall win %">${fmtPct(m.win_pct)}</td>
             <td class="num">${m.total_pf.toLocaleString('en-US', {minimumFractionDigits:1, maximumFractionDigits:1})}</td>
+            <td class="num">${((m.wins + m.losses + m.ties) ? m.total_pf / (m.wins + m.losses + m.ties) : 0).toFixed(1)}</td>
             <td class="num">${m.seasons_played}</td>
             <td class="num">${m.playoff_appearances}</td>
             <td>${chipBadges(m)}</td>
@@ -570,7 +572,7 @@ function render() {
                         <th colspan="1" class="group-reg num">Reg Season</th>
                         <th colspan="1" class="group-po num">Playoffs</th>
                         <th colspan="1" class="group-all num">All-Time</th>
-                        <th colspan="5"></th>
+                        <th colspan="6"></th>
                     </tr>
                     <tr>
                         <th class="num" style="cursor:default;">#</th>
@@ -583,6 +585,7 @@ function render() {
                         ${th('wins', 'Record', 'all-record')}
                         ${th('winpct', 'Win %')}
                         ${th('pf', 'Points For')}
+                        ${th('ppg', 'PPG')}
                         ${th('seasons', 'Seasons')}
                         ${th('playoffs', 'Playoff Apps')}
                         ${th('chips', 'Championships')}
@@ -592,7 +595,7 @@ function render() {
                     ${currentRows}
                     ${former.length > 0 ? `
                         <tr class="divider-row">
-                            <td colspan="11">★ Former Members · Alumni</td>
+                            <td colspan="12">★ Former Members · Alumni</td>
                         </tr>
                         ${formerRows}
                     ` : ''}

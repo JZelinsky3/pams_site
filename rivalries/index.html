@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rivalries · The Milk Society</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+/* ============================================================
+   RIVALRIES — Crimson / Charcoal / Noir
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --rv-red:        #dc2626;
+  --rv-red-dim:    #7f1d1d;
+  --rv-red-glow:   rgba(220, 38, 38, 0.13);
+  --rv-red-faint:  rgba(220, 38, 38, 0.05);
+  --rv-bg:         #0a0a0a;
+  --rv-card:       #111111;
+  --rv-card2:      #141414;
+  --rv-line:       #1e1e1e;
+  --rv-line2:      #272727;
+  --rv-grey-dk:    #1f2937;
+  --rv-grey:       #374151;
+  --rv-grey-mid:   #6b7280;
+  --rv-grey-lt:    #9ca3af;
+  --rv-white:      #f3f4f6;
+  --rv-cream:      #d1d5db;
+  --rv-gold:       #e8c889;
+  --serif:         'DM Serif Display', Georgia, serif;
+  --sans:          'Inter', system-ui, sans-serif;
+  --mono:          'JetBrains Mono', 'SF Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--rv-bg); color: var(--rv-white); min-height: 100vh; overflow-x: hidden; }
+
+/* ─── ATMOSPHERE ─────────────────────────────────── */
+.site-glow {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(220,38,38,.07) 0%, transparent 48%),
+    radial-gradient(circle at 88% 82%, rgba(220,38,38,.04) 0%, transparent 44%);
+}
+.site-grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .45;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+}
+
+/* ─── PAGE HEADER ────────────────────────────────── */
+.rv-header {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 4.5rem 1.5rem 3.5rem;
+}
+.rv-header-kicker {
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--rv-red);
+  margin-bottom: .9rem;
+}
+.rv-header h1 {
+  font-family: var(--serif);
+  font-size: clamp(4rem, 11vw, 7.5rem);
+  line-height: .95;
+  color: var(--rv-white);
+  letter-spacing: -.02em;
+  margin-bottom: .6rem;
+}
+.rv-header-sub {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--rv-grey-mid);
+  margin-bottom: 2rem;
+}
+.rv-header-rule {
+  width: 48px; height: 3px;
+  background: var(--rv-red);
+  margin: 0 auto 2.25rem;
+  border-radius: 2px;
+}
+.rv-header-stats {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  max-width: 640px;
+  margin: 0 auto;
+  border: 1px solid var(--rv-line2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.rv-stat-cell {
+  flex: 1;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .85rem .5rem;
+  border-right: 1px solid var(--rv-line2);
+  background: var(--rv-card2);
+}
+.rv-stat-cell:last-child { border-right: none; }
+.rv-stat-val {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--rv-white);
+  line-height: 1;
+}
+.rv-stat-label {
+  font-family: var(--mono);
+  font-size: .55rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--rv-grey-mid);
+  margin-top: .3rem;
+}
+
+/* ─── MAIN GRID ──────────────────────────────────── */
+.rv-grid {
+  position: relative; z-index: 2;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: .5rem 1.25rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* ─── RIVALRY CARD ───────────────────────────────── */
+.rv-card {
+  background: var(--rv-card);
+  border: 1px solid var(--rv-line2);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: box-shadow .25s ease, transform .2s ease;
+}
+.rv-card:hover {
+  box-shadow: 0 6px 40px rgba(220,38,38,.09), 0 2px 10px rgba(0,0,0,.5);
+  transform: translateY(-1px);
+}
+
+/* ─── CARD HEADER STRIP ──────────────────────────── */
+.rv-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .5rem 1.2rem;
+  background: var(--rv-card2);
+  border-bottom: 1px solid var(--rv-line2);
+}
+.rv-card-label {
+  font-family: var(--mono);
+  font-size: .58rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--rv-grey-mid);
+}
+.rv-badge {
+  font-family: var(--mono);
+  font-size: .57rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: .18rem .55rem;
+  border-radius: 2px;
+  border: 1px solid var(--rv-red-dim);
+  color: var(--rv-red);
+}
+.rv-badge.tied {
+  color: var(--rv-grey-lt);
+  border-color: var(--rv-grey);
+}
+
+/* ─── CARD BODY 3-COL ────────────────────────────── */
+.rv-body {
+  display: grid;
+  grid-template-columns: 1fr 180px 1fr;
+}
+
+/* ─── MANAGER SIDES ──────────────────────────────── */
+.rv-side {
+  padding: 1.6rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  position: relative;
+}
+.rv-side-a {
+  align-items: flex-start;
+  border-right: 1px solid var(--rv-line2);
+}
+.rv-side-b {
+  align-items: flex-end;
+  border-left: 1px solid var(--rv-line2);
+}
+.rv-side-a.side-leads {
+  background: linear-gradient(105deg, rgba(220,38,38,.055) 0%, transparent 60%);
+}
+.rv-side-b.side-leads {
+  background: linear-gradient(255deg, rgba(220,38,38,.055) 0%, transparent 60%);
+}
+
+.rv-wins {
+  font-family: var(--mono);
+  font-size: 3.8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--rv-grey);
+  transition: color .2s;
+}
+.rv-wins.hot { color: var(--rv-red); }
+.rv-wins.tied-color { color: var(--rv-grey-lt); }
+.rv-wins-lbl {
+  font-family: var(--mono);
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--rv-grey);
+  margin-top: -.1rem;
+}
+.rv-name {
+  font-family: var(--serif);
+  font-size: 1.65rem;
+  color: var(--rv-white);
+  margin-top: .25rem;
+  line-height: 1;
+}
+.rv-ppg {
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--rv-grey-lt);
+}
+.rv-rec {
+  font-family: var(--mono);
+  font-size: .58rem;
+  color: var(--rv-grey);
+  letter-spacing: .04em;
+}
+
+/* ─── LAST 5 DOTS ────────────────────────────────── */
+.rv-dots {
+  display: flex;
+  gap: .32rem;
+  margin-top: .4rem;
+}
+.rv-side-b .rv-dots { flex-direction: row-reverse; }
+
+.rv-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  position: relative;
+  cursor: default;
+  flex-shrink: 0;
+}
+.rv-dot.w  { background: var(--rv-red); }
+.rv-dot.l  { background: var(--rv-grey); }
+.rv-dot::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: #000;
+  border: 1px solid #333;
+  color: var(--rv-cream);
+  font-family: var(--mono);
+  font-size: .54rem;
+  padding: .22rem .5rem;
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s;
+  z-index: 20;
+}
+.rv-dot:hover::after { opacity: 1; }
+.rv-dots-label {
+  font-family: var(--mono);
+  font-size: .5rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--rv-grey);
+  margin-top: .15rem;
+}
+
+/* ─── CENTER COLUMN ──────────────────────────────── */
+.rv-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem 1.2rem;
+  gap: .55rem;
+}
+.rv-rivalry-name {
+  font-family: var(--mono);
+  font-size: .58rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--rv-grey-mid);
+}
+.rv-vs {
+  font-family: var(--serif);
+  font-size: 2.2rem;
+  font-style: italic;
+  color: var(--rv-red);
+  line-height: 1;
+}
+.rv-games {
+  font-family: var(--mono);
+  font-size: .57rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--rv-grey);
+}
+
+/* ─── DOMINANCE BAR ──────────────────────────────── */
+.rv-bar-wrap { width: 100%; display: flex; flex-direction: column; gap: .3rem; }
+.rv-bar {
+  width: 100%; height: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rv-bar-nums {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: .58rem;
+  color: var(--rv-grey-mid);
+}
+.rv-series-lbl {
+  font-family: var(--mono);
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--rv-red);
+}
+.rv-series-lbl.tied { color: var(--rv-grey-lt); }
+
+.rv-last-game {
+  font-family: var(--mono);
+  font-size: .53rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--rv-grey);
+  text-align: center;
+}
+.rv-last-game span {
+  color: var(--rv-grey-mid);
+}
+
+/* ─── KEY MOMENT STRIP ───────────────────────────── */
+.rv-key {
+  display: flex;
+  align-items: baseline;
+  gap: .7rem;
+  flex-wrap: wrap;
+  padding: .7rem 1.2rem;
+  background: var(--rv-card2);
+  border-top: 1px solid var(--rv-line2);
+}
+.rv-key-badge {
+  font-family: var(--mono);
+  font-size: .52rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--rv-red);
+  padding: .15rem .45rem;
+  border: 1px solid var(--rv-red-dim);
+  border-radius: 2px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.rv-key-text {
+  font-family: var(--sans);
+  font-size: .8rem;
+  color: var(--rv-cream);
+  flex: 1;
+  min-width: 180px;
+}
+.rv-key-date {
+  font-family: var(--mono);
+  font-size: .58rem;
+  color: var(--rv-grey-mid);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ─── TAGLINE ─────────────────────────────────────── */
+.rv-tagline {
+  padding: .45rem 1.2rem .65rem;
+  border-top: 1px solid var(--rv-line);
+}
+.rv-tagline em {
+  font-family: var(--serif);
+  font-size: .88rem;
+  font-style: italic;
+  color: var(--rv-grey-mid);
+}
+
+/* ─── SECTION DIVIDER ────────────────────────────── */
+.rv-section-sep {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.6rem 0 .4rem;
+}
+.rv-section-sep-line { flex: 1; height: 1px; background: var(--rv-line2); }
+.rv-section-sep-label {
+  font-family: var(--mono);
+  font-size: .57rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--rv-grey);
+  white-space: nowrap;
+}
+
+/* ─── NAV OVERRIDE — crimson instead of navy ────────── */
+.nav {
+  background: rgba(14, 3, 3, 0.94) !important;
+  border-bottom-color: rgba(220, 38, 38, 0.18) !important;
+}
+.nav-drop-menu {
+  background: rgba(12, 3, 3, 0.97) !important;
+  border-color: rgba(220, 38, 38, 0.15) !important;
+}
+.nav-drop-menu a {
+  border-bottom-color: rgba(220, 38, 38, 0.08) !important;
+}
+
+/* ─── MOBILE ──────────────────────────────────────── */
+@media (max-width: 660px) {
+  .rv-body {
+    grid-template-columns: 1fr;
+  }
+  .rv-side-a {
+    border-right: none;
+    border-bottom: 1px solid var(--rv-line2);
+  }
+  .rv-side-b {
+    border-left: none;
+    border-top: 1px solid var(--rv-line2);
+    align-items: flex-start;
+  }
+  .rv-side-b .rv-dots { flex-direction: row; }
+  .rv-center {
+    border-bottom: 1px solid var(--rv-line2);
+  }
+  .rv-wins { font-size: 2.8rem; }
+  .rv-name { font-size: 1.35rem; }
+  .rv-header-stats { border: none; flex-wrap: wrap; gap: 1px; }
+  .rv-stat-cell { min-width: 80px; border: 1px solid var(--rv-line2); border-radius: 3px; margin: 1px; }
+}
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<nav id="site-nav"
+     data-page="rivalries"
+     data-chapter="RIVALRIES"
+     data-back-label="← The Hub"
+     data-back-href="../index.html"></nav>
+<script src="../assets/js/nav.js"></script>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE HEADER
+════════════════════════════════════════════════════ -->
+<header class="rv-header">
+  <div class="rv-header-kicker">PA Milk Society · All-Time Series Records</div>
+  <h1>Rivalries</h1>
+  <div class="rv-header-sub">Six feuds. Seven seasons. No mercy.</div>
+  <div class="rv-header-rule"></div>
+  <div class="rv-header-stats">
+    <div class="rv-stat-cell">
+      <span class="rv-stat-val">6</span>
+      <span class="rv-stat-label">Active Feuds</span>
+    </div>
+    <div class="rv-stat-cell">
+      <span class="rv-stat-val">56</span>
+      <span class="rv-stat-label">Total Meetings</span>
+    </div>
+    <div class="rv-stat-cell">
+      <span class="rv-stat-val">7</span>
+      <span class="rv-stat-label">Seasons</span>
+    </div>
+    <div class="rv-stat-cell">
+      <span class="rv-stat-val">3</span>
+      <span class="rv-stat-label">Leaders</span>
+    </div>
+    <div class="rv-stat-cell">
+      <span class="rv-stat-val">3</span>
+      <span class="rv-stat-label">Deadlocked</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════
+     RIVALRY CARDS
+════════════════════════════════════════════════════ -->
+<main class="rv-grid">
+
+  <!-- ───────────────────────────────────────────────
+       I · JOEY vs CHRIS — THE CLASSIC
+  ─────────────────────────────────────────────────── -->
+  <div class="rv-card" id="joey-chris">
+    <div class="rv-card-head">
+      <span class="rv-card-label">Rivalry I · Joey vs Chris · 13 Meetings · Since 2019</span>
+      <span class="rv-badge">Chris Leads · 7–6</span>
+    </div>
+    <div class="rv-body">
+      <!-- Joey -->
+      <div class="rv-side rv-side-a">
+        <div class="rv-wins">6</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Joey</div>
+        <div class="rv-ppg">122.1 avg PPG</div>
+        <div class="rv-rec">Reg 6–5 &nbsp;·&nbsp; Playoff 0–2</div>
+        <div class="rv-dots">
+          <span class="rv-dot w" data-tip="2023 W15 · W · +20.4"></span>
+          <span class="rv-dot l" data-tip="2024 W3 · L · −46.1"></span>
+          <span class="rv-dot w" data-tip="2024 W6 · W · +4.6"></span>
+          <span class="rv-dot w" data-tip="2025 W10 · W · +5.1"></span>
+          <span class="rv-dot w" data-tip="2025 W16 · W · +49.8"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+      <!-- Center -->
+      <div class="rv-center">
+        <div class="rv-rivalry-name">The Classic</div>
+        <div class="rv-vs">vs</div>
+        <div class="rv-games">13 Meetings</div>
+        <div class="rv-bar-wrap">
+          <div class="rv-bar" style="background: linear-gradient(to left, #dc2626 0%, #dc2626 53.85%, #1f2937 53.85%, #1f2937 100%)"></div>
+          <div class="rv-bar-nums"><span>6</span><span>7</span></div>
+        </div>
+        <div class="rv-series-lbl">Chris Leads</div>
+        <div class="rv-last-game">Last: <span>2025 · W16</span></div>
+      </div>
+      <!-- Chris -->
+      <div class="rv-side rv-side-b side-leads">
+        <div class="rv-wins hot">7</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Chris</div>
+        <div class="rv-ppg">129.1 avg PPG</div>
+        <div class="rv-rec">Reg 5–6 &nbsp;·&nbsp; Playoff 2–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot l" data-tip="2023 W15 · L · −20.4"></span>
+          <span class="rv-dot w" data-tip="2024 W3 · W · +46.1"></span>
+          <span class="rv-dot l" data-tip="2024 W6 · L · −4.6"></span>
+          <span class="rv-dot l" data-tip="2025 W10 · L · −5.1"></span>
+          <span class="rv-dot l" data-tip="2025 W16 · L · −49.8"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+    </div>
+    <div class="rv-key">
+      <span class="rv-key-badge">Key Moment</span>
+      <span class="rv-key-text">Chris posts 200.60 — the highest single-game score in league history. Joey had 132.48. A 68-point margin. The series was never the same.</span>
+      <span class="rv-key-date">2021 · Week 5</span>
+    </div>
+    <div class="rv-tagline">
+      <em>"In the regular season, it's anyone's game. Come January — it's always Chris."</em>
+    </div>
+  </div>
+
+  <!-- ───────────────────────────────────────────────
+       II · MASON vs CONNIE — THE COIN FLIP
+  ─────────────────────────────────────────────────── -->
+  <div class="rv-card" id="mason-connie">
+    <div class="rv-card-head">
+      <span class="rv-card-label">Rivalry II · Mason vs Connie · 10 Meetings · Since 2019</span>
+      <span class="rv-badge tied">Deadlocked · 5–5</span>
+    </div>
+    <div class="rv-body">
+      <!-- Mason -->
+      <div class="rv-side rv-side-a">
+        <div class="rv-wins tied-color">5</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Mason</div>
+        <div class="rv-ppg">122.8 avg PPG</div>
+        <div class="rv-rec">Reg 4–4 &nbsp;·&nbsp; Playoff 1–1</div>
+        <div class="rv-dots">
+          <span class="rv-dot w" data-tip="2023 W4 · W · +18.8"></span>
+          <span class="rv-dot w" data-tip="2023 W7 · W · +26.8"></span>
+          <span class="rv-dot w" data-tip="2024 W4 · W · +46.7"></span>
+          <span class="rv-dot l" data-tip="2025 W11 · L · −2.8"></span>
+          <span class="rv-dot w" data-tip="2025 W17 · W · +14.9"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+      <!-- Center -->
+      <div class="rv-center">
+        <div class="rv-rivalry-name">The Coin Flip</div>
+        <div class="rv-vs">vs</div>
+        <div class="rv-games">10 Meetings</div>
+        <div class="rv-bar-wrap">
+          <div class="rv-bar" style="background: #374151"></div>
+          <div class="rv-bar-nums"><span>5</span><span>5</span></div>
+        </div>
+        <div class="rv-series-lbl tied">Deadlocked</div>
+        <div class="rv-last-game">Last: <span>2025 · W17</span></div>
+      </div>
+      <!-- Connie -->
+      <div class="rv-side rv-side-b">
+        <div class="rv-wins tied-color">5</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Connie</div>
+        <div class="rv-ppg">117.9 avg PPG</div>
+        <div class="rv-rec">Reg 4–4 &nbsp;·&nbsp; Playoff 1–1</div>
+        <div class="rv-dots">
+          <span class="rv-dot l" data-tip="2023 W4 · L · −18.8"></span>
+          <span class="rv-dot l" data-tip="2023 W7 · L · −26.8"></span>
+          <span class="rv-dot l" data-tip="2024 W4 · L · −46.7"></span>
+          <span class="rv-dot w" data-tip="2025 W11 · W · +2.8"></span>
+          <span class="rv-dot l" data-tip="2025 W17 · L · −14.9"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+    </div>
+    <div class="rv-key">
+      <span class="rv-key-badge">Key Moment</span>
+      <span class="rv-key-text">Mason scores 145.66. Connie scores 146.40. A margin of 0.74 — less than a dollar — decides the week. Mason still brings it up.</span>
+      <span class="rv-key-date">2020 · Week 7</span>
+    </div>
+    <div class="rv-tagline">
+      <em>"Ten games. Five each. The only stat that matters: seventy-four cents."</em>
+    </div>
+  </div>
+
+  <!-- ───────────────────────────────────────────────
+       III · KYLE vs SEAN — THE NIGHTMARE
+  ─────────────────────────────────────────────────── -->
+  <div class="rv-card" id="kyle-sean">
+    <div class="rv-card-head">
+      <span class="rv-card-label">Rivalry III · Kyle vs Sean · 9 Meetings · Since 2019</span>
+      <span class="rv-badge">Sean Leads · 7–2</span>
+    </div>
+    <div class="rv-body">
+      <!-- Kyle -->
+      <div class="rv-side rv-side-a">
+        <div class="rv-wins">2</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Kyle</div>
+        <div class="rv-ppg">107.6 avg PPG</div>
+        <div class="rv-rec">Reg 2–6 &nbsp;·&nbsp; Playoff 0–1</div>
+        <div class="rv-dots">
+          <span class="rv-dot l" data-tip="2022 W9 · L · −0.9"></span>
+          <span class="rv-dot l" data-tip="2023 W2 · L · −27.9"></span>
+          <span class="rv-dot l" data-tip="2023 W9 · L · −29.6"></span>
+          <span class="rv-dot w" data-tip="2024 W1 · W · +15.3"></span>
+          <span class="rv-dot l" data-tip="2025 W4 · L · −9.3"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+      <!-- Center -->
+      <div class="rv-center">
+        <div class="rv-rivalry-name">The Nightmare</div>
+        <div class="rv-vs">vs</div>
+        <div class="rv-games">9 Meetings</div>
+        <div class="rv-bar-wrap">
+          <div class="rv-bar" style="background: linear-gradient(to left, #dc2626 0%, #dc2626 77.78%, #1f2937 77.78%, #1f2937 100%)"></div>
+          <div class="rv-bar-nums"><span>2</span><span>7</span></div>
+        </div>
+        <div class="rv-series-lbl">Sean Leads</div>
+        <div class="rv-last-game">Last: <span>2025 · W4</span></div>
+      </div>
+      <!-- Sean -->
+      <div class="rv-side rv-side-b side-leads">
+        <div class="rv-wins hot">7</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Sean</div>
+        <div class="rv-ppg">129.6 avg PPG</div>
+        <div class="rv-rec">Reg 6–2 &nbsp;·&nbsp; Playoff 1–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot w" data-tip="2022 W9 · W · +0.9"></span>
+          <span class="rv-dot w" data-tip="2023 W2 · W · +27.9"></span>
+          <span class="rv-dot w" data-tip="2023 W9 · W · +29.6"></span>
+          <span class="rv-dot l" data-tip="2024 W1 · L · −15.3"></span>
+          <span class="rv-dot w" data-tip="2025 W4 · W · +9.3"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+    </div>
+    <div class="rv-key">
+      <span class="rv-key-badge">Key Moment</span>
+      <span class="rv-key-text">Kyle loses by 0.92. His closest game in nine tries — and it still goes the wrong way. There is no comfort in almost.</span>
+      <span class="rv-key-date">2022 · Week 9</span>
+    </div>
+    <div class="rv-tagline">
+      <em>"Nine meetings. Seven losses. Kyle's still looking for a way out."</em>
+    </div>
+  </div>
+
+  <!-- ───────────────────────────────────────────────
+       IV · ISAAC vs CONNOR — THE WAR
+  ─────────────────────────────────────────────────── -->
+  <div class="rv-card" id="isaac-connor">
+    <div class="rv-card-head">
+      <span class="rv-card-label">Rivalry IV · Isaac vs Connor · 10 Meetings · Since 2020</span>
+      <span class="rv-badge tied">Deadlocked · 5–5</span>
+    </div>
+    <div class="rv-body">
+      <!-- Isaac -->
+      <div class="rv-side rv-side-a">
+        <div class="rv-wins tied-color">5</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Isaac</div>
+        <div class="rv-ppg">123.5 avg PPG</div>
+        <div class="rv-rec">Reg 5–5 &nbsp;·&nbsp; Playoff 0–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot w" data-tip="2023 W9 · W · +55.8"></span>
+          <span class="rv-dot l" data-tip="2024 W2 · L · −64.0"></span>
+          <span class="rv-dot w" data-tip="2024 W13 · W · +17.1"></span>
+          <span class="rv-dot w" data-tip="2025 W3 · W · +45.5"></span>
+          <span class="rv-dot l" data-tip="2025 W14 · L · −54.5"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+      <!-- Center -->
+      <div class="rv-center">
+        <div class="rv-rivalry-name">The War</div>
+        <div class="rv-vs">vs</div>
+        <div class="rv-games">10 Meetings</div>
+        <div class="rv-bar-wrap">
+          <div class="rv-bar" style="background: #374151"></div>
+          <div class="rv-bar-nums"><span>5</span><span>5</span></div>
+        </div>
+        <div class="rv-series-lbl tied">Deadlocked</div>
+        <div class="rv-last-game">Last: <span>2025 · W14</span></div>
+      </div>
+      <!-- Connor -->
+      <div class="rv-side rv-side-b">
+        <div class="rv-wins tied-color">5</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Connor</div>
+        <div class="rv-ppg">131.5 avg PPG</div>
+        <div class="rv-rec">Reg 5–5 &nbsp;·&nbsp; Playoff 0–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot l" data-tip="2023 W9 · L · −55.8"></span>
+          <span class="rv-dot w" data-tip="2024 W2 · W · +64.0"></span>
+          <span class="rv-dot l" data-tip="2024 W13 · L · −17.1"></span>
+          <span class="rv-dot l" data-tip="2025 W3 · L · −45.5"></span>
+          <span class="rv-dot w" data-tip="2025 W14 · W · +54.5"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+    </div>
+    <div class="rv-key">
+      <span class="rv-key-badge">Key Moment</span>
+      <span class="rv-key-text">Connor erupts for 162.12 — a 64-point demolition. Isaac responded six weeks later with a 55-point blowout of his own. This series does not do subtle.</span>
+      <span class="rv-key-date">2024 · Weeks 2 &amp; 13</span>
+    </div>
+    <div class="rv-tagline">
+      <em>"Tied all-time. Every game a coin flip — just with bigger margins."</em>
+    </div>
+  </div>
+
+  <!-- ───────────────────────────────────────────────
+       V · EVAN vs ANDREW — THE UPSTART
+  ─────────────────────────────────────────────────── -->
+  <div class="rv-card" id="evan-andrew">
+    <div class="rv-card-head">
+      <span class="rv-card-label">Rivalry V · Evan vs Andrew · 4 Meetings · Since 2023</span>
+      <span class="rv-badge tied">Deadlocked · 2–2</span>
+    </div>
+    <div class="rv-body">
+      <!-- Evan -->
+      <div class="rv-side rv-side-a">
+        <div class="rv-wins tied-color">2</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Evan</div>
+        <div class="rv-ppg">113.1 avg PPG</div>
+        <div class="rv-rec">Reg 2–2 &nbsp;·&nbsp; Playoff 0–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot w" data-tip="2023 W8 · W · +16.5"></span>
+          <span class="rv-dot l" data-tip="2024 W7 · L · −14.9"></span>
+          <span class="rv-dot l" data-tip="2025 W2 · L · −28.7"></span>
+          <span class="rv-dot w" data-tip="2025 W13 · W · +8.2"></span>
+        </div>
+        <div class="rv-dots-label">All 4 Games</div>
+      </div>
+      <!-- Center -->
+      <div class="rv-center">
+        <div class="rv-rivalry-name">The Upstart</div>
+        <div class="rv-vs">vs</div>
+        <div class="rv-games">4 Meetings</div>
+        <div class="rv-bar-wrap">
+          <div class="rv-bar" style="background: #374151"></div>
+          <div class="rv-bar-nums"><span>2</span><span>2</span></div>
+        </div>
+        <div class="rv-series-lbl tied">Deadlocked</div>
+        <div class="rv-last-game">Last: <span>2025 · W13</span></div>
+      </div>
+      <!-- Andrew -->
+      <div class="rv-side rv-side-b">
+        <div class="rv-wins tied-color">2</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Andrew</div>
+        <div class="rv-ppg">117.8 avg PPG</div>
+        <div class="rv-rec">Reg 2–2 &nbsp;·&nbsp; Playoff 0–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot l" data-tip="2023 W8 · L · −16.5"></span>
+          <span class="rv-dot w" data-tip="2024 W7 · W · +14.9"></span>
+          <span class="rv-dot w" data-tip="2025 W2 · W · +28.7"></span>
+          <span class="rv-dot l" data-tip="2025 W13 · L · −8.2"></span>
+        </div>
+        <div class="rv-dots-label">All 4 Games</div>
+      </div>
+    </div>
+    <div class="rv-key">
+      <span class="rv-key-badge">Key Moment</span>
+      <span class="rv-key-text">Win. Loss. Loss. Win. Four meetings and already mirrored at 2–2. Evan answers Andrew's back-to-back run with a 2025 closer. Now what?</span>
+      <span class="rv-key-date">2023–2025 · Every Game</span>
+    </div>
+    <div class="rv-tagline">
+      <em>"The series is young. Both are already keeping count."</em>
+    </div>
+  </div>
+
+  <!-- ───────────────────────────────────────────────
+       VI · LUKE vs CHARLIE — CHARLIE'S HOUSE
+  ─────────────────────────────────────────────────── -->
+  <div class="rv-card" id="luke-charlie">
+    <div class="rv-card-head">
+      <span class="rv-card-label">Rivalry VI · Luke vs Charlie · 10 Meetings · Since 2020</span>
+      <span class="rv-badge">Charlie Leads · 6–4</span>
+    </div>
+    <div class="rv-body">
+      <!-- Luke -->
+      <div class="rv-side rv-side-a">
+        <div class="rv-wins">4</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Luke</div>
+        <div class="rv-ppg">114.7 avg PPG</div>
+        <div class="rv-rec">Reg 4–6 &nbsp;·&nbsp; Playoff 0–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot l" data-tip="2023 W2 · L · −40.2"></span>
+          <span class="rv-dot w" data-tip="2023 W13 · W · +20.1"></span>
+          <span class="rv-dot l" data-tip="2024 W1 · L · −11.3"></span>
+          <span class="rv-dot w" data-tip="2025 W1 · W · +8.0"></span>
+          <span class="rv-dot l" data-tip="2025 W12 · L · −14.8"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+      <!-- Center -->
+      <div class="rv-center">
+        <div class="rv-rivalry-name">Charlie's House</div>
+        <div class="rv-vs">vs</div>
+        <div class="rv-games">10 Meetings</div>
+        <div class="rv-bar-wrap">
+          <div class="rv-bar" style="background: linear-gradient(to left, #dc2626 0%, #dc2626 60%, #1f2937 60%, #1f2937 100%)"></div>
+          <div class="rv-bar-nums"><span>4</span><span>6</span></div>
+        </div>
+        <div class="rv-series-lbl">Charlie Leads</div>
+        <div class="rv-last-game">Last: <span>2025 · W12</span></div>
+      </div>
+      <!-- Charlie -->
+      <div class="rv-side rv-side-b side-leads">
+        <div class="rv-wins hot">6</div>
+        <div class="rv-wins-lbl">Wins</div>
+        <div class="rv-name">Charlie</div>
+        <div class="rv-ppg">124.2 avg PPG</div>
+        <div class="rv-rec">Reg 6–4 &nbsp;·&nbsp; Playoff 0–0</div>
+        <div class="rv-dots">
+          <span class="rv-dot w" data-tip="2023 W2 · W · +40.2"></span>
+          <span class="rv-dot l" data-tip="2023 W13 · L · −20.1"></span>
+          <span class="rv-dot w" data-tip="2024 W1 · W · +11.3"></span>
+          <span class="rv-dot l" data-tip="2025 W1 · L · −8.0"></span>
+          <span class="rv-dot w" data-tip="2025 W12 · W · +14.8"></span>
+        </div>
+        <div class="rv-dots-label">Last 5</div>
+      </div>
+    </div>
+    <div class="rv-key">
+      <span class="rv-key-badge">Key Moment</span>
+      <span class="rv-key-text">Luke puts up 53.40 — his worst performance in any rivalry matchup. Charlie wins by 62.86. Luke is the 2024 champion. Charlie still has his number.</span>
+      <span class="rv-key-date">2022 · Week 14</span>
+    </div>
+    <div class="rv-tagline">
+      <em>"Luke has a ring. Charlie has Luke's number."</em>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>
