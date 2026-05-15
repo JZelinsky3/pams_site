@@ -185,20 +185,26 @@ a.nav-title { text-decoration: none; color: var(--cream); }
     cursor: default; user-select: none;
     transition: color .15s;
 }
-.nav-drop-group:hover .nav-drop-group-lbl,
 .nav-drop-group.open  .nav-drop-group-lbl { color: var(--nav-drop-accent, var(--gold)); }
 .nav-group-arr { display: inline-block; font-size: .75rem; transition: transform .15s; }
-.nav-drop-group:hover .nav-group-arr,
 .nav-drop-group.open  .nav-group-arr { transform: rotate(90deg); }
 .nav-drop-sub {
     max-height: 0; overflow: hidden;
     background: var(--nav-drop-sub-bg, rgba(0,0,0,.12));
     transition: max-height .18s ease;
 }
-.nav-drop-group:hover .nav-drop-sub,
 .nav-drop-group.open  .nav-drop-sub {
     max-height: 200px;
     border-bottom: 1px solid var(--nav-drop-border, var(--ink-line-soft));
+}
+/* Desktop hover preview — touch devices use the click handler instead */
+@media (hover: hover) and (pointer: fine) {
+    .nav-drop-group:hover .nav-drop-group-lbl { color: var(--nav-drop-accent, var(--gold)); }
+    .nav-drop-group:hover .nav-group-arr { transform: rotate(90deg); }
+    .nav-drop-group:hover .nav-drop-sub {
+        max-height: 200px;
+        border-bottom: 1px solid var(--nav-drop-border, var(--ink-line-soft));
+    }
 }
 .nav-drop-sub a {
     display: block; padding: .65rem 1.1rem .65rem 1.65rem;
