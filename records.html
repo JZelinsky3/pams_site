@@ -610,7 +610,7 @@ function render(managers, recordBook, managerHighs) {
             <div class="rec-section-header">
                 <span class="rec-section-num">§ 01</span>
                 <span class="rec-section-title">Win &amp; Loss Streaks</span>
-                <span class="rec-section-note">Reg season + playoffs only · no consolation</span>
+                <span class="rec-section-note">Reg season + playoffs</span>
             </div>
             <div class="streak-grid">
                 ${buildStreakBoard('wins', '🔥', 'Longest Win Streaks', winStreaks)}
@@ -683,7 +683,7 @@ function buildStreakBoard(type, icon, title, streaks) {
                 <span class="streak-board-title">${title}</span>
             </div>
             ${rows}
-            <div class="streak-note">★ Reg season + qualifying playoffs only</div>
+            <div class="streak-note">★ Reg season + playoffs</div>
         </div>`;
 }
 
@@ -962,7 +962,7 @@ function buildChampRoll(champByYear, managers) {
     }).join('');
     return `
         <div class="chips-grid">${cards}</div>
-        <div class="rec-footnote">★ Icons = career championships through that season · * 2025 payout pending final league accounting</div>`;
+        <div class="rec-footnote"></div>`;
 }
 
 function buildH2HTable(managers) {
@@ -1049,7 +1049,7 @@ function buildH2HTable(managers) {
                 <tbody>${sortedRows}</tbody>
             </table>
         </div>
-        <div class="rec-footnote">★ All-time reg season + qualifying playoff matchups vs all 11 managers · Best/Worst min. 4 games</div>`;
+        <div class="rec-footnote">★ All-time reg season + playoff matchups vs all 11 managers · Best/Worst min. 4 games</div>`;
 }
 
 load();

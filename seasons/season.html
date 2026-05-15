@@ -175,7 +175,41 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
 }
-@media (max-width: 700px) { .podium-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) {
+    .podium-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "first  first"
+            "second third";
+        gap: .65rem;
+    }
+    .podium-card.first  { grid-area: first; }
+    .podium-card.second { grid-area: second; }
+    .podium-card.third  { grid-area: third; }
+    .podium-card.second, .podium-card.third {
+        padding: 1.1rem 1rem;
+    }
+    .podium-card.second .podium-medal-label,
+    .podium-card.third  .podium-medal-label {
+        font-size: .5rem; letter-spacing: .22em; margin-bottom: .55rem;
+    }
+    .podium-card.second .podium-place-num,
+    .podium-card.third  .podium-place-num {
+        font-size: 2.6rem; margin-bottom: .45rem;
+    }
+    .podium-card.second .podium-team,
+    .podium-card.third  .podium-team {
+        font-size: 1rem; line-height: 1.1;
+    }
+    .podium-card.second .podium-owner,
+    .podium-card.third  .podium-owner {
+        font-size: .52rem; letter-spacing: .14em;
+    }
+    .podium-card.second .podium-record,
+    .podium-card.third  .podium-record {
+        font-size: .5rem; letter-spacing: .1em; margin-top: .35rem;
+    }
+}
 
 .podium-card {
     padding: 1.75rem 1.5rem;
@@ -391,7 +425,8 @@ table.season-standings tbody tr:hover { background: rgba(232,200,137,.03); }
      data-chapter="CH. III · ARCHIVES"
      data-back-label="← Season Archives"
      data-back-href="seasons/index.html"
-     data-title-id="nav-year"></nav>
+     data-title-id="nav-year"
+     data-title-href="seasons/index.html"></nav>
 <script src="../assets/js/nav.js"></script>
 
 <!-- PAGE BODY (rendered by JS) -->

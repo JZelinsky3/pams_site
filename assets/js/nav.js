@@ -73,6 +73,7 @@
         var rightLabel  = nav.dataset.rightLabel || '';
         var rightHref   = nav.dataset.rightHref  ? root + nav.dataset.rightHref : '';
         var titleId     = nav.dataset.titleId    || 'nav-title';
+        var titleHref   = nav.dataset.titleHref  ? root + nav.dataset.titleHref : root + 'index.html';
 
         // Build dropdown links — groups expand on hover; skip current page
         var links = PAGES.map(function (p) {
@@ -113,7 +114,7 @@
             + '<div class="nav-kicker">' + chapter + '</div>'
             + (currentPage === 'hub'
                 ? '<div class="nav-title" id="' + titleId + '">The Milk <em>Society.</em></div>'
-                : '<a class="nav-title" id="' + titleId + '" href="' + root + 'index.html">The Milk <em>Society.</em></a>')
+                : '<a class="nav-title" id="' + titleId + '" href="' + titleHref + '">The Milk <em>Society.</em></a>')
             + '</div>'
             + rightSlot;
 

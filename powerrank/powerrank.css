@@ -427,16 +427,62 @@ body {
 }
 @media (max-width: 640px) {
   .pr-app { padding: 10px 12px 30px; }
-  .podium-hero { flex-direction: column; align-items: flex-start; gap: 1rem; }
-  .podium-hero-right { align-items: flex-start; flex-direction: row; gap: 1rem; align-items: center; }
-  .podium-hero::after { font-size: 5rem; }
-  .podium-runners { grid-template-columns: 1fr; }
+
+  /* #1 hero — keep its own row but scale everything down */
+  .podium-hero { padding: 1.1rem 1.2rem; gap: .75rem; }
+  .podium-hero::after { font-size: 4.5rem; right: 1.2rem; }
+  .podium-rank-label { font-size: .52rem; letter-spacing: .2em; margin-bottom: .3rem; }
+  .podium-rank-num { font-size: 2.4rem; margin-bottom: .25rem; }
+  .podium-hero-name { font-size: 1.25rem; }
+  .podium-hero-mgr { font-size: .58rem; letter-spacing: .1em; margin-bottom: .3rem; }
+  .podium-hero-rec { font-size: .65rem; }
+  .podium-hero-right { gap: .35rem; }
+  .podium-hero-logo { width: 52px; height: 52px; }
+  .podium-hero-score { font-size: 1.1rem; }
+
+  /* #2 + #3 stay side-by-side with equal cells, shrunken */
+  .podium-runners { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .podium-runner { padding: .75rem .8rem .75rem 1rem; }
+  .podium-runner-top { gap: 8px; margin-bottom: .5rem; }
+  .podium-runner-logo { width: 32px; height: 32px; }
+  .podium-runner-label { font-size: .5rem; letter-spacing: .18em; margin-bottom: .15rem; }
+  .podium-runner-name { font-size: .9rem; line-height: 1.05; }
+  .podium-runner-mgr { font-size: .55rem; letter-spacing: .08em; }
+  .podium-runner-bottom { padding-top: .45rem; }
+  .podium-runner-rec { font-size: .6rem; }
+  .podium-runner-score { font-size: .72rem; }
+
   .col-bars { display: none; }
   .col-pf   { display: none; }
   .rank-num { font-size: 1.1rem; }
   .proj-bar-wrap { width: 50px; }
+
+  /* §03 conference tables: tighten so they fit phone width without overflow */
+  .pr-conf-grid .pr-table { font-size: 12px; }
+  .pr-conf-grid .pr-table th,
+  .pr-conf-grid .pr-table td { padding: .55rem .5rem; }
+  .pr-conf-grid .pr-table th { font-size: .52rem; letter-spacing: .12em; }
+  .pr-conf-grid .col-rank   { width: 32px; }
+  .pr-conf-grid .col-team   { min-width: 0; }
+  .pr-conf-grid .col-record,
+  .pr-conf-grid .col-score  { width: auto; }
+  .pr-conf-grid .team-cell  { gap: 6px; }
+  .pr-conf-grid .team-logo  { width: 26px; height: 26px; }
+  .pr-conf-grid .team-name-main { font-size: .78rem; }
+  .pr-conf-grid .team-mgr   { font-size: .58rem; }
+  .pr-conf-grid .conf-rank-num { font-size: .9rem; min-width: 16px; }
+  .pr-conf-grid .rec-cell,
+  .pr-conf-grid .score-cell { font-size: .72rem; }
 }
 @media (max-width: 420px) {
   .pr-view-tab { padding: 6px 10px; font-size: .63rem; }
   .pr-section-title { font-size: 1.2rem; }
+
+  /* Even tighter for tiny phones so runners still fit two-up */
+  .podium-runner { padding: .65rem .65rem .65rem .85rem; }
+  .podium-runner-logo { width: 28px; height: 28px; }
+  .podium-runner-name { font-size: .82rem; }
+  .podium-runner-mgr { font-size: .5rem; }
+  .podium-runner-rec { font-size: .55rem; }
+  .podium-runner-score { font-size: .68rem; }
 }
