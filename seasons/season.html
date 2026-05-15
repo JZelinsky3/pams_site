@@ -28,6 +28,16 @@
     font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
     color: var(--gold); margin-bottom: 1.2rem;
 }
+@media (max-width: 700px) {
+    .hero-kicker {
+        font-size: .5rem; letter-spacing: .25em;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        margin-bottom: .85rem;
+    }
+}
+@media (max-width: 420px) {
+    .hero-kicker { font-size: .44rem; letter-spacing: .18em; }
+}
 .hero-year {
     font-family: var(--serif); font-style: italic;
     font-size: clamp(6rem, 18vw, 14rem);

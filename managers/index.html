@@ -76,122 +76,144 @@
 }
 @media (max-width: 900px) { .managers-grid { grid-template-columns: 1fr; } }
 
-/* Shadow wrapper — drop-shadow follows the clip-path shape */
-.card-wrap {
-    filter: drop-shadow(0 5px 18px rgba(0,0,0,.36));
-    transition: filter .3s cubic-bezier(.2,.8,.2,1);
-}
-.card-wrap:hover {
-    filter: drop-shadow(0 16px 34px rgba(0,0,0,.52))
-            drop-shadow(0 0 16px rgba(232,200,137,.1));
-}
-
-/* Parallelogram card — angled left + right edges */
-.manager-card {
+/* ─── Ticket-stub manager card ─── */
+.ts-card {
     position: relative;
-    display: flex; flex-direction: row; align-items: stretch;
-    background: linear-gradient(150deg, var(--ink-card) 0%, var(--ink-soft) 100%);
+    display: flex;
+    background: linear-gradient(160deg, var(--ink-card) 0%, var(--ink-soft) 100%);
     border: 1px solid var(--ink-line);
     text-decoration: none; color: inherit;
-    clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
-    transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s;
-    overflow: hidden;
-    min-height: 128px;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+    min-height: 168px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.28);
 }
-/* Thin gold top rule */
-.manager-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(to right, transparent 4%, var(--gold) 25%, var(--gold) 75%, transparent 96%);
-    opacity: .55; z-index: 3; pointer-events: none;
-}
-/* Subtle gold shimmer in top-left corner */
-.manager-card::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(120deg, rgba(232,200,137,.07) 0%, transparent 40%);
-    z-index: 0; pointer-events: none;
-}
-.manager-card:hover {
-    border-color: rgba(232,200,137,.5);
+.ts-card:hover {
     transform: translateY(-3px);
+    border-color: rgba(232,200,137,.4);
+    box-shadow: 0 14px 28px rgba(0,0,0,.45), 0 0 14px rgba(232,200,137,.08);
 }
+.ts-card:hover .ts-arrow { transform: translateX(4px); }
 
-/* Rank column — left side */
-.card-rank-side {
-    display: flex; align-items: center; justify-content: center;
-    min-width: 62px; width: 62px; flex-shrink: 0;
-    border-right: 1px solid rgba(232,200,137,.18);
-    position: relative; z-index: 1;
+/* Half-circle notches on the divider so it reads as perforated */
+.ts-card::before, .ts-card::after {
+    content: '';
+    position: absolute; left: 70px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--ink);
+    transform: translateX(-50%);
+    z-index: 2;
 }
-.crs-num {
-    font-family: var(--serif); font-style: italic; font-weight: 700;
-    font-size: 2rem; line-height: 1; letter-spacing: -.04em;
-    color: rgba(232,200,137,.5);
-}
+.ts-card::before { top: -6px; }
+.ts-card::after  { bottom: -6px; }
 
-/* Main content */
-.card-content {
-    flex: 1; min-width: 0;
+.ts-stub {
+    width: 70px; flex-shrink: 0;
+    background: linear-gradient(180deg, rgba(232,200,137,.1), rgba(232,200,137,.02));
+    border-right: 2px dashed rgba(232,200,137,.35);
     display: flex; flex-direction: column;
-    padding: 1.1rem 1.5rem 1rem 1.15rem;
-    gap: .65rem;
-    position: relative; z-index: 1;
+    align-items: center; justify-content: center;
+    padding: .9rem .4rem;
+    text-align: center;
 }
-.card-top-row { flex: 1; }
+.ts-stub-lbl {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .46rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .35rem;
+}
+.ts-stub-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.4rem; line-height: 1; letter-spacing: -.04em;
+    color: var(--gold); margin-bottom: .25rem;
+}
+.ts-stub-foot {
+    font-family: var(--mono);
+    font-size: .42rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
 
-.manager-name {
+.ts-body {
+    flex: 1; min-width: 0;
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+.ts-conf {
+    position: absolute; top: .85rem; right: 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .5rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .25rem .55rem;
+    border: 1px solid;
+    border-radius: 2px;
+}
+.ts-conf.whole {
+    color: var(--gold);
+    background: rgba(232,200,137,.1);
+    border-color: rgba(232,200,137,.4);
+}
+.ts-conf.skim {
+    color: #6b8aa8;
+    background: rgba(107,138,168,.1);
+    border-color: rgba(107,138,168,.4);
+}
+
+.ts-name {
     font-family: var(--serif);
-    font-size: 1.6rem; line-height: 1; letter-spacing: -.02em;
+    font-size: 1.55rem; line-height: 1; letter-spacing: -.02em;
     color: var(--cream);
     margin-bottom: .2rem;
+    padding-right: 4.5rem;
 }
-.manager-team {
+.ts-team {
     font-family: var(--mono);
     font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--cream-mute);
+    color: var(--cream-mute); margin-bottom: .5rem;
 }
-
-.chip-row {
-    display: flex; align-items: center; gap: .3rem;
-    margin-top: .5rem; min-height: 1.1rem;
-}
-.chip-row .chip-star { color: var(--gold); font-size: .9rem; line-height: 1; }
-.chip-row .chip-label {
+.ts-chips {
     font-family: var(--mono); font-weight: 700;
-    font-size: .52rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--gold); margin-left: .3rem;
+    font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: .35rem;
+    min-height: 1rem;
 }
-.chip-row.empty .chip-label-empty {
-    font-family: var(--mono);
-    font-size: .52rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--cream-mute);
-}
+.ts-chips .ts-chip-star { color: var(--gold); font-size: .85rem; line-height: 1; }
+.ts-chips.empty { color: var(--cream-mute); font-weight: 400; }
 
-/* Horizontal stats bar */
-.card-stats-row {
-    display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap;
-    border-top: 1px solid var(--ink-line-soft);
-    padding-top: .6rem;
+.ts-statline {
+    display: flex; gap: 1.1rem; align-items: center;
+    border-top: 1px dotted var(--ink-line);
+    padding-top: .65rem; margin-top: .75rem;
+    flex-wrap: wrap;
 }
-.csr-item { display: flex; flex-direction: column; gap: .1rem; }
-.csr-label {
+.ts-stat { display: flex; flex-direction: column; gap: .15rem; }
+.ts-stat-lbl {
     font-family: var(--mono); font-weight: 700;
-    font-size: .48rem; letter-spacing: .2em; text-transform: uppercase;
+    font-size: .46rem; letter-spacing: .22em; text-transform: uppercase;
     color: var(--cream-mute);
 }
-.csr-val {
-    font-family: var(--serif); font-size: .95rem; line-height: 1;
+.ts-stat-val {
+    font-family: var(--serif); font-size: 1rem; line-height: 1;
     color: var(--cream);
 }
-.csr-val.gold { color: var(--gold); font-style: italic; }
-.csr-arrow {
-    margin-left: auto; flex-shrink: 0;
-    font-family: var(--serif); font-size: 1.2rem;
+.ts-stat-val.gold { color: var(--gold); font-style: italic; }
+.ts-arrow {
+    margin-left: auto;
+    font-family: var(--serif); font-size: 1.3rem;
     color: var(--gold);
     transition: transform .25s ease;
 }
-.manager-card:hover .csr-arrow { transform: translateX(4px); }
+
+@media (max-width: 520px) {
+    .ts-stub { width: 56px; }
+    .ts-card::before, .ts-card::after { left: 56px; }
+    .ts-stub-num { font-size: 2rem; }
+    .ts-body { padding: 1rem 1rem .9rem; }
+    .ts-name { font-size: 1.3rem; padding-right: 4rem; }
+    .ts-conf { top: .7rem; right: .75rem; font-size: .46rem; padding: .2rem .45rem; }
+    .ts-statline { gap: .85rem; }
+    .ts-stat-val { font-size: .9rem; }
+}
 
 .former-wrap {
     margin-top: 4rem;
@@ -322,14 +344,27 @@
 <script>
 
 let allManagers = [];
+let divisionMap = {};
 let currentSort = 'winpct';
 
 async function loadData() {
     try {
-        const res = await fetch('../data/managers_directory.json');
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        const [dirRes, seasonRes] = await Promise.all([
+            fetch('../data/managers_directory.json'),
+            fetch('../data/seasons/2025.json'),
+        ]);
+        if (!dirRes.ok) throw new Error(`HTTP ${dirRes.status}`);
+        const data = await dirRes.json();
         allManagers = data.managers;
+
+        if (seasonRes.ok) {
+            const season = await seasonRes.json();
+            (season.standings || []).forEach(s => {
+                if (s.owner_user_id && s.division) {
+                    divisionMap[s.owner_user_id] = s.division;
+                }
+            });
+        }
         render();
     } catch (err) {
         document.getElementById('managers-grid').innerHTML = `
@@ -359,54 +394,62 @@ function renderCurrent() {
     };
     current.sort(sorts[currentSort] || sorts.winpct);
 
+    const ROMAN = ['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'];
+
     grid.innerHTML = current.map((m, idx) => {
         let chipRow;
         if (m.championships > 0) {
-            const stars = Array(m.championships).fill('<span class="chip-star">★</span>').join('');
+            const stars = Array(m.championships).fill('<span class="ts-chip-star">★</span>').join('');
             const yrs = m.championship_seasons.join(', ');
-            chipRow = `<div class="chip-row">${stars}<span class="chip-label">${m.championships} CHIP${m.championships>1?'S':''} · ${yrs}</span></div>`;
+            chipRow = `<div class="ts-chips">${stars}<span>${m.championships}× Champion · ${yrs}</span></div>`;
         } else {
-            chipRow = `<div class="chip-row empty"><span class="chip-label-empty">— No chips yet —</span></div>`;
+            chipRow = `<div class="ts-chips empty">— No chips yet —</div>`;
         }
 
         const pctDisplay = m.win_pct.toFixed(3).replace(/^0\./, '.');
-        const games = m.wins + m.losses + m.ties;
+        const rank = idx + 1;
+        const roman = ROMAN[rank] || rank;
+        const rankNum = String(rank).padStart(2, '0');
+        const division = divisionMap[m.user_id];
+        const confBadge = division
+            ? `<span class="ts-conf ${division.toLowerCase()}">${division}</span>`
+            : '';
 
-        const rankNum = String(idx + 1).padStart(2, '0');
         return `
-            <div class="card-wrap">
-            <a href="manager.html?id=${m.user_id}" class="manager-card">
-                <div class="card-rank-side">
-                    <span class="crs-num">${rankNum}</span>
+            <a href="manager.html?id=${m.user_id}" class="ts-card">
+                <div class="ts-stub">
+                    <div class="ts-stub-lbl">Admit</div>
+                    <div class="ts-stub-num">${roman}</div>
+                    <div class="ts-stub-foot">Mgr № ${rankNum}</div>
                 </div>
-                <div class="card-content">
-                    <div class="card-top-row">
-                        <div class="manager-name">${m.name}</div>
-                        <div class="manager-team">${m.team_latest}</div>
+                <div class="ts-body">
+                    ${confBadge}
+                    <div>
+                        <div class="ts-name">${m.name}</div>
+                        <div class="ts-team">${m.team_latest}</div>
                         ${chipRow}
                     </div>
-                    <div class="card-stats-row">
-                        <div class="csr-item">
-                            <span class="csr-label">Record</span>
-                            <span class="csr-val">${m.wins}–${m.losses}${m.ties?'–'+m.ties:''}</span>
+                    <div class="ts-statline">
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Record</span>
+                            <span class="ts-stat-val">${m.wins}–${m.losses}${m.ties?'–'+m.ties:''}</span>
                         </div>
-                        <div class="csr-item">
-                            <span class="csr-label">Win %</span>
-                            <span class="csr-val gold">${pctDisplay}</span>
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Win %</span>
+                            <span class="ts-stat-val gold">${pctDisplay}</span>
                         </div>
-                        <div class="csr-item">
-                            <span class="csr-label">Points</span>
-                            <span class="csr-val">${Math.round(m.total_pf).toLocaleString()}</span>
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Points</span>
+                            <span class="ts-stat-val">${Math.round(m.total_pf).toLocaleString()}</span>
                         </div>
-                        <div class="csr-item">
-                            <span class="csr-label">Top-3</span>
-                            <span class="csr-val">${m.top_three_finishes}</span>
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Top-3</span>
+                            <span class="ts-stat-val">${m.top_three_finishes}</span>
                         </div>
-                        <span class="csr-arrow">→</span>
+                        <span class="ts-arrow">→</span>
                     </div>
                 </div>
             </a>
-            </div>
         `;
     }).join('');
 }

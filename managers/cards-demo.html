@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager Card Mockups · The Milk Society</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+body { background: var(--ink); color: var(--cream); padding: 3rem 1.5rem 5rem; }
+
+.demo-wrap { max-width: 880px; margin: 0 auto; }
+.demo-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.5rem; color: var(--cream); margin-bottom: .5rem;
+}
+.demo-sub {
+    font-family: var(--mono); font-size: .65rem; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--cream-mute); margin-bottom: 3rem;
+}
+
+.demo-section { margin-bottom: 4rem; }
+.demo-section-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .25rem;
+}
+.demo-section-name {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.6rem; color: var(--cream); margin-bottom: .25rem;
+}
+.demo-section-desc {
+    font-family: var(--mono); font-size: .65rem; letter-spacing: .12em;
+    color: var(--cream-mute); margin-bottom: 1.5rem;
+}
+
+.demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+@media (max-width: 800px) { .demo-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   DESIGN 1 — LIBRARY CATALOG CARD
+   ============================================================ */
+.lib-card {
+    position: relative;
+    background:
+        linear-gradient(180deg, transparent 0, transparent 100%),
+        repeating-linear-gradient(
+            180deg,
+            var(--ink-card) 0,
+            var(--ink-card) 32px,
+            rgba(232,200,137,.06) 32px,
+            rgba(232,200,137,.06) 33px
+        );
+    border: 1px solid var(--ink-line);
+    border-top: 3px solid var(--gold);
+    padding: 1.4rem 1.4rem 1.2rem 3rem;
+    text-decoration: none; color: inherit; display: block;
+    transition: transform .25s, border-color .25s;
+}
+.lib-card:hover { transform: translateY(-2px); border-top-color: var(--gold-bright); }
+.lib-card::before {
+    content: '';
+    position: absolute; top: 1.4rem; left: 1.1rem;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--ink);
+    border: 1.5px solid var(--cream-mute);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.6);
+}
+.lib-card::after {
+    content: '';
+    position: absolute; left: 1.6rem; top: 0; bottom: 0;
+    width: 1px; background: rgba(160, 72, 48, .35);
+}
+.lib-meta-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .52rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .9rem;
+}
+.lib-meta-row .lib-rank { color: var(--gold); }
+.lib-name {
+    font-family: var(--serif);
+    font-size: 1.55rem; line-height: 1; color: var(--cream);
+    margin-bottom: .15rem;
+}
+.lib-team {
+    font-family: var(--mono);
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: 1rem;
+}
+.lib-stamp {
+    position: absolute; right: 1.1rem; top: 3rem;
+    transform: rotate(-8deg);
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--rust);
+    border: 1.5px solid var(--rust);
+    padding: .25rem .55rem;
+    opacity: .8;
+}
+.lib-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .4rem .9rem;
+    padding-top: .65rem;
+    border-top: 1px dotted var(--ink-line);
+}
+.lib-stat { display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px dotted rgba(232,200,137,.15);
+    padding-bottom: .15rem;
+}
+.lib-stat-lbl {
+    font-family: var(--mono); font-size: .5rem;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.lib-stat-val {
+    font-family: var(--serif);
+    font-size: .95rem; color: var(--cream);
+}
+.lib-stat-val.gold { color: var(--gold); font-style: italic; }
+
+/* ============================================================
+   DESIGN 2 — TRADING CARD
+   ============================================================ */
+.tc-card {
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg, var(--ink-card) 0%, var(--ink-soft) 100%);
+    border: 1px solid var(--ink-line);
+    border-radius: 8px;
+    padding: 1.1rem 1.1rem 1rem;
+    text-decoration: none; color: inherit; display: block;
+    transition: transform .25s, box-shadow .25s;
+    box-shadow: 0 6px 20px rgba(0,0,0,.35),
+                inset 0 1px 0 rgba(232,200,137,.08);
+}
+.tc-card:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0,0,0,.5); }
+/* Corner starburst marks */
+.tc-card::before, .tc-card::after {
+    content: '★';
+    position: absolute;
+    font-size: .7rem; color: rgba(232,200,137,.25);
+    pointer-events: none;
+}
+.tc-card::before { top: .55rem; left: .65rem; }
+.tc-card::after  { bottom: .55rem; right: .65rem; }
+
+.tc-banner {
+    position: relative;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+    color: var(--ink);
+    margin: -.35rem -.35rem 1rem;
+    padding: .55rem .85rem;
+    border: 1px solid var(--gold-deep);
+    box-shadow: 0 2px 0 rgba(0,0,0,.18);
+    display: flex; justify-content: space-between; align-items: center;
+}
+.tc-banner-name {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.25rem; line-height: 1; letter-spacing: -.01em;
+}
+.tc-banner-rank {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .2em;
+}
+.tc-body {
+    display: grid; grid-template-columns: 70px 1fr;
+    gap: 1rem; align-items: center;
+}
+.tc-photo {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(160deg, rgba(232,200,137,.18), rgba(160,72,48,.1));
+    border: 2px solid var(--gold-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-style: italic;
+    font-size: 2rem; color: var(--gold);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.4);
+}
+.tc-team {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .56rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .35rem;
+}
+.tc-chips {
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .65rem;
+}
+.tc-statline {
+    display: flex; gap: .85rem;
+    border-top: 1px dotted var(--ink-line);
+    padding-top: .55rem;
+}
+.tc-stat { display: flex; flex-direction: column; gap: 0; }
+.tc-stat-lbl {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .46rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.tc-stat-val {
+    font-family: var(--serif); font-size: 1rem; color: var(--cream);
+    line-height: 1.1;
+}
+.tc-stat-val.gold { color: var(--gold); font-style: italic; }
+
+/* ============================================================
+   DESIGN 3 — TICKET STUB
+   ============================================================ */
+.ts-card {
+    position: relative;
+    display: flex;
+    background: linear-gradient(160deg, var(--ink-card) 0%, var(--ink-soft) 100%);
+    border: 1px solid var(--ink-line);
+    text-decoration: none; color: inherit;
+    transition: transform .25s, border-color .25s;
+    min-height: 168px;
+}
+.ts-card:hover { transform: translateY(-3px); border-color: rgba(232,200,137,.4); }
+
+/* Half-circle notches on the divider so it reads as perforated */
+.ts-card::before, .ts-card::after {
+    content: '';
+    position: absolute; left: 70px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--ink);
+    transform: translateX(-50%);
+    z-index: 2;
+}
+.ts-card::before { top: -6px; }
+.ts-card::after  { bottom: -6px; }
+
+.ts-stub {
+    width: 70px; flex-shrink: 0;
+    background: linear-gradient(180deg, rgba(232,200,137,.1), rgba(232,200,137,.02));
+    border-right: 2px dashed rgba(232,200,137,.35);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: .9rem .4rem;
+    text-align: center;
+    position: relative;
+}
+.ts-stub-lbl {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .46rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .35rem;
+}
+.ts-stub-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.4rem; line-height: 1; letter-spacing: -.04em;
+    color: var(--gold); margin-bottom: .25rem;
+}
+.ts-stub-foot {
+    font-family: var(--mono);
+    font-size: .42rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.ts-body {
+    flex: 1; min-width: 0;
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+.ts-conf {
+    position: absolute; top: .85rem; right: 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .5rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .25rem .55rem;
+    border: 1px solid;
+    border-radius: 2px;
+}
+.ts-conf.whole {
+    color: var(--gold);
+    background: rgba(232,200,137,.1);
+    border-color: rgba(232,200,137,.4);
+}
+.ts-conf.skim {
+    color: var(--steel, #6b8aa8);
+    background: rgba(107,138,168,.1);
+    border-color: rgba(107,138,168,.4);
+}
+.ts-name {
+    font-family: var(--serif);
+    font-size: 1.55rem; line-height: 1; color: var(--cream);
+    margin-bottom: .2rem;
+    padding-right: 4.5rem;
+}
+.ts-team {
+    font-family: var(--mono);
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .5rem;
+}
+.ts-chips {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold);
+}
+.ts-statline {
+    display: flex; gap: 1rem; align-items: baseline;
+    border-top: 1px dotted var(--ink-line);
+    padding-top: .55rem; margin-top: .65rem;
+}
+.ts-stat { display: flex; flex-direction: column; gap: 0; }
+.ts-stat-lbl {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .46rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.ts-stat-val {
+    font-family: var(--serif); font-size: 1rem; color: var(--cream);
+    line-height: 1.1;
+}
+.ts-stat-val.gold { color: var(--gold); font-style: italic; }
+.ts-arrow {
+    margin-left: auto;
+    font-family: var(--serif); font-size: 1.3rem;
+    color: var(--gold); align-self: center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="demo-wrap">
+
+    <div class="demo-title">Manager Card <em style="color:var(--gold);">Mockups.</em></div>
+    <div class="demo-sub">★ Three concepts · Pick one ★</div>
+
+    <!-- ── DESIGN 1 ── -->
+    <div class="demo-section">
+        <div class="demo-section-label">Option 01</div>
+        <div class="demo-section-name">Library Catalog Card</div>
+        <div class="demo-section-desc">Punched-hole + red margin rule · typewriter labels · dotted slot lines · "ACTIVE" stamp</div>
+
+        <div class="demo-grid">
+            <a href="#" class="lib-card">
+                <div class="lib-meta-row">
+                    <span>Mgr. № 01 · The Milk Society</span>
+                    <span class="lib-rank">RANK · I</span>
+                </div>
+                <div class="lib-name">Joey Z.</div>
+                <div class="lib-team">Oreos & Cream</div>
+                <div class="lib-stamp">★ 3× Champion</div>
+                <div class="lib-stats">
+                    <div class="lib-stat"><span class="lib-stat-lbl">W–L</span><span class="lib-stat-val gold">68–32</span></div>
+                    <div class="lib-stat"><span class="lib-stat-lbl">PCT</span><span class="lib-stat-val">.680</span></div>
+                    <div class="lib-stat"><span class="lib-stat-lbl">PF</span><span class="lib-stat-val">14,820</span></div>
+                    <div class="lib-stat"><span class="lib-stat-lbl">PLAYOFFS</span><span class="lib-stat-val">6×</span></div>
+                </div>
+            </a>
+
+            <a href="#" class="lib-card">
+                <div class="lib-meta-row">
+                    <span>Mgr. № 02 · The Milk Society</span>
+                    <span class="lib-rank">RANK · IV</span>
+                </div>
+                <div class="lib-name">Mason H.</div>
+                <div class="lib-team">Skim Squad</div>
+                <div class="lib-stats">
+                    <div class="lib-stat"><span class="lib-stat-lbl">W–L</span><span class="lib-stat-val gold">52–48</span></div>
+                    <div class="lib-stat"><span class="lib-stat-lbl">PCT</span><span class="lib-stat-val">.520</span></div>
+                    <div class="lib-stat"><span class="lib-stat-lbl">PF</span><span class="lib-stat-val">13,210</span></div>
+                    <div class="lib-stat"><span class="lib-stat-lbl">PLAYOFFS</span><span class="lib-stat-val">4×</span></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ── DESIGN 2 ── -->
+    <div class="demo-section">
+        <div class="demo-section-label">Option 02</div>
+        <div class="demo-section-name">Trading Card</div>
+        <div class="demo-section-desc">Gold nameplate banner · embossed circular crest · rounded corners · 70's Topps feel</div>
+
+        <div class="demo-grid">
+            <a href="#" class="tc-card">
+                <div class="tc-banner">
+                    <span class="tc-banner-name">Joey Z.</span>
+                    <span class="tc-banner-rank">№ I</span>
+                </div>
+                <div class="tc-body">
+                    <div class="tc-photo">J</div>
+                    <div>
+                        <div class="tc-team">Oreos & Cream</div>
+                        <div class="tc-chips">★ ★ ★ &nbsp;3× Champ</div>
+                        <div class="tc-statline">
+                            <div class="tc-stat"><span class="tc-stat-lbl">W–L</span><span class="tc-stat-val gold">68–32</span></div>
+                            <div class="tc-stat"><span class="tc-stat-lbl">PCT</span><span class="tc-stat-val">.680</span></div>
+                            <div class="tc-stat"><span class="tc-stat-lbl">PF</span><span class="tc-stat-val">14,820</span></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="tc-card">
+                <div class="tc-banner">
+                    <span class="tc-banner-name">Mason H.</span>
+                    <span class="tc-banner-rank">№ IV</span>
+                </div>
+                <div class="tc-body">
+                    <div class="tc-photo">M</div>
+                    <div>
+                        <div class="tc-team">Skim Squad</div>
+                        <div class="tc-chips">No chips yet</div>
+                        <div class="tc-statline">
+                            <div class="tc-stat"><span class="tc-stat-lbl">W–L</span><span class="tc-stat-val gold">52–48</span></div>
+                            <div class="tc-stat"><span class="tc-stat-lbl">PCT</span><span class="tc-stat-val">.520</span></div>
+                            <div class="tc-stat"><span class="tc-stat-lbl">PF</span><span class="tc-stat-val">13,210</span></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ── DESIGN 3 ── -->
+    <div class="demo-section">
+        <div class="demo-section-label">Option 03</div>
+        <div class="demo-section-name">Ticket Stub</div>
+        <div class="demo-section-desc">Perforated dashed divider · rank stub on left · "ADMIT" tag · circular notches</div>
+
+        <div class="demo-grid">
+            <a href="#" class="ts-card">
+                <div class="ts-stub">
+                    <div class="ts-stub-lbl">Admit</div>
+                    <div class="ts-stub-num">I</div>
+                    <div class="ts-stub-foot">Mgr № 01</div>
+                </div>
+                <div class="ts-body">
+                    <span class="ts-conf whole">Whole</span>
+                    <div>
+                        <div class="ts-name">Joey Z.</div>
+                        <div class="ts-team">Oreos & Cream</div>
+                        <div class="ts-chips">★★★ 3× CHAMPION</div>
+                    </div>
+                    <div class="ts-statline">
+                        <div class="ts-stat"><span class="ts-stat-lbl">W–L</span><span class="ts-stat-val gold">68–32</span></div>
+                        <div class="ts-stat"><span class="ts-stat-lbl">PCT</span><span class="ts-stat-val">.680</span></div>
+                        <div class="ts-stat"><span class="ts-stat-lbl">PF</span><span class="ts-stat-val">14,820</span></div>
+                        <span class="ts-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="ts-card">
+                <div class="ts-stub">
+                    <div class="ts-stub-lbl">Admit</div>
+                    <div class="ts-stub-num">IV</div>
+                    <div class="ts-stub-foot">Mgr № 04</div>
+                </div>
+                <div class="ts-body">
+                    <span class="ts-conf skim">Skim</span>
+                    <div>
+                        <div class="ts-name">Mason H.</div>
+                        <div class="ts-team">Skim Squad</div>
+                        <div class="ts-chips">No chips yet</div>
+                    </div>
+                    <div class="ts-statline">
+                        <div class="ts-stat"><span class="ts-stat-lbl">W–L</span><span class="ts-stat-val gold">52–48</span></div>
+                        <div class="ts-stat"><span class="ts-stat-lbl">PCT</span><span class="ts-stat-val">.520</span></div>
+                        <div class="ts-stat"><span class="ts-stat-lbl">PF</span><span class="ts-stat-val">13,210</span></div>
+                        <span class="ts-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
