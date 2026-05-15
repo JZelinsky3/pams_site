@@ -100,7 +100,7 @@
             + '</div></div>';
 
         var leftSlot  = backLabel
-            ? '<button class="nav-back" onclick="history.back()">← Back</button>'
+            ? '<button class="nav-back" onclick="history.back()" aria-label="Go back"><svg viewBox="0 0 8 14" width="9" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 1 1 7 7 13"/></svg></button>'
             : dropMenu;
 
         var rightSlot = backLabel

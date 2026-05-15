@@ -801,16 +801,28 @@ table.data tbody tr.highlight {
     .hero-stat-value { font-size: clamp(4.5rem, 20vw, 11rem); }
     .hero-stat-detail { font-size: 1.05rem; }
 
-    /* Records grid — single column so stats have room to breathe */
+    /* Records grid — 2-column equal-size table on mobile */
     .stat-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         column-gap: 0;
+        row-gap: 0;
+        border: 1px solid var(--ink-line);
     }
-    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: 1px dotted var(--ink-line); }
-    .stat-grid .stat-row:last-child { border-bottom: none; }
-    .stat-row { gap: 1rem; padding: 1.25rem 0; }
-    .stat-row-num { font-size: 2.4rem; min-width: 5rem; }
-    .stat-row-name { font-size: 1rem; }
+    .stat-row {
+        display: flex;
+        flex-direction: column;
+        gap: .18rem;
+        padding: .6rem .55rem;
+        border-bottom: 1px solid var(--ink-line);
+        border-right: 1px solid var(--ink-line);
+        align-items: flex-start;
+    }
+    .stat-grid .stat-row:nth-child(2n) { border-right: none; }
+    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: none; }
+    .stat-row-num { font-size: 1.4rem; min-width: unset; text-align: left; }
+    .stat-row-label { font-size: .46rem; letter-spacing: .13em; }
+    .stat-row-name { font-size: .75rem; line-height: 1.25; }
+    .stat-row-detail { font-size: .5rem; }
 
     .stat-bar { grid-template-columns: 1fr; }
     .champion-seal { width: 150px; height: 150px; }
@@ -880,7 +892,7 @@ table.data tbody tr.highlight {
             <!-- populated by JS -->
         </div>
 
-        <!-- 6 (or more) smaller records — remaining ones from the array -->
+        <!-- 6 randomly chosen small records -->
         <div class="stat-grid" id="stat-grid">
             <!-- populated by JS -->
         </div>
@@ -917,7 +929,7 @@ table.data tbody tr.highlight {
         <a href="managers/index.html" class="toc-row">
             <div class="toc-chapter">Ch. II</div>
             <div class="toc-title-wrap">
-                <div class="toc-title">The <em>Managers.</em></div>
+                <div class="toc-title">The <em>Society.</em></div>
                 <div class="toc-desc">Twelve active profiles. Championship banners, streaks, and head-to-head records.</div>
             </div>
             <span class="toc-badge steel">12 Active</span>
@@ -1145,14 +1157,78 @@ const records = [
         prose: "<strong>Joey</strong> and <strong>Connie</strong> combined for 363.8 points in week three of 2020 — the highest-scoring matchup ever played in the league.",
         gameContext: "2020 · Week 3 · 188.50 — 175.30",
     },
+    {
+        label: "Longest Losing Streak",
+        value: "9",
+        name: "<em>Joey</em>'s nightmare",
+        detail: "W2 → W10 · 2023 season",
+        prose: "<strong>Joey</strong> dropped 9 in a row in 2023, from week 2 all the way through week 10 — the longest cold stretch any manager has endured in league history.",
+        gameContext: "2023 · W2 → W10 · 9 straight losses",
+    },
+    {
+        label: "Lowest Regular-Season Score",
+        value: "49.46",
+        name: "<em>Joey</em>, dark week",
+        detail: "2022 · W11 · vs Kyle (129.44)",
+        prose: "<strong>Joey</strong>'s 2022 \"Space Mav\" squad — the same team that went 12-2 — put up just 49.46 in week eleven, the lowest regular-season score in league history.",
+        gameContext: "2022 · Week 11 · 49.46 — 129.44 L",
+    },
+    {
+        label: "Best Regular Season Record",
+        value: "12-2",
+        name: "<em>Joey</em> \"Space Mav\"",
+        detail: "2022 · .857 win pct · seed 1",
+        prose: "<strong>Joey</strong>'s 2022 \"Space Mav\" team went 12-2 in the regular season — the best single-season record in league history — before a first-round playoff exit.",
+        gameContext: "2022 Regular Season · 12-2-0 · Seed 1",
+    },
+    {
+        label: "Worst Season Total",
+        value: "1,303",
+        name: "<em>Costigan</em> — 2019",
+        detail: "2019 · 100.2 ppg · 6-7 record",
+        prose: "<strong>Costigan</strong> scored just 1,303 points across his only season in 2019 — the lowest total in league history — and somehow still went 6-7.",
+        gameContext: "2019 Season · 1,303 PF · 100.2 ppg",
+    },
+    {
+        label: "Most Championship Appearances",
+        value: "3",
+        name: "<em>Connie</em>, always close",
+        detail: "2020, 2023, 2025 finals",
+        prose: "<strong>Connie</strong> has appeared in the championship game three times — more than anyone in league history. One ring in 2023, two heartbreaking runner-up finishes.",
+        gameContext: "2020 (Runner-up) · 2023 (Champion) · 2025 (Runner-up)",
+    },
+    {
+        label: "Second-Highest Season Total",
+        value: "2,339",
+        name: "<em>Connor</em> — \"CR North Indians\"",
+        detail: "2024 · 137.6 ppg · finished 3rd",
+        prose: "<strong>Connor</strong>'s 2024 squad piled up 2,339 points — second only to Joey's legendary 2021 Oreos — averaging 137.6 a game and finishing 3rd overall.",
+        gameContext: "2024 Season · 2,339 PF · 137.6 ppg",
+    },
+    {
+        label: "Worst Regular Season Record",
+        value: "3-10",
+        name: "<em>Kyle</em> — \"Fuk Joey\"",
+        detail: "2019 · .231 win pct · 13th place",
+        prose: "<strong>Kyle</strong>'s 2019 team \"Fuk Joey\" went just 3-10 in the regular season — the worst single-season record in league history — and finished 13th out of 14 teams.",
+        gameContext: "2019 Regular Season · 3-10-0 · 13th seed",
+    },
+    {
+        label: "Best Season Floor",
+        value: "112.3",
+        name: "<em>Isaac</em>, iron consistency",
+        detail: "2025 · worst week still scored 112",
+        prose: "<strong>Isaac</strong>'s worst single week in the 2025 season was 112.3 points — the highest floor any manager has ever had in a season. Exhausting to play against.",
+        gameContext: "2025 Season · Worst week: 112.3 pts",
+    },
     // Add more records here as needed — script picks them up automatically.
 ];
 
-// Pick one random record for hero, the rest go in the grid
+// Randomly shuffle, show 1 hero + 6 small from the full pool each load
 function renderRecords() {
-    const heroIdx = Math.floor(Math.random() * records.length);
-    const hero = records[heroIdx];
-    const others = records.filter((_, i) => i !== heroIdx);
+    const shuffled = [...records].sort(() => Math.random() - 0.5);
+    const hero  = shuffled[0];
+    const small = shuffled.slice(1, 7);
 
     // Render hero
     document.getElementById('hero-stat').innerHTML = `
@@ -1165,7 +1241,7 @@ function renderRecords() {
     `;
 
     // Render small records — no prose, no gameContext
-    document.getElementById('stat-grid').innerHTML = others.map(r => `
+    document.getElementById('stat-grid').innerHTML = small.map(r => `
         <div class="stat-row">
             <div class="stat-row-num">${r.value}</div>
             <div class="stat-row-body">

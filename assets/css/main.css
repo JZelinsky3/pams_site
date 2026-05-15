@@ -506,7 +506,8 @@ table.data tbody tr.highlight {
     .nav { padding: .7rem 1rem; gap: .5rem; }
     .nav-title { font-size: 1.2rem; }
     .nav-kicker { font-size: .5rem; letter-spacing: .2em; }
-    .nav-back, .nav-link { font-size: .62rem; letter-spacing: .12em; }
+    .nav-back { font-size: .62rem; letter-spacing: .12em; }
+    .nav-link { display: none; }
     .nav-links { display: none; }
     .hero { padding: 2.5rem 1rem 2rem; }
     .hero-sub { font-size: 1rem; }
