@@ -171,14 +171,21 @@
     color: var(--cream-mute); margin-bottom: .5rem;
 }
 .ts-chips {
-    font-family: var(--mono); font-weight: 700;
-    font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--gold);
-    display: flex; align-items: center; gap: .35rem;
+    display: flex; flex-direction: column; gap: .2rem;
     min-height: 1rem;
 }
-.ts-chips .ts-chip-star { color: var(--gold); font-size: .85rem; line-height: 1; }
-.ts-chips.empty { color: var(--cream-mute); font-weight: 400; }
+.ts-chip-line {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: .35rem;
+}
+.ts-chip-star { color: var(--gold); font-size: .85rem; line-height: 1; }
+.ts-chips.empty {
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
 
 .ts-statline {
     display: flex; gap: 1.1rem; align-items: center;
@@ -399,9 +406,11 @@ function renderCurrent() {
     grid.innerHTML = current.map((m, idx) => {
         let chipRow;
         if (m.championships > 0) {
-            const stars = Array(m.championships).fill('<span class="ts-chip-star">★</span>').join('');
-            const yrs = m.championship_seasons.join(', ');
-            chipRow = `<div class="ts-chips">${stars}<span>${m.championships}× Champion · ${yrs}</span></div>`;
+            const lines = [...m.championship_seasons]
+                .sort((a, b) => b - a)
+                .map(y => `<div class="ts-chip-line">* ${y} Champion</div>`)
+                .join('');
+            chipRow = `<div class="ts-chips">${lines}</div>`;
         } else {
             chipRow = `<div class="ts-chips empty">— No chips yet —</div>`;
         }

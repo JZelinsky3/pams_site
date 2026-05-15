@@ -430,12 +430,15 @@ body { font-family: var(--sans); background: var(--rv-bg); color: var(--rv-white
   background: rgba(14, 3, 3, 0.94) !important;
   border-bottom-color: rgba(220, 38, 38, 0.18) !important;
 }
-.nav-drop-menu {
-  background: rgba(12, 3, 3, 0.97) !important;
-  border-color: rgba(220, 38, 38, 0.15) !important;
-}
-.nav-drop-menu a {
-  border-bottom-color: rgba(220, 38, 38, 0.08) !important;
+:root {
+  --nav-drop-bg:           rgba(12,3,3,.97);
+  --nav-drop-border:       rgba(220,38,38,.15);
+  --nav-drop-text:         var(--rv-cream);
+  --nav-drop-text-mute:    var(--rv-grey-mid);
+  --nav-drop-accent:       var(--rv-red);
+  --nav-drop-hover-bg:     rgba(220,38,38,.1);
+  --nav-drop-sub-bg:       rgba(0,0,0,.35);
+  --nav-drop-accent-line:  rgba(220,38,38,.2);
 }
 .nav-kicker { color: rgba(220, 38, 38, 0.55) !important; }
 .nav-title em { color: var(--rv-red) !important; }

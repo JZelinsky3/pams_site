@@ -119,13 +119,36 @@
             + rightSlot;
 
         // Wire up toggle (global so onclick="" can find it)
+        function closeAllGroups(drop) {
+            if (!drop) return;
+            drop.querySelectorAll('.nav-drop-group.open').forEach(function (g) {
+                g.classList.remove('open');
+            });
+        }
         window.toggleDrop = function () {
             var drop = document.getElementById('nav-drop');
-            if (drop) drop.classList.toggle('open');
+            if (!drop) return;
+            drop.classList.toggle('open');
+            if (!drop.classList.contains('open')) closeAllGroups(drop);
         };
         document.addEventListener('click', function (e) {
             var drop = document.getElementById('nav-drop');
-            if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+            if (drop && !drop.contains(e.target)) {
+                drop.classList.remove('open');
+                closeAllGroups(drop);
+            }
+        });
+
+        // Tap-to-expand groups: opening one closes others; re-tapping
+        // the open group keeps it open (only switching closes it).
+        nav.querySelectorAll('.nav-drop-group-lbl').forEach(function (lbl) {
+            lbl.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var group = lbl.parentElement;
+                if (group.classList.contains('open')) return;
+                closeAllGroups(document.getElementById('nav-drop'));
+                group.classList.add('open');
+            });
         });
     }
 
