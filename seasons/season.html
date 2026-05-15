@@ -21,7 +21,15 @@
     align-items: end;
 }
 @media (max-width: 700px) {
-    .season-hero { grid-template-columns: 1fr; gap: 1.5rem; }
+    .season-hero { grid-template-columns: 1fr; gap: 1.25rem; }
+    .hero-right {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .5rem;
+        padding-bottom: 0;
+    }
 }
 .hero-kicker {
     font-family: var(--mono); font-weight: 700;
@@ -630,7 +638,6 @@ async function loadSeason() {
     const yearNavHTML = [
         prevYear ? `<a href="season.html?year=${prevYear}" class="hero-nav-year">← ${prevYear}</a>` : '',
         nextYear ? `<a href="season.html?year=${nextYear}" class="hero-nav-year">${nextYear} →</a>` : '',
-        `<a href="index.html" class="hero-nav-year">All seasons →</a>`,
     ].filter(Boolean).join('');
 
     const podiumDefs = [
