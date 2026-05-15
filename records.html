@@ -86,7 +86,6 @@ body { background: var(--rb-bg); }
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
 }
-@media (max-width: 700px) { .streak-grid { grid-template-columns: 1fr; } }
 
 .streak-board {
     background: var(--rb-card);
@@ -162,7 +161,6 @@ body { background: var(--rb-bg); }
     gap: 1rem;
 }
 @media (max-width: 900px) { .rec-cells { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 500px) { .rec-cells { grid-template-columns: 1fr; } }
 
 .rec-cell {
     background: var(--rb-card);
@@ -328,12 +326,51 @@ table.career-table tbody tr:hover { background: rgba(46,120,58,.06); }
 @media (max-width: 640px) {
     .page-header { padding: 2.5rem 1rem 1.5rem; }
     .section { padding: 0 1.25rem; }
-    .rec-cells { gap: .75rem; }
-    .rec-cell { padding: 1.1rem 1.25rem; }
+    .rec-cells { gap: .55rem; grid-template-columns: 1fr 1fr; }
+    .rec-cell { padding: .9rem .85rem; }
+    .rec-cell-label { font-size: .48rem; letter-spacing: .18em; margin-bottom: .45rem; }
+    .rec-cell-value { font-size: 1.55rem; margin-bottom: .35rem; }
+    .rec-cell-holder { font-size: .55rem; letter-spacing: .14em; line-height: 1.15; }
+    .rec-cell-detail { font-size: .5rem; letter-spacing: .08em; }
     .rec-section { margin-bottom: 2.5rem; }
 
-    /* Tabs scroll horizontally — already overflow-x:auto, but tighten paddings */
-    .career-tab { padding: .65rem 1rem; font-size: .6rem; letter-spacing: .16em; }
+    /* Section header: stack title + note so they don't run off the page */
+    .rec-section-header {
+        flex-wrap: wrap;
+        gap: .4rem .75rem;
+        padding-bottom: .75rem;
+        margin-bottom: 1rem;
+    }
+    .rec-section-num { font-size: .55rem; letter-spacing: .22em; }
+    .rec-section-title { font-size: 1.25rem; line-height: 1.1; }
+    .rec-section-note {
+        margin-left: 0; flex-basis: 100%;
+        font-size: .5rem; letter-spacing: .1em;
+    }
+
+    /* Streak boards stay side-by-side on mobile — scale everything down */
+    .streak-grid { gap: .55rem; }
+    .streak-board-header { padding: .65rem .65rem .55rem; gap: .35rem; }
+    .streak-board-icon { font-size: .8rem; }
+    .streak-board-title { font-size: .48rem; letter-spacing: .14em; }
+    .streak-row {
+        padding: .55rem .6rem;
+        grid-template-columns: 1.1rem 1fr auto;
+        gap: .35rem;
+    }
+    .streak-rank { font-size: .5rem; letter-spacing: .05em; }
+    .streak-name { font-size: .82rem; line-height: 1.05; }
+    .streak-when { font-size: .45rem; letter-spacing: .06em; margin-top: .15rem; }
+    .streak-count { font-size: 1.4rem; }
+    .streak-note { padding: .5rem .6rem; font-size: .45rem; letter-spacing: .08em; }
+
+    /* Tabs: tighter padding + small gap so adjacent labels don't collide */
+    .career-tabs { gap: .15rem; }
+    .career-tab {
+        padding: .55rem .75rem;
+        font-size: .55rem; letter-spacing: .12em;
+        line-height: 1.2;
+    }
 
     /* Tables: keep horizontal-scroll behavior but tighten cell padding so tables
        don't force more scroll than necessary. */
@@ -364,24 +401,36 @@ table.career-table tbody tr:hover { background: rgba(46,120,58,.06); }
         background-attachment: local, local, scroll, scroll;
     }
 
-    /* Chip grid: ensure cards comfortably fit on small phones */
+    /* Championship roll: 2-column grid, equal cells */
     .chips-grid { grid-template-columns: 1fr 1fr; }
-    .chip-entry { padding: 1.1rem 1.1rem; }
-    .chip-entry-name { font-size: 1.15rem; }
+    .chip-entry { padding: 1rem .9rem; gap: .3rem; }
+    .chip-entry-year { font-size: .52rem; letter-spacing: .22em; }
+    .chip-entry-name { font-size: 1rem; line-height: 1.1; }
+    .chip-entry-seasons { font-size: .5rem; letter-spacing: .1em; }
+    .chip-entry-prize { font-size: .7rem; }
+    .chip-star-icon { font-size: .95rem; }
 
     .rec-footnote { font-size: .5rem; letter-spacing: .1em; }
 }
 
 @media (max-width: 420px) {
     .section { padding: 0 1rem; }
-    .career-tab { padding: .55rem .85rem; font-size: .58rem; letter-spacing: .14em; }
+    .rec-cell { padding: .8rem .7rem; }
+    .rec-cell-value { font-size: 1.35rem; }
+    .career-tab {
+        padding: .5rem .6rem;
+        font-size: .52rem; letter-spacing: .1em;
+    }
     table.career-table th,
     table.career-table td { padding: .6rem .55rem; }
     table.career-table.spread th,
     table.career-table.spread td { padding-left: .8rem; padding-right: .8rem; }
     table.career-table.spread th.pre-gap,
     table.career-table.spread td.pre-gap { padding-left: 1.25rem; }
-    .chips-grid { grid-template-columns: 1fr; }
+    /* Keep 2-column on tiny screens too */
+    .chips-grid { grid-template-columns: 1fr 1fr; }
+    .chip-entry { padding: .85rem .7rem; }
+    .chip-entry-name { font-size: .9rem; }
 }
 </style>
 </head>
