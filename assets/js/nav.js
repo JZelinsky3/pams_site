@@ -139,10 +139,12 @@
             }
         });
 
-        // Tap-to-toggle groups: tapping an open group closes it; tapping
-        // a different group closes the previous and opens the new one.
+        // Tap-to-toggle groups (touch only — desktop keeps its hover behavior).
+        // Tapping an open group closes it; tapping a different group closes the
+        // previous and opens the new one.
         nav.querySelectorAll('.nav-drop-group-lbl').forEach(function (lbl) {
             lbl.addEventListener('click', function (e) {
+                if (!window.matchMedia('(hover: none)').matches) return;
                 e.stopPropagation();
                 var group = lbl.parentElement;
                 var wasOpen = group.classList.contains('open');
