@@ -139,15 +139,15 @@
             }
         });
 
-        // Tap-to-expand groups: opening one closes others; re-tapping
-        // the open group keeps it open (only switching closes it).
+        // Tap-to-toggle groups: tapping an open group closes it; tapping
+        // a different group closes the previous and opens the new one.
         nav.querySelectorAll('.nav-drop-group-lbl').forEach(function (lbl) {
             lbl.addEventListener('click', function (e) {
                 e.stopPropagation();
                 var group = lbl.parentElement;
-                if (group.classList.contains('open')) return;
+                var wasOpen = group.classList.contains('open');
                 closeAllGroups(document.getElementById('nav-drop'));
-                group.classList.add('open');
+                if (!wasOpen) group.classList.add('open');
             });
         });
     }
