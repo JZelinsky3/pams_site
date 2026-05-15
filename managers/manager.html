@@ -126,22 +126,26 @@
 
 .ledger-section { margin-bottom: 4rem; }
 .season-ledger,
-.h2h-table {
+.h2h-table,
+.top5-table {
     background: var(--ink-card);
     border: 1px solid var(--ink-line);
     overflow-x: auto;
 }
 .season-ledger table,
-.h2h-table table {
+.h2h-table table,
+.top5-table table {
     width: 100%; border-collapse: collapse;
     font-family: var(--sans);
 }
 .season-ledger thead,
-.h2h-table thead {
+.h2h-table thead,
+.top5-table thead {
     background: var(--ink-soft); border-bottom: 1px solid var(--ink-line);
 }
 .season-ledger th,
-.h2h-table th {
+.h2h-table th,
+.top5-table th {
     padding: .85rem 1rem;
     font-family: var(--mono); font-weight: 700;
     font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
@@ -149,9 +153,11 @@
     text-align: left; white-space: nowrap;
 }
 .season-ledger th.num,
-.h2h-table th.num { text-align: right; }
+.h2h-table th.num,
+.top5-table th.num { text-align: right; }
 .season-ledger td,
-.h2h-table td {
+.h2h-table td,
+.top5-table td {
     padding: 1rem;
     border-top: 1px solid var(--ink-line-soft);
     font-size: .9rem;
@@ -159,7 +165,33 @@
     vertical-align: middle;
 }
 .season-ledger td.num,
-.h2h-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.h2h-table td.num,
+.top5-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.top5-table td.rank {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .8rem;
+    color: var(--cream-mute);
+    width: 3rem;
+}
+.top5-table td.rank.gold { color: var(--gold); }
+.top5-table td.score {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.25rem;
+    color: var(--gold);
+}
+.top5-table td.opp {
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--cream);
+}
+.top5-table td.result {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .7rem; letter-spacing: .1em;
+}
+.top5-table td.result.win  { color: var(--gold); }
+.top5-table td.result.loss { color: var(--rust); }
+.top5-table tbody tr:hover { background: rgba(232, 200, 137, .03); }
 .season-ledger td.year {
     font-family: var(--serif); font-style: italic;
     font-size: 1.25rem;
@@ -210,6 +242,67 @@
     text-decoration: none;
 }
 .error-state a:hover { color: var(--gold-bright); }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    .profile-header { padding: 2.5rem 1rem 1.25rem; }
+    .profile-tagline { font-size: 1.05rem; }
+    .mini-seal { width: 70px; height: 70px; }
+
+    .stat-strip { grid-template-columns: repeat(2, 1fr); }
+    .strip-item {
+        padding: 1.1rem .75rem;
+        border-right: 1px solid var(--ink-line);
+        border-bottom: 1px solid var(--ink-line);
+    }
+    .strip-item:nth-child(2n) { border-right: none; }
+    .strip-item:nth-last-child(-n+2) { border-bottom: none; }
+    .strip-value { font-size: 1.55rem; }
+    .strip-label { font-size: .52rem; letter-spacing: .18em; }
+
+    .split-record { font-size: 2rem; }
+    .split-col { padding: 1.1rem 1.25rem; }
+
+    /* Tables: keep horizontal scroll, but tighten padding + type */
+    .season-ledger th,
+    .h2h-table th,
+    .top5-table th { padding: .65rem .6rem; font-size: .54rem; letter-spacing: .14em; }
+    .season-ledger td,
+    .h2h-table td,
+    .top5-table td { padding: .75rem .6rem; font-size: .82rem; }
+    .season-ledger td.year { font-size: 1rem; width: auto; }
+    .h2h-table td.opp { font-size: .95rem; width: auto; }
+    .top5-table td.score { font-size: 1rem; }
+    .top5-table td.opp { font-size: .9rem; }
+    .top5-table td.rank { width: 1.4rem; font-size: .7rem; }
+
+    /* Scroll hint */
+    .season-ledger,
+    .h2h-table,
+    .top5-table {
+        background-image:
+            linear-gradient(to right, var(--ink-card), var(--ink-card)),
+            linear-gradient(to right, var(--ink-card), var(--ink-card)),
+            linear-gradient(to right, rgba(0,0,0,.5), rgba(0,0,0,0)),
+            linear-gradient(to left,  rgba(0,0,0,.5), rgba(0,0,0,0));
+        background-position: left center, right center, left center, right center;
+        background-repeat: no-repeat;
+        background-size: 20px 100%, 20px 100%, 14px 100%, 14px 100%;
+        background-attachment: local, local, scroll, scroll;
+    }
+}
+
+@media (max-width: 420px) {
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+    .profile-tagline { font-size: .95rem; }
+    .strip-value { font-size: 1.4rem; }
+    .season-ledger th,
+    .h2h-table th,
+    .top5-table th { padding: .55rem .5rem; }
+    .season-ledger td,
+    .h2h-table td,
+    .top5-table td { padding: .65rem .5rem; font-size: .78rem; }
+}
 </style>
 </head>
 <body>
@@ -341,6 +434,16 @@ async function loadProfile() {
         return showError(`Couldn't load profile (${err.message}). Did you run build_data.py?`);
     }
 
+    let top5 = [];
+    try {
+        const res = await fetch('../data/manager_highs.json');
+        if (res.ok) {
+            const highs = await res.json();
+            const entry = highs.find(h => String(h.user_id) === String(userId));
+            if (entry && Array.isArray(entry.top5)) top5 = entry.top5;
+        }
+    } catch (_) { /* non-fatal */ }
+
     document.getElementById('nav-name').innerHTML = `${m.name} <em>·</em>`;
     document.title = `${m.name} · The Milk Society`;
 
@@ -436,6 +539,45 @@ async function loadProfile() {
         h2hHTML = `<p style="font-family: var(--serif); font-style: italic; color: var(--cream-mute); padding: 1rem;">No head-to-head data on file.</p>`;
     }
 
+    // Top 5 weeks
+    let top5HTML;
+    if (top5.length > 0) {
+        top5HTML = `
+            <div class="top5-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="num">#</th>
+                            <th class="num">Score</th>
+                            <th>Opponent</th>
+                            <th class="num">Opp Score</th>
+                            <th class="num">Result</th>
+                            <th class="num">Year</th>
+                            <th class="num">Week</th>
+                            <th>Team</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${top5.map((g, i) => `
+                            <tr>
+                                <td class="rank${i === 0 ? ' gold' : ''}">${i + 1}</td>
+                                <td class="num score">${g.score.toFixed(2)}</td>
+                                <td class="opp">${g.opp_name}</td>
+                                <td class="num">${g.opp_score.toFixed(2)}</td>
+                                <td class="num result ${g.result === 'W' ? 'win' : 'loss'}">${g.result}</td>
+                                <td class="num">${g.season}</td>
+                                <td class="num">W${g.week}</td>
+                                <td>${g.team || '—'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    } else {
+        top5HTML = `<p style="font-family: var(--serif); font-style: italic; color: var(--cream-mute); padding: 1rem;">No top performances on file.</p>`;
+    }
+
     document.getElementById('profile-body').innerHTML = `
         <div class="profile-header">
             <div class="profile-kicker">★ ${m.seasons_played} Seasons · ${m.championships} ${m.championships === 1 ? 'Chip' : 'Chips'} ★</div>
@@ -510,9 +652,18 @@ async function loadProfile() {
             ${ledgerHTML}
         </div>
 
+        <div class="section ledger-section">
+            <div class="section-header">
+                <span class="section-num">§ 03 · Top Performances</span>
+                <span class="section-title">Highest scoring weeks —</span>
+                <span class="section-meta">all-time top 5</span>
+            </div>
+            ${top5HTML}
+        </div>
+
         <div class="section">
             <div class="section-header">
-                <span class="section-num">§ 03 · Rivalries</span>
+                <span class="section-num">§ 04 · Rivalries</span>
                 <span class="section-title">Head-to-head —</span>
                 <span class="section-meta">all opponents</span>
             </div>

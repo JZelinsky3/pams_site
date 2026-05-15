@@ -7,9 +7,30 @@
 <link rel="stylesheet" href="assets/css/main.css">
 <style>
 /* ============================================================
-   RECORD BOOK
+   RECORD BOOK — Trophy Room Green
    ============================================================ */
 
+:root {
+    --rb-bg:         #0b1a0f;
+    --rb-soft:       #0e1f12;
+    --rb-card:       #112014;
+    --rb-card-hover: #152718;
+    --rb-line:       #1c3b22;
+    --rb-line-soft:  #172f1c;
+    --rb-mute:       #a1c6aa;
+}
+
+body { background: var(--rb-bg); }
+
+.site-glow {
+    background-image:
+        radial-gradient(circle at 18% 22%, rgba(46,120,58,.09) 0%, transparent 50%),
+        radial-gradient(circle at 82% 78%, rgba(232,200,137,.05) 0%, transparent 45%);
+}
+
+.nav { background: rgba(11,26,15,.95); border-bottom-color: var(--rb-line); }
+
+/* ── Page header ── */
 .page-header {
     text-align: center;
     padding: 3.5rem 1.5rem 2.5rem;
@@ -35,13 +56,11 @@
 }
 
 /* ─── Section chrome ─── */
-.rec-section {
-    margin-bottom: 4rem;
-}
+.rec-section { margin-bottom: 4rem; }
 .rec-section-header {
     display: flex; align-items: baseline; gap: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid var(--ink-line);
+    border-bottom: 2px solid var(--rb-line);
     margin-bottom: 1.5rem;
 }
 .rec-section-num {
@@ -58,7 +77,7 @@
     margin-left: auto; flex-shrink: 0;
     font-family: var(--mono);
     font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--cream-mute);
+    color: var(--rb-mute);
 }
 
 /* ─── Streak leaderboards ─── */
@@ -70,21 +89,21 @@
 @media (max-width: 700px) { .streak-grid { grid-template-columns: 1fr; } }
 
 .streak-board {
-    background: var(--ink-card);
-    border: 1px solid var(--ink-line);
+    background: var(--rb-card);
+    border: 1px solid var(--rb-line);
 }
 .streak-board-header {
     display: flex; align-items: center; gap: .75rem;
     padding: 1rem 1.25rem .85rem;
-    border-bottom: 1px solid var(--ink-line);
-    background: var(--ink-soft);
+    border-bottom: 1px solid var(--rb-line);
+    background: var(--rb-soft);
 }
 .streak-board-icon { font-size: 1rem; }
 .streak-board-title {
     font-family: var(--mono); font-weight: 700;
     font-size: .62rem; letter-spacing: .25em; text-transform: uppercase;
 }
-.streak-board.wins  .streak-board-title { color: var(--gold); }
+.streak-board.wins   .streak-board-title { color: var(--gold); }
 .streak-board.losses .streak-board-title { color: var(--rust); }
 
 .streak-row {
@@ -93,18 +112,18 @@
     align-items: center;
     gap: .75rem;
     padding: .85rem 1.25rem;
-    border-bottom: 1px solid var(--ink-line-soft);
+    border-bottom: 1px solid var(--rb-line-soft);
     transition: background .15s;
 }
 .streak-row:last-child { border-bottom: none; }
-.streak-row:hover { background: rgba(232,200,137,.03); }
+.streak-row:hover { background: rgba(46,120,58,.07); }
 
 .streak-rank {
     font-family: var(--mono); font-weight: 700;
     font-size: .6rem; letter-spacing: .1em;
-    color: var(--cream-mute); text-align: right;
+    color: var(--rb-mute); text-align: right;
 }
-.streak-rank.gold   { color: var(--gold); }
+.streak-rank.gold { color: var(--gold); }
 
 .streak-name-col { min-width: 0; }
 .streak-name {
@@ -115,7 +134,7 @@
 .streak-when {
     font-family: var(--mono);
     font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--cream-mute);
+    color: var(--rb-mute);
     margin-top: .2rem;
 }
 
@@ -124,16 +143,16 @@
     font-size: 2.4rem; line-height: 1; letter-spacing: -.04em;
     flex-shrink: 0;
 }
-.streak-board.wins  .streak-count { color: var(--gold); }
+.streak-board.wins   .streak-count { color: var(--gold); }
 .streak-board.losses .streak-count { color: var(--rust); }
 
 .streak-note {
     padding: .75rem 1.25rem;
     font-family: var(--mono);
     font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--cream-mute);
-    border-top: 1px dotted var(--ink-line);
-    background: var(--ink-soft);
+    color: var(--rb-mute);
+    border-top: 1px dotted var(--rb-line);
+    background: var(--rb-soft);
 }
 
 /* ─── Record cells grid ─── */
@@ -146,20 +165,20 @@
 @media (max-width: 500px) { .rec-cells { grid-template-columns: 1fr; } }
 
 .rec-cell {
-    background: var(--ink-card);
-    border: 1px solid var(--ink-line);
+    background: var(--rb-card);
+    border: 1px solid var(--rb-line);
     padding: 1.4rem 1.5rem;
     position: relative; overflow: hidden;
 }
 .rec-cell::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: var(--gold); opacity: .4;
+    background: var(--gold); opacity: .55;
 }
 .rec-cell-label {
     font-family: var(--mono); font-weight: 700;
     font-size: .55rem; letter-spacing: .25em; text-transform: uppercase;
-    color: var(--cream-mute); margin-bottom: .6rem;
+    color: var(--rb-mute); margin-bottom: .6rem;
 }
 .rec-cell-value {
     font-family: var(--serif); font-style: italic;
@@ -174,39 +193,37 @@
 .rec-cell-detail {
     font-family: var(--mono);
     font-size: .58rem; letter-spacing: .12em;
-    color: var(--cream-mute);
+    color: var(--rb-mute);
     margin-top: .2rem;
 }
 
 /* ─── Career ranked table ─── */
 .career-table-wrap {
-    background: var(--ink-card);
-    border: 1px solid var(--ink-line);
+    background: var(--rb-card);
+    border: 1px solid var(--rb-line);
     overflow-x: auto;
 }
-table.career-table {
-    width: 100%; border-collapse: collapse;
-}
+table.career-table { width: 100%; border-collapse: collapse; }
 table.career-table thead {
-    background: var(--ink-soft);
-    border-bottom: 1px solid var(--ink-line);
+    background: var(--rb-soft);
+    border-bottom: 1px solid var(--rb-line);
 }
 table.career-table th {
     padding: .8rem 1rem;
     font-family: var(--mono); font-weight: 700;
     font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--cream-mute); text-align: left; white-space: nowrap;
+    color: var(--rb-mute); text-align: left; white-space: nowrap;
 }
 table.career-table th.num { text-align: right; }
 table.career-table td {
     padding: .85rem 1rem;
-    border-top: 1px solid var(--ink-line-soft);
+    border-top: 1px solid var(--rb-line-soft);
     font-size: .88rem; color: var(--cream-soft);
     vertical-align: middle; white-space: nowrap;
 }
 table.career-table td.r {
     font-family: var(--mono); font-weight: 700;
-    font-size: .65rem; color: var(--cream-mute);
+    font-size: .65rem; color: var(--rb-mute);
     text-align: center; width: 2rem;
 }
 table.career-table td.r.gold { color: var(--gold); }
@@ -219,28 +236,30 @@ table.career-table td.hi {
     font-family: var(--serif); font-style: italic;
     font-size: 1rem; color: var(--gold);
 }
-table.career-table td.num {
-    text-align: right; font-variant-numeric: tabular-nums;
-}
-table.career-table tbody tr:hover { background: rgba(232,200,137,.03); }
+table.career-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.career-table th.pre-gap,
+table.career-table td.pre-gap { padding-left: 2.5rem; }
+table.career-table.spread th,
+table.career-table.spread td { padding-left: 2.25rem; padding-right: 2.25rem; }
+table.career-table.spread th.pre-gap,
+table.career-table.spread td.pre-gap { padding-left: 3.75rem; }
+table.career-table tbody tr:hover { background: rgba(46,120,58,.06); }
 
 /* ─── Championships banner ─── */
 .chips-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 0;
-    background: var(--ink-card);
-    border: 1px solid var(--ink-line);
+    background: var(--rb-card);
+    border: 1px solid var(--rb-line);
 }
 .chip-entry {
     padding: 1.4rem 1.5rem;
-    border-right: 1px solid var(--ink-line-soft);
-    border-bottom: 1px solid var(--ink-line-soft);
+    border-right: 1px solid var(--rb-line-soft);
+    border-bottom: 1px solid var(--rb-line-soft);
     display: flex; flex-direction: column; gap: .4rem;
 }
-.chip-entry-chips {
-    display: flex; gap: .25rem; align-items: center;
-}
+.chip-entry-chips { display: flex; gap: .25rem; align-items: center; }
 .chip-star-icon { font-size: 1.1rem; color: var(--gold); line-height: 1; }
 .chip-entry-name {
     font-family: var(--serif);
@@ -255,31 +274,55 @@ table.career-table tbody tr:hover { background: rgba(232,200,137,.03); }
 .chip-entry-record {
     font-family: var(--mono);
     font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--cream-mute);
+    color: var(--rb-mute);
     margin-top: .1rem;
 }
 
 .loading-state {
     text-align: center; padding: 4rem 2rem;
     font-family: var(--serif); font-style: italic;
-    color: var(--cream-mute);
+    color: var(--rb-mute);
 }
 
-/* ── Full-page gold override ── */
-body { background: var(--gold); }
-.site-glow, .site-grain { display: none; }
+/* ─── Career section tabs ─── */
+.career-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--rb-line);
+    margin-bottom: 1.5rem;
+    overflow-x: auto; scrollbar-width: none; gap: 0;
+}
+.career-tabs::-webkit-scrollbar { display: none; }
+.career-tab {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .63rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .75rem 1.35rem;
+    border: none; border-bottom: 2px solid transparent;
+    background: transparent; color: var(--rb-mute);
+    cursor: pointer; transition: color .15s, border-color .15s;
+    margin-bottom: -1px; white-space: nowrap; flex-shrink: 0;
+}
+.career-tab:hover { color: var(--cream); }
+.career-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.career-panel { display: none; }
+.career-panel.active { display: block; }
 
-.page-kicker { color: var(--gold-deep); }
-.page-title  { color: var(--ink); }
-.page-title em { color: var(--gold-deep); }
-.page-sub    { color: var(--ink-soft); }
-
-.rec-section-num   { color: var(--gold-deep); }
-.rec-section-title { color: var(--ink); }
-.rec-section-note  { color: var(--ink-soft); }
-.rec-section-header { border-bottom-color: rgba(14,22,32,.18); }
-
-.loading-state { color: var(--ink-soft); }
+/* ─── Championship roll extras ─── */
+.chip-entry-year {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--rb-mute);
+}
+.chip-entry-prize {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .8rem; letter-spacing: .08em;
+    color: var(--gold); margin-top: .1rem;
+}
+.rec-footnote {
+    margin-top: .75rem;
+    font-family: var(--mono);
+    font-size: .54rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--rb-mute);
+}
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
@@ -288,6 +331,57 @@ body { background: var(--gold); }
     .rec-cells { gap: .75rem; }
     .rec-cell { padding: 1.1rem 1.25rem; }
     .rec-section { margin-bottom: 2.5rem; }
+
+    /* Tabs scroll horizontally — already overflow-x:auto, but tighten paddings */
+    .career-tab { padding: .65rem 1rem; font-size: .6rem; letter-spacing: .16em; }
+
+    /* Tables: keep horizontal-scroll behavior but tighten cell padding so tables
+       don't force more scroll than necessary. */
+    table.career-table th,
+    table.career-table td { padding: .7rem .65rem; }
+    table.career-table th     { font-size: .55rem; letter-spacing: .14em; }
+    table.career-table td     { font-size: .82rem; }
+    table.career-table td.name-link a { font-size: .95rem; }
+    table.career-table td.hi  { font-size: .92rem; }
+    table.career-table td.r   { width: 1.4rem; font-size: .6rem; }
+    table.career-table th.pre-gap,
+    table.career-table td.pre-gap { padding-left: 1.25rem; }
+    table.career-table.spread th,
+    table.career-table.spread td { padding-left: 1rem; padding-right: 1rem; }
+    table.career-table.spread th.pre-gap,
+    table.career-table.spread td.pre-gap { padding-left: 1.6rem; }
+
+    /* Hint that table is scrollable */
+    .career-table-wrap {
+        background-image:
+            linear-gradient(to right, var(--rb-card), var(--rb-card)),
+            linear-gradient(to right, var(--rb-card), var(--rb-card)),
+            linear-gradient(to right, rgba(0,0,0,.5), rgba(0,0,0,0)),
+            linear-gradient(to left,  rgba(0,0,0,.5), rgba(0,0,0,0));
+        background-position: left center, right center, left center, right center;
+        background-repeat: no-repeat;
+        background-size: 20px 100%, 20px 100%, 14px 100%, 14px 100%;
+        background-attachment: local, local, scroll, scroll;
+    }
+
+    /* Chip grid: ensure cards comfortably fit on small phones */
+    .chips-grid { grid-template-columns: 1fr 1fr; }
+    .chip-entry { padding: 1.1rem 1.1rem; }
+    .chip-entry-name { font-size: 1.15rem; }
+
+    .rec-footnote { font-size: .5rem; letter-spacing: .1em; }
+}
+
+@media (max-width: 420px) {
+    .section { padding: 0 1rem; }
+    .career-tab { padding: .55rem .85rem; font-size: .58rem; letter-spacing: .14em; }
+    table.career-table th,
+    table.career-table td { padding: .6rem .55rem; }
+    table.career-table.spread th,
+    table.career-table.spread td { padding-left: .8rem; padding-right: .8rem; }
+    table.career-table.spread th.pre-gap,
+    table.career-table.spread td.pre-gap { padding-left: 1.25rem; }
+    .chips-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -340,11 +434,27 @@ body { background: var(--gold); }
 
 <script>
 
+const PRIZES = {
+    2025: '$413*',
+    2024: '$540',
+    2023: '$400',
+    2022: '$320',
+    2021: '$240',
+    2020: '$160',
+    2019: '$100',
+};
+
 async function load() {
     try {
-        const dirRes = await fetch('data/managers_directory.json');
+        const [dirRes, rbRes, mhRes] = await Promise.all([
+            fetch('data/managers_directory.json'),
+            fetch('data/record_book.json'),
+            fetch('data/manager_highs.json'),
+        ]);
         if (!dirRes.ok) throw new Error(`HTTP ${dirRes.status}`);
         const dir = await dirRes.json();
+        const recordBook   = rbRes.ok  ? await rbRes.json()  : null;
+        const managerHighs = mhRes.ok  ? await mhRes.json()  : [];
 
         const details = await Promise.all(
             dir.managers.map(m =>
@@ -354,16 +464,13 @@ async function load() {
             )
         );
 
-        // Merge directory data (win_pct, total_pf, wins/losses/ties, etc.)
-        // with detail data (season_ledger, streaks, high_score).
-        // Directory fields are the source of truth for career aggregates.
         const managers = dir.managers.map((dirMgr, i) => {
             const detail = details[i];
             if (!detail) return null;
-            return { ...detail, ...dirMgr };   // dirMgr wins on overlap
+            return { ...detail, ...dirMgr };
         }).filter(Boolean);
 
-        render(managers);
+        render(managers, recordBook, managerHighs);
     } catch (err) {
         document.getElementById('page-body').innerHTML =
             `<div class="loading-state" style="color:var(--rust);">
@@ -372,7 +479,6 @@ async function load() {
     }
 }
 
-// Parse "W-L-T" string → {w, l, t, pct}
 function parseRecord(str) {
     if (!str) return { w: 0, l: 0, t: 0, pct: 0 };
     const [w, l, t = 0] = str.split('-').map(Number);
@@ -383,10 +489,7 @@ function parseRecord(str) {
 function fmtPct(p) { return (p ?? 0).toFixed(3).replace(/^0\./, '.'); }
 function fmtPts(n) { return Math.round(n).toLocaleString(); }
 
-function render(managers) {
-    // ── Build all computed data ──────────────────────────────
-
-    // Single-season records: expand season ledgers
+function render(managers, recordBook, managerHighs) {
     const allSeasons = [];
     managers.forEach(m => {
         (m.season_ledger || []).forEach(s => {
@@ -401,24 +504,25 @@ function render(managers) {
                 reg_pf: s.reg_pf || 0,
                 total_pf: s.total_pf || 0,
                 high_score: s.high_week_score || 0,
+                high_week: s.high_week || null,
                 low_score: s.low_week_score || 0,
+                reg_avg: (reg.w + reg.l) > 0 ? s.reg_pf / (reg.w + reg.l) : 0,
                 final_rank: s.final_rank,
             });
         });
     });
 
-    // ── § 01 Streaks ───────────────────────────────────────
+    // § 01 Streaks
     const winStreaks  = managers
         .filter(m => m.longest_win_streak?.length > 0)
         .map(m => ({ name: m.name, user_id: m.user_id, ...m.longest_win_streak }))
         .sort((a, b) => b.length - a.length);
-
     const lossStreaks = managers
         .filter(m => m.longest_loss_streak?.length > 0)
         .map(m => ({ name: m.name, user_id: m.user_id, ...m.longest_loss_streak }))
         .sort((a, b) => b.length - a.length);
 
-    // ── § 02 Single-season bests ───────────────────────────
+    // § 02 Single season
     const mostWins   = [...allSeasons].sort((a, b) => b.reg_w - a.reg_w || b.reg_pct - a.reg_pct)[0];
     const bestPct    = [...allSeasons].filter(s => s.reg_w + s.reg_l >= 10)
                         .sort((a, b) => b.reg_pct - a.reg_pct)[0];
@@ -428,16 +532,26 @@ function render(managers) {
                         .sort((a, b) => a.reg_pct - b.reg_pct)[0];
     const mostLosses = [...allSeasons].sort((a, b) => b.reg_l - a.reg_l || a.reg_pct - b.reg_pct)[0];
 
-    // ── § 03 Career records ────────────────────────────────
+    // § 03 Career tabs data
     const active = managers.filter(m => m.is_current);
+    const byWins = [...active].sort((a, b) => b.wins - a.wins);
 
-    const byChips  = [...managers].filter(m => m.championships > 0)
-                      .sort((a, b) => b.championships - a.championships || b.win_pct - a.win_pct);
-    const byWinPct = [...active].filter(m => (m.wins + m.losses + (m.ties || 0)) >= 50)
-                      .sort((a, b) => b.win_pct - a.win_pct);
-    const byPF     = [...active].sort((a, b) => b.total_pf - a.total_pf);
-    const byWins   = [...active].sort((a, b) => b.wins - a.wins);
-    const byPlayoffs = [...active].sort((a, b) => b.playoff_appearances - a.playoff_appearances || b.wins - a.wins);
+    const top10Games    = recordBook?.full_book?.weekly?.highest_single_week_score || [];
+    const top10Matchups = recordBook?.full_book?.weekly?.highest_combined_score    || [];
+
+    const top10Seasons = [...allSeasons]
+        .filter(s => s.reg_pf > 0)
+        .sort((a, b) => b.reg_pf - a.reg_pf)
+        .slice(0, 10);
+
+    const byPlayoff = [...active]
+        .filter(m => (m.playoff_appearances || 0) > 0)
+        .sort((a, b) => (b.playoff_win_pct || 0) - (a.playoff_win_pct || 0) || b.playoff_appearances - a.playoff_appearances);
+
+    // § 04 Championship roll — year-by-year descending
+    const champByYear = allSeasons
+        .filter(s => s.final_rank === 1)
+        .sort((a, b) => b.year - a.year);
 
     document.getElementById('page-body').innerHTML = `
     <div class="section">
@@ -485,7 +599,7 @@ function render(managers) {
                 <span class="rec-section-title">Career Records</span>
                 <span class="rec-section-note">Active managers · all-time</span>
             </div>
-            ${buildCareerTable(byWinPct, byPF, byWins, byPlayoffs)}
+            ${buildCareerSection(byWins, top10Games, top10Seasons, top10Matchups, managerHighs, byPlayoff, active)}
         </div>
 
         <!-- § 04 CHAMPIONSHIPS -->
@@ -494,19 +608,7 @@ function render(managers) {
                 <span class="rec-section-num">§ 04</span>
                 <span class="rec-section-title">Championship Roll</span>
             </div>
-            <div class="chips-grid">
-                ${byChips.map(m => `
-                    <div class="chip-entry">
-                        <div class="chip-entry-chips">
-                            ${Array(m.championships).fill('<span class="chip-star-icon">★</span>').join('')}
-                        </div>
-                        <div class="chip-entry-name">
-                            <a href="managers/manager.html?id=${m.user_id}" style="color:inherit;text-decoration:none;">${m.name}</a>
-                        </div>
-                        <div class="chip-entry-seasons">${m.championship_seasons.join(' · ')}</div>
-                        <div class="chip-entry-record">${m.wins}–${m.losses} career · .${Math.round(m.win_pct * 1000)} win%</div>
-                    </div>`).join('')}
-            </div>
+            ${buildChampRoll(champByYear, managers)}
         </div>
 
     </div>`;
@@ -549,12 +651,48 @@ function buildCell(label, value, name, detail, userId) {
         </div>`;
 }
 
-function buildCareerTable(byWinPct, byPF, byWins, byPlayoffs) {
-    // Use win pct as the primary sort table, include other stats as columns
-    const managers = byWins;  // sorted by wins
+function buildCareerSection(byWins, top10Games, top10Seasons, top10Matchups, managerHighs, byPlayoff, active) {
+    return `
+        <div class="career-tabs">
+            <button class="career-tab active" onclick="switchCareerTab(this,'career-leaders')">Career Leaders</button>
+            <button class="career-tab" onclick="switchCareerTab(this,'top10-games')">Sunday Spectacles</button>
+            <button class="career-tab" onclick="switchCareerTab(this,'top10-seasons')">Dynasty Years</button>
+            <button class="career-tab" onclick="switchCareerTab(this,'top10-matchups')">Legendary Duels</button>
+            <button class="career-tab" onclick="switchCareerTab(this,'playoff-records')">Playoff Records</button>
+            <button class="career-tab" onclick="switchCareerTab(this,'h2h-records')">Head-to-Head</button>
+        </div>
+        <div class="career-panel active" id="career-leaders">
+            ${buildLeadersTable(byWins)}
+        </div>
+        <div class="career-panel" id="top10-games">
+            ${buildTop10GamesTable(top10Games)}
+        </div>
+        <div class="career-panel" id="top10-seasons">
+            ${buildTop10SeasonsTable(top10Seasons)}
+        </div>
+        <div class="career-panel" id="top10-matchups">
+            ${buildTop10MatchupsTable(top10Matchups)}
+        </div>
+        <div class="career-panel" id="playoff-records">
+            ${buildPlayoffTable(byPlayoff)}
+        </div>
+        <div class="career-panel" id="h2h-records">
+            ${buildH2HTable(active)}
+        </div>`;
+}
+
+window.switchCareerTab = function(btn, panelId) {
+    document.querySelectorAll('.career-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.career-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+};
+
+function buildLeadersTable(managers) {
     const rows = managers.map((m, i) => {
         const pct = fmtPct(m.win_pct);
-        const qualPct = (m.wins + m.losses + (m.ties || 0)) >= 50 ? `<span class="hi">${pct}</span>` : pct;
+        const qualPct = (m.wins + m.losses + (m.ties || 0)) >= 50
+            ? `<span class="hi">${pct}</span>` : pct;
         return `<tr>
             <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
             <td class="name-link"><a href="managers/manager.html?id=${m.user_id}">${m.name}</a></td>
@@ -566,7 +704,6 @@ function buildCareerTable(byWinPct, byPF, byWins, byPlayoffs) {
             <td class="num">${m.championships > 0 ? '★'.repeat(m.championships) : '—'}</td>
         </tr>`;
     }).join('');
-
     return `
         <div class="career-table-wrap">
             <table class="career-table">
@@ -583,6 +720,287 @@ function buildCareerTable(byWinPct, byPF, byWins, byPlayoffs) {
                 <tbody>${rows}</tbody>
             </table>
         </div>`;
+}
+
+function buildTop10GamesTable(top10) {
+    const rows = top10.map((g, i) => `<tr>
+        <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+        <td class="name-link"><a href="managers/manager.html?id=${g.user_id}">${g.owner}</a></td>
+        <td class="num hi">${g.score.toFixed(2)}</td>
+        <td class="num">${g.opp_score.toFixed(2)}</td>
+        <td class="num">${g.season}</td>
+        <td class="num pre-gap">W${g.week}</td>
+        <td class="pre-gap">${g.team_name || '—'}</td>
+    </tr>`).join('');
+    return `
+        <div class="career-table-wrap">
+            <table class="career-table spread">
+                <thead><tr>
+                    <th class="num">#</th>
+                    <th>Manager</th>
+                    <th class="num">Score</th>
+                    <th class="num">Opp Score</th>
+                    <th class="num">Year</th>
+                    <th class="num pre-gap">Week</th>
+                    <th class="pre-gap">Team</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+        <div class="rec-footnote">★ All individual game scores · No consolation playoffs</div>`;
+}
+
+function buildTop10SeasonsTable(top10) {
+    const rows = top10.map((s, i) => `<tr>
+        <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+        <td class="name-link"><a href="managers/manager.html?id=${s.user_id}">${s.name}</a></td>
+        <td class="num hi">${fmtPts(s.reg_pf)}</td>
+        <td class="num">${s.reg_avg ? s.reg_avg.toFixed(1) : '—'}</td>
+        <td class="num pre-gap">${s.year}</td>
+        <td class="pre-gap">${s.reg_w}–${s.reg_l}</td>
+        <td>${s.team || '—'}</td>
+    </tr>`).join('');
+    return `
+        <div class="career-table-wrap">
+            <table class="career-table spread">
+                <thead><tr>
+                    <th class="num">#</th>
+                    <th>Manager</th>
+                    <th class="num">Reg Season PF</th>
+                    <th class="num">Avg PPG</th>
+                    <th class="num pre-gap">Year</th>
+                    <th class="pre-gap">Record</th>
+                    <th>Team</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+        <div class="rec-footnote">★ Regular season points only · Avg PPG excludes playoffs</div>`;
+}
+
+function buildTop10MatchupsTable(top10) {
+    const rows = top10.map((g, i) => {
+        const winner    = g.result === 'W' ? g.owner     : g.opp_owner;
+        const winnerId  = g.result === 'W' ? g.user_id   : g.opp_user_id;
+        const winScore  = g.result === 'W' ? g.score     : g.opp_score;
+        const loser     = g.result === 'W' ? g.opp_owner : g.owner;
+        const loserId   = g.result === 'W' ? g.opp_user_id : g.user_id;
+        const loseScore = g.result === 'W' ? g.opp_score : g.score;
+        const combined  = (g.combined_score || (g.score + g.opp_score)).toFixed(2);
+        return `<tr>
+            <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+            <td class="num hi">${combined}</td>
+            <td class="gap-col"></td>
+            <td class="name-link"><a href="managers/manager.html?id=${winnerId}">${winner}</a> <span style="margin-left:1.2rem;color:var(--cream-soft);font-family:var(--serif);font-style:italic;font-size:.95rem">${winScore.toFixed(2)}</span></td>
+            <td>${loser} <span style="margin-left:1.2rem;color:var(--rb-mute);font-family:var(--serif);font-style:italic;font-size:.95rem">${loseScore.toFixed(2)}</span></td>
+            <td class="num">W${g.week}</td>
+            <td class="num">${g.season}</td>
+        </tr>`;
+    }).join('');
+    return `
+        <div class="career-table-wrap">
+            <table class="career-table" style="table-layout:fixed;width:100%">
+                <colgroup>
+                    <col style="width:5%">
+                    <col style="width:13%">
+                    <col style="width:14%">
+                    <col style="width:26%">
+                    <col style="width:26%">
+                    <col style="width:8%">
+                    <col style="width:8%">
+                </colgroup>
+                <thead><tr>
+                    <th class="num">#</th>
+                    <th class="num">Combined</th>
+                    <th class="gap-col"></th>
+                    <th>Winner</th>
+                    <th>Loser</th>
+                    <th class="num">Week</th>
+                    <th class="num">Year</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+        <div class="rec-footnote">★ Highest combined score matchups · All reg season + playoff games</div>`;
+}
+
+function buildManagerHighsTable(managerHighs) {
+    if (!managerHighs?.length) return '<div class="rec-footnote">No data available.</div>';
+    const cards = managerHighs.map(m => {
+        const rows = (m.top5 || []).map((g, i) => `<tr>
+            <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+            <td class="num hi">${g.score.toFixed(2)}</td>
+            <td class="num">${g.opp_score.toFixed(2)}</td>
+            <td>${g.opp_name}</td>
+            <td class="num">${g.season}</td>
+            <td class="num">W${g.week}</td>
+        </tr>`).join('');
+        const badge = m.is_current ? '' : ' <span style="font-size:.55rem;color:var(--rb-mute);letter-spacing:.1em">FORMER</span>';
+        return `
+            <div class="career-table-wrap" style="margin-bottom:1rem">
+                <div style="padding:.7rem 1rem .6rem;background:var(--rb-soft);border-bottom:1px solid var(--rb-line);font-family:var(--serif);font-size:1rem;color:var(--cream);">
+                    <a href="managers/manager.html?id=${m.user_id}" style="color:inherit;text-decoration:none;">${m.name}</a>${badge}
+                </div>
+                <table class="career-table">
+                    <thead><tr>
+                        <th class="num">#</th>
+                        <th class="num">Score</th>
+                        <th class="num">Opp</th>
+                        <th>Opponent</th>
+                        <th class="num">Year</th>
+                        <th class="num">Week</th>
+                    </tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>`;
+    }).join('');
+    return `<div>${cards}</div>
+        <div class="rec-footnote">★ Each manager's top 5 individual game scores all-time · All weeks including playoffs</div>`;
+}
+
+function buildPlayoffTable(managers) {
+    const rows = managers.map((m, i) => {
+        const pr = parseRecord(m.playoff_record || '0-0-0');
+        const pct = pr.w + pr.l + pr.t > 0
+            ? fmtPct((pr.w + pr.t * 0.5) / (pr.w + pr.l + pr.t)) : '—';
+        return `<tr>
+            <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+            <td class="name-link"><a href="managers/manager.html?id=${m.user_id}">${m.name}</a></td>
+            <td class="num">${m.playoff_record || '—'}</td>
+            <td class="num hi">${pct}</td>
+            <td class="num">${fmtPts(m.playoff_pf || 0)}</td>
+            <td class="num">${fmtPts(m.playoff_pa || 0)}</td>
+            <td class="num">${m.playoff_appearances}</td>
+            <td class="num">${m.championships > 0 ? '★'.repeat(m.championships) : '—'}</td>
+        </tr>`;
+    }).join('');
+    return `
+        <div class="career-table-wrap">
+            <table class="career-table">
+                <thead><tr>
+                    <th class="num">#</th>
+                    <th>Manager</th>
+                    <th class="num">Record</th>
+                    <th class="num">Win %</th>
+                    <th class="num">PF</th>
+                    <th class="num">PA</th>
+                    <th class="num">Appearances</th>
+                    <th class="num">Chips</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+        <div class="rec-footnote">★ Sorted by playoff win % · Min. 1 appearance</div>`;
+}
+
+function buildChampRoll(champByYear, managers) {
+    const cards = champByYear.map(c => {
+        const mgr = managers.find(m => m.user_id === c.user_id);
+        const totalChips = mgr?.championships || 1;
+        const prize = PRIZES[c.year] || '—';
+        return `
+            <div class="chip-entry">
+                <div class="chip-entry-year">${c.year}</div>
+                <div class="chip-entry-chips">
+                    ${Array(totalChips).fill('<span class="chip-star-icon">★</span>').join('')}
+                </div>
+                <div class="chip-entry-name">
+                    <a href="managers/manager.html?id=${c.user_id}" style="color:inherit;text-decoration:none;">${c.name}</a>
+                </div>
+                <div class="chip-entry-seasons">${c.team || ''}</div>
+                <div class="chip-entry-prize">${prize}</div>
+            </div>`;
+    }).join('');
+    return `
+        <div class="chips-grid">${cards}</div>
+        <div class="rec-footnote">★ Icons = career championships through that season · * 2025 payout pending final league accounting</div>`;
+}
+
+function buildH2HTable(managers) {
+    const rows = managers.map(m => {
+        if (!m.h2h || m.h2h.length === 0) return null;
+
+        let totalW = 0, totalL = 0, totalT = 0;
+        let bestPct = -1, bestName = '—', worstPct = 2, worstName = '—';
+
+        m.h2h.forEach(opp => {
+            const r = parseRecord(opp.total_record);
+            totalW += r.w; totalL += r.l; totalT += r.t;
+            if (opp.total_games >= 4) {
+                if (r.pct > bestPct)  { bestPct  = r.pct;  bestName  = `${opp.opp_name} (${r.w}-${r.l})`; }
+                if (r.pct < worstPct) { worstPct = r.pct;  worstName = `${opp.opp_name} (${r.w}-${r.l})`; }
+            }
+        });
+
+        const total = totalW + totalL + totalT;
+        const pct = total > 0 ? fmtPct((totalW + totalT * 0.5) / total) : '—';
+        const i = managers.indexOf(m);
+        return `<tr>
+            <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+            <td class="name-link"><a href="managers/manager.html?id=${m.user_id}">${m.name}</a></td>
+            <td class="num">${totalW}–${totalL}</td>
+            <td class="num hi">${pct}</td>
+            <td>${bestName}</td>
+            <td>${worstName}</td>
+        </tr>`;
+    }).filter(Boolean);
+
+    const sorted = [...managers]
+        .filter(m => m.h2h?.length > 0)
+        .map(m => {
+            let w = 0, l = 0, t = 0;
+            m.h2h.forEach(o => { const r = parseRecord(o.total_record); w += r.w; l += r.l; t += r.t; });
+            const total = w + l + t;
+            const pct = total > 0 ? (w + t * 0.5) / total : 0;
+            return { ...m, h2h_w: w, h2h_l: l, h2h_pct: pct };
+        })
+        .sort((a, b) => b.h2h_pct - a.h2h_pct);
+
+    const sortedRows = sorted.map((m, i) => {
+        let bestPct = -1, bestName = '—', worstPct = 2, worstName = '—';
+        m.h2h.forEach(opp => {
+            const r = parseRecord(opp.total_record);
+            if (opp.total_games >= 4) {
+                if (r.pct > bestPct)  { bestPct  = r.pct;  bestName  = `${opp.opp_name} (${r.w}-${r.l})`; }
+                if (r.pct < worstPct) { worstPct = r.pct;  worstName = `${opp.opp_name} (${r.w}-${r.l})`; }
+            }
+        });
+        return `<tr>
+            <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
+            <td class="name-link"><a href="managers/manager.html?id=${m.user_id}">${m.name}</a></td>
+            <td class="num">${m.h2h_w}–${m.h2h_l}</td>
+            <td class="num hi">${fmtPct(m.h2h_pct)}</td>
+            <td class="gap-col"></td>
+            <td>${bestName}</td>
+            <td>${worstName}</td>
+        </tr>`;
+    }).join('');
+
+    return `
+        <div class="career-table-wrap">
+            <table class="career-table" style="table-layout:fixed;width:100%">
+                <colgroup>
+                    <col style="width:5%">
+                    <col style="width:17%">
+                    <col style="width:12%">
+                    <col style="width:10%">
+                    <col style="width:14%">
+                    <col style="width:21%">
+                    <col style="width:21%">
+                </colgroup>
+                <thead><tr>
+                    <th class="num">#</th>
+                    <th>Manager</th>
+                    <th class="num">Record</th>
+                    <th class="num">Win %</th>
+                    <th class="gap-col"></th>
+                    <th>Best Matchup</th>
+                    <th>Toughest Matchup</th>
+                </tr></thead>
+                <tbody>${sortedRows}</tbody>
+            </table>
+        </div>
+        <div class="rec-footnote">★ All-time reg season + qualifying playoff matchups vs all 11 managers · Best/Worst min. 4 games</div>`;
 }
 
 load();

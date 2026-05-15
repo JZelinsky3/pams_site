@@ -62,7 +62,8 @@
       "total_pf": 1874.62,
       "avg_ppg": 133.9,
       "high_week_score": 193.88,
-      "low_week_score": 98.74
+      "low_week_score": 98.74,
+      "high_week": 12
     },
     {
       "year": 2021,
@@ -142,7 +143,8 @@
       "total_pf": 2084.76,
       "avg_ppg": 130.3,
       "high_week_score": 192.8,
-      "low_week_score": 95.4
+      "low_week_score": 95.4,
+      "high_week": 16
     }
   ],
   "h2h": [

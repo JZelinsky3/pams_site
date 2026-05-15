@@ -124,7 +124,8 @@
       "total_pf": 2339.24,
       "avg_ppg": 137.6,
       "high_week_score": 189.52,
-      "low_week_score": 104.1
+      "low_week_score": 104.1,
+      "high_week": 4
     },
     {
       "year": 2025,
@@ -140,7 +141,8 @@
       "total_pf": 1902.42,
       "avg_ppg": 135.89,
       "high_week_score": 187.72,
-      "low_week_score": 21.08
+      "low_week_score": 21.08,
+      "high_week": 12
     }
   ],
   "h2h": [

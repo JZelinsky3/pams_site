@@ -23,7 +23,7 @@
   "avg_ppg": 129.01,
   "longest_win_streak": {
     "length": 4,
-    "when": "W4 2019 → W7 2019"
+    "when": "W4 2019 \u2192 W7 2019"
   },
   "longest_loss_streak": {
     "length": 0,
@@ -44,7 +44,8 @@
       "total_pf": 2064.2,
       "avg_ppg": 129.01,
       "high_week_score": 192.44,
-      "low_week_score": 90.76
+      "low_week_score": 90.76,
+      "high_week": 5
     }
   ],
   "h2h": []

@@ -46,7 +46,8 @@
       "total_pf": 2060.0,
       "avg_ppg": 137.33,
       "high_week_score": 191.76,
-      "low_week_score": 78.64
+      "low_week_score": 78.64,
+      "high_week": 1
     },
     {
       "year": 2020,
@@ -62,7 +63,8 @@
       "total_pf": 2226.14,
       "avg_ppg": 139.13,
       "high_week_score": 199.76,
-      "low_week_score": 86.26
+      "low_week_score": 86.26,
+      "high_week": 7
     },
     {
       "year": 2021,
@@ -78,7 +80,8 @@
       "total_pf": 2417.12,
       "avg_ppg": 142.18,
       "high_week_score": 189.64,
-      "low_week_score": 108.72
+      "low_week_score": 108.72,
+      "high_week": 11
     },
     {
       "year": 2022,

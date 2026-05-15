@@ -709,6 +709,31 @@ table.data tbody tr.highlight {
     color: #c08060;
     background: rgba(168, 112, 80, .08);
 }
+.toc-badge.ember {
+    border-color: rgba(200, 168, 48, .35);
+    color: #d4bc60;
+    background: rgba(200, 168, 48, .08);
+}
+.toc-badge.violet {
+    border-color: rgba(154, 130, 184, .35);
+    color: #b09ad8;
+    background: rgba(154, 130, 184, .08);
+}
+.toc-badge.teal {
+    border-color: rgba(90, 154, 150, .35);
+    color: #6abdb8;
+    background: rgba(90, 154, 150, .08);
+}
+.toc-badge.rose {
+    border-color: #b8688059;
+    color: #d494a8;
+    background: #b8688014;
+}
+.toc-badge.fire {
+    border-color: #b3606559;
+    color: #d25555;
+    background: #b25e6214;
+}
 .toc-arrow {
     color: var(--gold);
     font-family: var(--serif);
@@ -922,7 +947,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">All-Time <em>Standings.</em></div>
                 <div class="toc-desc">Every manager's career record, split by regular season and playoffs.</div>
             </div>
-            <span class="toc-badge alert">2025 Live</span>
+            <span class="toc-badge rose">History</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -962,7 +987,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">Weekly <em>Pick'ems.</em></div>
                 <div class="toc-desc">Pick the winner of every matchup each week. Login with your name and PIN — same accounts as the old site.</div>
             </div>
-            <span class="toc-badge alert">2026 Live</span>
+            <span class="toc-badge ember">2026 Live</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -972,7 +997,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">Power <em>Rankings.</em></div>
                 <div class="toc-desc">Auto-calculated each week using record, points for, efficiency, recent form, and 7-season history.</div>
             </div>
-            <span class="toc-badge steel">Formula</span>
+            <span class="toc-badge violet">Formula</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -982,7 +1007,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">Draft <em>History.</em></div>
                 <div class="toc-desc">Every pick from every draft since 2019. Round-by-round breakdowns across all seven seasons.</div>
             </div>
-            <span class="toc-badge sage">Archive</span>
+            <span class="toc-badge teal">Archive</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -992,7 +1017,7 @@ table.data tbody tr.highlight {
                 <div class="toc-title">The <em>Rivalries.</em></div>
                 <div class="toc-desc">Six assigned feuds. All-time head-to-head records, dominance bars, and key moments.</div>
             </div>
-            <span class="toc-badge warm">6 Feuds</span>
+            <span class="toc-badge fire">6 Feuds</span>
             <div class="toc-arrow">→</div>
         </a>
 
@@ -1193,7 +1218,7 @@ const records = [
         label: "Most Championship Appearances",
         value: "3",
         name: "<em>Connie</em>, always close",
-        detail: "2020, 2023, 2025 finals",
+        detail: "2020 · ★ 2023 · 2025 finals",
         prose: "<strong>Connie</strong> has appeared in the championship game three times — more than anyone in league history. One ring in 2023, two heartbreaking runner-up finishes.",
         gameContext: "2020 (Runner-up) · 2023 (Champion) · 2025 (Runner-up)",
     },
