@@ -106,11 +106,16 @@ function showPreseason() {
 // ── Views ─────────────────────────────────────────────────────────────────
 function setActive(weekId) {
   state.activeWeekId = weekId;
+  // NOTE: the CSS selector is .week[data-active="true"] (literal string),
+  // so we set the attribute value explicitly. toggleAttribute would write
+  // an empty string and never match the selector.
   document.querySelectorAll(".pe-tab").forEach(x => {
-    x.toggleAttribute("data-active", x.dataset.week === weekId);
+    if (x.dataset.week === weekId) x.setAttribute("data-active", "true");
+    else x.removeAttribute("data-active");
   });
   document.querySelectorAll(".week").forEach(x => {
-    x.toggleAttribute("data-active", x.dataset.week === weekId);
+    if (x.dataset.week === weekId) x.setAttribute("data-active", "true");
+    else x.removeAttribute("data-active");
   });
   state.pending = { picks: {}, hl: {} };
   updateSubmitEnabled();

@@ -8,15 +8,16 @@
   <link rel="stylesheet" href="./pickems.css" />
 </head>
 <body>
-  <div class="site-glow" aria-hidden="true"></div>
-
-  <nav class="nav">
-    <button class="nav-back" onclick="history.back()">← Back</button>
-    <div class="nav-center">
-      <div class="nav-kicker">THE LAKESIDE LEAGUE · 2026</div>
-      <a href="../index.html" class="nav-title">Weekly <em>Pick'ems.</em></a>
+  <!-- ── MASTHEAD NAV ── -->
+  <nav class="pe-nav">
+    <div class="pe-nav-inner">
+      <button class="pe-nav-back" onclick="history.back()" aria-label="Back">← Back</button>
+      <div class="pe-nav-center">
+        <a href="../index.html" class="pe-nav-title">Weekly <em>Pick'ems.</em></a>
+        <div class="pe-nav-kicker">THE LAKESIDE LEAGUE · 2026</div>
+      </div>
+      <button id="recordsBtn" class="pe-nav-records" type="button">Records</button>
     </div>
-    <button id="recordsBtn" class="nav-link pe-records-btn" type="button">Records</button>
   </nav>
 
   <div class="pe-app">
