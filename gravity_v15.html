@@ -1,10 +1,13 @@
-
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gravity</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#111)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#111}
 #wrap{max-width:520px;margin:0 auto;user-select:none;-webkit-user-select:none}
 canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;text-align:center;min-height:600px}
@@ -12,8 +15,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #e5e7eb}
 .tval{font-size:19px;font-weight:600;letter-spacing:-0.5px}
 .tlabel{font-size:10px;color:#6b7280;margin-top:1px}
-.iconbtn{width:32px;height:32px;border-radius:50%;border:1px solid #e5e7eb;background:#f9fafb;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#111;transition:background .12s}
-.iconbtn:hover{background:#f3f4f6}
+.iconbtn{width:32px;height:32px;border-radius:50%;border:1px solid #e5e7eb;background:#f9fafb;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#111}
 .hint{font-size:11px;color:#9ca3af;text-align:center;padding:4px 8px;border-bottom:1px solid #f3f4f6}
 .mw{height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden}
 .mf{height:100%;border-radius:3px;transition:width .3s,background .3s}
@@ -29,72 +31,86 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 .tabs{display:flex;border-bottom:1px solid #e5e7eb;width:100%}
 .tab{flex:1;padding:10px;font-size:13px;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;transition:all .15s}
 .tab.on{color:#111;border-bottom-color:#111;font-weight:600}
-.lb-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;font-size:13px;margin-bottom:4px;background:#f9fafb}
+.lb-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-size:13px;margin-bottom:3px;background:#f9fafb}
 .lb-row.you{background:#eff6ff;border:1px solid #bfdbfe}
-.lb-rank{width:24px;font-weight:700;color:#6b7280;font-size:12px}
-.lb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.lb-name{flex:1;font-weight:600}
-.lb-score{font-weight:700;color:#111}
-#pause-overlay,#countdown-overlay{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:10}
+.lb-rank{width:22px;font-weight:700;color:#6b7280;font-size:12px}
+.lb-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.lb-name{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-score{font-weight:700;color:#111;font-size:12px}
+#pause-overlay,#countdown-overlay{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;flex-direction:column;z-index:10}
 #pause-overlay.show,#countdown-overlay.show{display:flex}
 .overlay-box{background:#1e293b;border-radius:20px;padding:28px 32px;text-align:center;min-width:230px}
 .ot{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
 .os{font-size:13px;color:#94a3b8;margin-bottom:18px}
-.overlay-btn{width:100%;padding:11px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;margin-bottom:8px;transition:transform .1s}
-.overlay-btn:active{transform:scale(.97)}
+.overlay-btn{width:100%;padding:11px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;margin-bottom:8px}
 .overlay-btn-primary{background:#6366F1;color:#fff}
 .overlay-btn-secondary{background:#334155;color:#f1f5f9}
-#countdown-num{font-size:80px;font-weight:700;color:#fff;letter-spacing:-4px;animation:cpulse 1s ease}
+#countdown-num{font-size:80px;font-weight:700;color:#fff;animation:cpulse 1s ease}
 @keyframes cpulse{0%{transform:scale(1.4);opacity:.4}100%{transform:scale(1);opacity:1}}
-#flash-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+#flash-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:0}
 .fp{position:absolute;font-size:13px;font-weight:600;pointer-events:none;animation:fp .75s ease forwards;white-space:nowrap;transform:translateX(-50%)}
 @keyframes fp{0%{opacity:1;top:var(--fy)}100%{opacity:0;top:calc(var(--fy) - 42px)}}
-/* bomb full-screen flash */
-#bomb-flash{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:8;display:none;flex-direction:column;align-items:center;justify-content:center;gap:0}
-#bomb-flash.show{display:flex}
-#bomb-flash-bg{position:absolute;top:0;left:0;width:100%;height:100%;background:#000}
-#bomb-flash-text{position:relative;z-index:9;font-size:52px;font-weight:900;color:#DC2626;letter-spacing:2px;text-shadow:0 0 30px #DC2626,0 0 60px #DC262688;animation:bombtxt .22s ease infinite alternate}
-@keyframes bombtxt{0%{transform:scale(1);opacity:1}100%{transform:scale(1.08);opacity:0.85}}
+#bomb-flash{display:none !important; font-family: Georgia, 'Times New Roman', Times, serif;}
+.bomb-life{display:inline-block;font-size:16px;margin:0 1px;transition:opacity .2s}
+.bomb-life.lost{opacity:0.2}
+/* BOMB Flash Retro Style */
+#bomb-flash-text {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 58px;
+    font-weight: 400;
+    letter-spacing: 6px;
+    color: white;
+    text-shadow: 
+        -3px 0 0 #fdff2a,
+        -6px 0 0 #df4a42,
+        3px 0 0 #91fcfe,
+        6px 0 0 #4405fc;
+    text-align: center;
+    animation: retro-blink 0.8s steps(4, start) infinite;
+    image-rendering: pixelated;
+}
+
+@keyframes retro-blink {
+    to { visibility: hidden; }
+}
 </style>
 </head>
 <body>
 <div id="wrap">
 
 <!-- HOME -->
-<div id="sc-home" class="screen on" style="padding:0;min-height:640px;justify-content:flex-start">
+<div id="sc-home" style="display:none;flex-direction:column;min-height:640px">
   <div style="padding:24px 20px 16px;width:100%;text-align:center">
     <div style="font-size:36px;font-weight:800;letter-spacing:-2px;margin-bottom:4px">Gravity</div>
     <div style="font-size:13px;color:#6b7280">Guide. Stack. Merge. Survive.</div>
   </div>
   <div style="display:flex;gap:10px;padding:0 16px 16px;width:100%">
     <div class="home-stat"><div class="home-stat-v" id="h-best">0</div><div class="home-stat-l">Best score</div></div>
-    <div class="home-stat"><div class="home-stat-v" id="h-played">0</div><div class="home-stat-l">Games played</div></div>
+    <div class="home-stat"><div class="home-stat-v" id="h-played">0</div><div class="home-stat-l">Games</div></div>
     <div class="home-stat"><div class="home-stat-v" id="h-high">—</div><div class="home-stat-l">Highest tile</div></div>
   </div>
-  <div style="width:100%;padding:0 16px 12px">
+  <div style="padding:0 16px 14px;width:100%">
     <button class="btn" style="width:100%;font-size:16px;padding:14px" onclick="startGame()">▶ Play</button>
   </div>
-  <div class="tabs" id="home-tabs">
+  <div class="tabs">
     <button class="tab on" onclick="showTab('how')">How to play</button>
     <button class="tab" onclick="showTab('lb')">Leaderboard</button>
     <button class="tab" onclick="showTab('settings')">Settings</button>
   </div>
-  <div id="tab-how" style="padding:16px;width:100%;text-align:left">
+  <div id="tab-how" style="padding:16px;width:100%;text-align:left;overflow-y:auto">
     <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:20px;flex-shrink:0">✏️</div><div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Draw lines</div><div style="font-size:12px;color:#6b7280">Hold and drag to redirect a falling ball. One line per ball dropped, up to 4 banked.</div></div></div>
-      <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:20px;flex-shrink:0">🎯</div><div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Land on the platform</div><div style="font-size:12px;color:#6b7280">The platform slides left and right. Miss it and your merge meter drains.</div></div></div>
-      <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:20px;flex-shrink:0">🔢</div><div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Merge same numbers</div><div style="font-size:12px;color:#6b7280">3+3=6, 6+6=12… Only identical values merge. A glowing arc appears between nearby matches — they pull together gently.</div></div></div>
-      <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:20px;flex-shrink:0">📦</div><div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Manage the stack</div><div style="font-size:12px;color:#6b7280">Balls lock in place on landing. Stack too high = game over. Merges clear space.</div></div></div>
-      <div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:20px;flex-shrink:0">☠️</div><div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Dodge bombs</div><div style="font-size:12px;color:#6b7280">Screen flashes black + red when a bomb drops. Redirect it off the edge fast.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">✏️</span><div><b style="font-size:13px">Draw lines</b><div style="font-size:12px;color:#6b7280;margin-top:2px">Drag to redirect falling balls. 1 line per ball dropped, up to 4 banked. Lines fade fast.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🎯</span><div><b style="font-size:13px">Land on platform</b><div style="font-size:12px;color:#6b7280;margin-top:2px">The platform slides left-right. Miss it and your merge timer drains faster.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🔢</span><div><b style="font-size:13px">Merge same numbers</b><div style="font-size:12px;color:#6b7280;margin-top:2px">3+3=6, 6+6=12… Glowing arc appears between nearby matches. Merging resets the timer.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">☠️</span><div><b style="font-size:13px">Dodge bombs</b><div style="font-size:12px;color:#6b7280;margin-top:2px">Background flashes when a bomb drops. Redirect it off the edge. 3 bombs hit = game over.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">⏱️</span><div><b style="font-size:13px">Merge timer</b><div style="font-size:12px;color:#6b7280;margin-top:2px">If timer runs out without a merge, game over. Any merge resets it to full.</div></div></div>
     </div>
   </div>
-  <div id="tab-lb" style="padding:16px;width:100%;display:none">
-    <div style="font-size:12px;color:#6b7280;margin-bottom:10px;text-align:left">Your best runs</div>
+  <div id="tab-lb" style="padding:16px;width:100%;display:none;overflow-y:auto">
     <div id="lb-list"></div>
-    <div style="margin-top:12px;font-size:11px;color:#9ca3af;text-align:center">Play more to fill the leaderboard</div>
   </div>
   <div id="tab-settings" style="padding:16px;width:100%;display:none">
-    <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;flex-direction:column;gap:10px">
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f9fafb;border-radius:12px">
         <div><div style="font-size:13px;font-weight:600">Ball speed</div><div style="font-size:11px;color:#6b7280">How fast balls fall</div></div>
         <select id="set-speed" style="font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #e5e7eb;background:#fff" onchange="saveSetting('speed',this.value)">
@@ -102,15 +118,15 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
         </select>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f9fafb;border-radius:12px">
-        <div><div style="font-size:13px;font-weight:600">Bomb frequency</div><div style="font-size:11px;color:#6b7280">How often bombs appear</div></div>
+        <div><div style="font-size:13px;font-weight:600">Bomb hits to lose</div><div style="font-size:11px;color:#6b7280">How many bombs before game over</div></div>
         <select id="set-bombs" style="font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #e5e7eb;background:#fff" onchange="saveSetting('bombs',this.value)">
-          <option value="rare">Rare (every 16)</option><option value="normal" selected>Normal (every 12)</option><option value="often">Often (every 8)</option>
+          <option value="1">1 (Hard)</option><option value="3" selected>3 (Normal)</option><option value="5">5 (Easy)</option>
         </select>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f9fafb;border-radius:12px">
         <div><div style="font-size:13px;font-weight:600">Merge timer</div><div style="font-size:11px;color:#6b7280">Time allowed between merges</div></div>
         <select id="set-timer" style="font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid #e5e7eb;background:#fff" onchange="saveSetting('timer',this.value)">
-          <option value="30">30 seconds</option><option value="45" selected>45 seconds</option><option value="60">60 seconds</option>
+          <option value="25">25s (Fast)</option><option value="35" selected>35s (Default)</option><option value="45">45s (Long)</option>
         </select>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f9fafb;border-radius:12px">
@@ -125,27 +141,30 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 <div id="sc-game" style="display:none;flex-direction:column">
   <div class="topbar">
     <div><div class="tval" id="g-score">0</div><div class="tlabel">Best: <span id="g-best">0</span></div></div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;margin:0 10px">
-      <div style="display:flex;justify-content:space-between;width:100%;max-width:180px">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;margin:0 8px">
+      <div style="display:flex;justify-content:space-between;width:100%;max-width:175px">
         <span style="font-size:10px;color:#6b7280">Merge timer</span>
         <span style="font-size:10px;color:#6b7280">Lines: <span id="g-lcount">1</span></span>
       </div>
-      <div class="mw" style="width:100%;max-width:180px"><div class="mf" id="g-meter" style="width:100%"></div></div>
-      <div style="display:flex;gap:4px" id="g-pips"></div>
+      <div class="mw" style="width:100%;max-width:175px"><div class="mf" id="g-meter" style="width:100%"></div></div>
+      <div style="display:flex;gap:3px" id="g-pips"></div>
     </div>
-    <div style="display:flex;align-items:center;gap:5px">
+    <div style="display:flex;align-items:center;gap:4px">
+      <div style="text-align:center;margin-right:2px">
+        <div id="bomb-lives-display" style="line-height:1"></div>
+        <div style="font-size:9px;color:#6b7280;margin-top:1px">bombs</div>
+      </div>
       <div style="text-align:right;margin-right:2px"><div class="tval" id="g-highest">—</div><div class="tlabel">highest</div></div>
       <button class="iconbtn" onclick="togglePause()" id="pause-btn">⏸</button>
       <button class="iconbtn" onclick="goHome()">⌂</button>
     </div>
   </div>
-  <div class="hint">Draw to redirect · Same numbers merge · Glowing arc = match nearby · ☠ = dodge the bomb</div>
+  <div class="hint">Draw to redirect · Same numbers merge · Glowing arc = match nearby · ☠ bomb = dodge it</div>
   <div style="position:relative">
     <canvas id="gc"></canvas>
     <div id="flash-layer"></div>
-    <div id="bomb-flash">
-      <div id="bomb-flash-bg"></div>
-      <div id="bomb-flash-text">BOMB!!!</div>
+    <div id="bomb-flash" style="display:none !important">
+      <div id="bomb-flash-text">BOMB</div>
     </div>
     <div id="pause-overlay">
       <div class="overlay-box">
@@ -159,145 +178,238 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 </div>
 
 <!-- END -->
-<div id="sc-end" class="screen" style="min-height:600px">
+<div id="sc-end" class="screen">
   <div style="font-size:13px;color:#6b7280;margin-bottom:4px" id="go-reason">Game over</div>
   <div style="font-size:48px;font-weight:800;letter-spacing:-2px;margin-bottom:2px" id="go-score">0</div>
-  <div style="font-size:12px;color:#6b7280;margin-bottom:16px">points</div>
-  <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;justify-content:center">
-    <div class="home-stat" style="min-width:80px"><div class="home-stat-v" id="go-high">—</div><div class="home-stat-l">highest</div></div>
-    <div class="home-stat" style="min-width:80px"><div class="home-stat-v" id="go-merges">0</div><div class="home-stat-l">merges</div></div>
-    <div class="home-stat" style="min-width:80px"><div class="home-stat-v" id="go-lost">0</div><div class="home-stat-l">lost</div></div>
+  <div style="font-size:12px;color:#6b7280;margin-bottom:14px">points</div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center">
+    <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-high">—</div><div class="home-stat-l">highest</div></div>
+    <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-merges">0</div><div class="home-stat-l">merges</div></div>
+    <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-bombs-hit">0</div><div class="home-stat-l">bombs hit</div></div>
+    <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-best">0</div><div class="home-stat-l">best ever</div></div>
   </div>
-  <div style="padding:10px 16px;background:#f3f4f6;border-radius:12px;font-size:13px;color:#374151;margin-bottom:16px;max-width:300px" id="go-share"></div>
-  <button class="btn" style="width:240px" onclick="startGame()">Play again</button>
-  <button class="btn btn-out" style="width:240px" onclick="shareAndCopy()">Share score 🔗</button>
-  <button class="btn btn-out" style="width:240px" onclick="goHome()">Home</button>
-</div>
+  <div id="go-name-area" style="width:100%;max-width:300px;margin-bottom:12px">
+    <div style="font-size:12px;color:#6b7280;margin-bottom:6px">Enter your name for the leaderboard</div>
+    <input id="go-name-input" maxlength="16" placeholder="Your name" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;font-family:inherit;outline:none;text-align:center"/>
+    <button class="btn" style="width:100%;margin-top:8px" onclick="saveToLB()">Save to leaderboard</button>
+  </div>
+  <div style="padding:10px 16px;background:#f3f4f6;border-radius:12px;font-size:13px;color:#374151;margin-bottom:14px;max-width:300px" id="go-share"></div>
+  <button class="btn" style="width:220px" onclick="startGame()">Play again</button>
+  <button class="btn btn-out" style="width:220px" onclick="shareAndCopy()">Share score 🔗</button>
+  <button class="btn btn-out" style="width:220px" onclick="goHome()">Home</button>
 </div>
 
+</div>
 <script>
-const W=520,H=750,BALL_R=21,LINE_LIFE=2000,MAX_LINE=140;
+const W=520,H=750,BALL_R=21,LINE_LIFE=2000,MAX_LINE=110;
 const PLAT_H=14,PLAT_W_FRAC=0.76,WALL_W=10,WALL_H=14,LINE_CAP=4;
-const METER_FULL=100,METER_LOSE=14,BOMB_DRAIN=7,BOMB_R=55,DANGER_Y=180;
+const METER_FULL=100,METER_LOSE=14,BOMB_R=55;
 const RESTITUTION=0.08,LINE_SLIDE_BOOST=1.28,MERGE_COOLDOWN=500,MAX_SPEED=5.5;
-// magnetic pull between matching locked balls
-const MAGNET_DIST=BALL_R*5.5;   // max distance to feel pull
-const MAGNET_FORCE=0.012;        // gentle nudge per frame
-const MAGNET_MIN_GAP=BALL_R*2.15; // stop pulling when almost touching
+const MAGNET_DIST=BALL_R*5.5,MAGNET_FORCE=0.012,MAGNET_MIN_GAP=BALL_R*2.15;
 
-const CLR={
-  3:{bg:"#2563EB",tx:"#fff"},6:{bg:"#059669",tx:"#fff"},
-  12:{bg:"#DC2626",tx:"#fff"},24:{bg:"#7C3AED",tx:"#fff"},
-  48:{bg:"#0891B2",tx:"#fff"},96:{bg:"#D97706",tx:"#fff"},
-  192:{bg:"#DB2777",tx:"#fff"},384:{bg:"#4F46E5",tx:"#fff"},
-  768:{bg:"#0D9488",tx:"#fff"},1536:{bg:"#B45309",tx:"#fff"},
-  3072:{bg:"#be123c",tx:"#fff"}
-};
+const CLR={3:{bg:"#2563EB",tx:"#fff"},6:{bg:"#059669",tx:"#fff"},12:{bg:"#DC2626",tx:"#fff"},24:{bg:"#7C3AED",tx:"#fff"},48:{bg:"#0891B2",tx:"#fff"},96:{bg:"#D97706",tx:"#fff"},192:{bg:"#DB2777",tx:"#fff"},384:{bg:"#4F46E5",tx:"#fff"},768:{bg:"#0D9488",tx:"#fff"},1536:{bg:"#B45309",tx:"#fff"},3072:{bg:"#be123c",tx:"#fff"}};
 function ballColor(v){return CLR[v]||{bg:"#1e293b",tx:"#f1f5f9"};}
 
-let settings={speed:"normal",bombs:"normal",timer:45};
+document.fonts.load('900 52px "Press Start 2P"').catch(() => {});
+
+// === SUPABASE CONFIG - REPLACE THESE ===
+const SUPABASE_URL = "https://upnojkszxgrpbcusupwb.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwbm9qa3N6eGdycGJjdXN1cHdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4OTE0MzksImV4cCI6MjA5NDQ2NzQzOX0.TO6gJyyN3S9q_K2IkwSGT_RO1qJDAGa5K0wgBZ7y8Ug";                     // ← Change this
+
+// Helper function to submit score
+async function submitToGlobalLB(name, score, highest, merges) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL.includes("YOUR-PROJECT-REF")) {
+        console.warn("Supabase not configured yet");
+        return false;
+    }
+
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/scores`, {
+            method: "POST",
+            headers: {
+                "apikey": SUPABASE_ANON_KEY,
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({
+                name: name,
+                score: score,
+                highest: highest,
+                merges: merges
+            })
+        });
+
+        return response.ok;
+    } catch (e) {
+        console.error("Failed to submit to global leaderboard", e);
+        return false;
+    }
+}
+
+// Fetch global leaderboard
+async function loadGlobalLeaderboard() {
+    const list = document.getElementById('lb-list');
+    if (!list) return;
+
+    list.innerHTML = '<div style="text-align:center;padding:40px 20px;color:#9ca3af">Loading global leaderboard...</div>';
+
+    try {
+        const response = await fetch(
+            `${SUPABASE_URL}/rest/v1/scores?select=*&order=score.desc&limit=100`,
+            {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_ANON_KEY,
+                    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data || data.length === 0) {
+            list.innerHTML = '<div style="font-size:13px;color:#9ca3af;text-align:center;padding:30px">No scores yet. Be the first!</div>';
+            return;
+        }
+
+        let html = `<div style="font-size:12px;color:#6b7280;margin-bottom:8px">🌍 Global Top ${data.length}</div>`;
+
+        data.forEach((entry, i) => {
+            html += `
+            <div class="lb-row">
+                <div class="lb-rank">#${i+1}</div>
+                <div class="lb-name">${entry.name}</div>
+                <div style="font-size:11px;color:#6b7280;margin-right:6px">tile ${entry.highest}</div>
+                <div class="lb-score">${entry.score.toLocaleString()}</div>
+            </div>`;
+        });
+
+        list.innerHTML = html;
+    } catch (e) {
+        console.error(e);
+        list.innerHTML = '<div style="color:#ef4444;text-align:center;padding:20px">Could not load global leaderboard</div>';
+    }
+}
+
+let settings={speed:"normal",bombs:3,timer:35};
 function loadSettings(){
-  try{const s=JSON.parse(localStorage.getItem("grav14_s")||"{}");settings={...settings,...s};}catch(e){}
+  try{const s=JSON.parse(localStorage.getItem("grav15_s")||"{}");settings={...settings,...s};}catch(e){}
   document.getElementById('set-speed').value=settings.speed;
   document.getElementById('set-bombs').value=settings.bombs;
   document.getElementById('set-timer').value=settings.timer;
 }
-function saveSetting(k,v){settings[k]=k==='timer'?parseInt(v):v;localStorage.setItem("grav14_s",JSON.stringify(settings));}
+function saveSetting(k,v){settings[k]=(['bombs','timer'].includes(k))?parseInt(v):v;localStorage.setItem("grav15_s",JSON.stringify(settings));}
 
 let stats={best:0,played:0,highTile:0,history:[]};
 function loadStats(){
-  try{const s=JSON.parse(localStorage.getItem("grav14_st")||"{}");stats={...stats,...s};}catch(e){}
+  try{const s=JSON.parse(localStorage.getItem("grav15_st")||"{}");stats={...stats,...s};}catch(e){}
   document.getElementById('h-best').textContent=(stats.best||0).toLocaleString();
   document.getElementById('h-played').textContent=stats.played||0;
   document.getElementById('h-high').textContent=stats.highTile||'—';
 }
-function saveStats(){localStorage.setItem("grav14_st",JSON.stringify(stats));}
+function saveStats(){localStorage.setItem("grav15_st",JSON.stringify(stats));}
 function resetStats(){if(!confirm("Reset all stats?"))return;stats={best:0,played:0,highTile:0,history:[]};saveStats();loadStats();renderLB();}
+
+function filterName(raw){
+  let n=raw.replace(/[^a-zA-Z0-9 _\-]/g,'').trim().slice(0,16);
+  const bad=['fuck','shit','ass','dick','cock','cunt','nigga','nigger','bitch','fag','retard','nazi'];
+  bad.forEach(w=>{const re=new RegExp(w,'gi');n=n.replace(re,'***');});
+  return n||'Anonymous';
+}
+
+async function saveToLB() {
+    const raw = document.getElementById('go-name-input').value || 'Anonymous';
+    const name = filterName(raw);
+
+    // Save locally (keep your existing system)
+    stats.history = stats.history || [];
+    stats.history.push({name, score: lastScore, highest: lastHighest, merges: lastMerges});
+    stats.history.sort((a,b) => b.score - a.score);
+    stats.history = stats.history.slice(0, 100);
+    saveStats();
+
+    // Submit to global leaderboard
+    const success = await submitToGlobalLB(name, lastScore, lastHighest, lastMerges);
+
+    const msg = success 
+        ? '<div style="font-size:13px;color:#059669;font-weight:600;padding:8px">✓ Saved to global leaderboard!</div>'
+        : '<div style="font-size:13px;color:#f59e0b;font-weight:600;padding:8px">✓ Saved locally (global failed)</div>';
+
+    document.getElementById('go-name-area').innerHTML = msg;
+}
 
 function renderLB(){
   const list=document.getElementById('lb-list');if(!list)return;
   const h=stats.history||[];
   if(!h.length){list.innerHTML='<div style="font-size:13px;color:#9ca3af;text-align:center;padding:20px">No games yet!</div>';return;}
   const dots=["#2563EB","#059669","#DC2626","#7C3AED","#0891B2","#D97706","#DB2777","#4F46E5","#0D9488","#B45309"];
-  list.innerHTML=h.slice(0,10).map((e,i)=>`
-    <div class="lb-row${i===0?' you':''}">
+  list.innerHTML=h.slice(0,20).map((e,i)=>`
+    <div class="lb-row">
       <div class="lb-rank">#${i+1}</div>
-      <div class="lb-dot" style="background:${dots[i%10]}"></div>
-      <div class="lb-name">${i===0?'You (best)':'You'} · tile ${e.highest}</div>
+      <div class="lb-name">${e.name||'Anon'}</div>
+      <div style="font-size:11px;color:#6b7280;margin-right:4px">tile ${e.highest}</div>
       <div class="lb-score">${e.score.toLocaleString()}</div>
     </div>`).join('');
 }
 
 function showTab(t){
   ['how','lb','settings'].forEach(id=>{document.getElementById('tab-'+id).style.display=id===t?'block':'none';});
-  document.querySelectorAll('#home-tabs .tab').forEach((el,i)=>el.classList.toggle('on',['how','lb','settings'][i]===t));
-  if(t==='lb')renderLB();
+  document.querySelectorAll('.tabs .tab').forEach((el,i)=>el.classList.toggle('on',['how','lb','settings'][i]===t));
+  if(t==='lb') {
+    renderLB();           // your local history
+    loadGlobalLeaderboard();  // global from Supabase
+  }
 }
 
 function goHome(){
   alive=false;cancelAnimationFrame(raf);
   document.getElementById('sc-game').style.display='none';
   document.getElementById('sc-end').classList.remove('on');
-  document.getElementById('sc-home').classList.add('on');
-  hideBombFlash();loadStats();showTab('how');
+  const h=document.getElementById('sc-home');h.style.display='flex';
+  loadStats();showTab('how');
 }
 
-// game
 let canvas,ctx,balls=[],lines=[],explosions=[];
 let score=0,merges=0,lost=0,highest=0,meter=METER_FULL;
+let bombsHit=0,maxBombHits=3;
+let lastScore=0,lastHighest=0,lastMerges=0;
 let drawing=false,curLine=null,lastPos=null;
-let spawnTimer=0,pendingBomb=false,bombDelay=0;
+let spawnTimer=0,pendingBomb=false,bombDelay=0,ballCount=0;
 let lastTime=0,raf=null,alive=false,paused=false,diff=1;
-let linesAvail=1,spawnMs=3400,ballCount=0;
+let linesAvail=1,spawnMs=3400;
 let plat={x:0,y:0,w:0,vx:0.38};
-let GRAV=0.068,BOMB_EVERY=12,METER_DRAIN_MS=45000;
-let bombFlashTimer=0,bombFlashPhase=0;
+let GRAV=0.068,METER_DRAIN_MS=35000;
+let bombFlashActive=false,bombFlashTimer=0;
 
 function initPlat(){plat.w=Math.round(W*PLAT_W_FRAC);plat.x=(W-plat.w)/2;plat.y=H-90;plat.vx=0.38;}
 function randVal(){const r=Math.random();return r<0.42?3:r<0.80?6:12;}
 function capSpeed(b){const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy);if(s>MAX_SPEED){b.vx=b.vx/s*MAX_SPEED;b.vy=b.vy/s*MAX_SPEED;}}
-
-// bomb flash: pulse black bg + red BOMB!!! text
-function showBombFlash(){
-  bombFlashTimer=2400;bombFlashPhase=0;
-  document.getElementById('bomb-flash').classList.add('show');
-}
-function hideBombFlash(){
-  bombFlashTimer=0;
-  document.getElementById('bomb-flash').classList.remove('show');
-  document.getElementById('bomb-flash-bg').style.opacity='';
-}
-function updateBombFlash(dt){
-  if(bombFlashTimer<=0)return;
-  bombFlashTimer-=dt;
-  if(bombFlashTimer<=0){hideBombFlash();return;}
-  // pulse: alternate bg opacity to create flashing effect
-  bombFlashPhase+=dt*0.007;
-  const pulse=0.5+0.5*Math.sin(bombFlashPhase*Math.PI*2);
-  document.getElementById('bomb-flash-bg').style.opacity=(pulse*0.82).toFixed(2);
-}
-
-function getBombEvery(){return settings.bombs==='rare'?16:settings.bombs==='often'?8:12;}
-function getTimerMs(){return(parseInt(settings.timer)||45)*1000;}
 function getSpeedGrav(){return settings.speed==='slow'?0.050:settings.speed==='fast'?0.086:0.068;}
+
+function showBombFlash(){bombFlashActive=true;bombFlashTimer=1000;}
+function hideBombFlash(){bombFlashActive=false;bombFlashTimer=0;}
+
+function renderBombLives(){
+  const max=maxBombHits,hit=bombsHit;
+  let h='';
+  for(let i=0;i<max;i++)h+=`<span class="bomb-life${i<hit?' lost':''}">☠</span>`;
+  document.getElementById('bomb-lives-display').innerHTML=h;
+}
 
 function spawnBall(isBomb){
   const x=BALL_R*2+Math.random()*(W-BALL_R*4);
   const sm=settings.speed==='slow'?0.6:settings.speed==='fast'?1.25:1.0;
-  // bombs fall noticeably faster than before
   balls.push({
-    x,y:-BALL_R*2,
-    vx:(Math.random()-0.5)*0.28,
-    vy:(isBomb?1.05:0.18+Math.random()*0.13)*sm,
-    val:isBomb?0:randVal(),
-    isBomb,r:BALL_R,dead:false,merging:false,
-    flash:0,scale:1.0,lastMerge:0,
-    locked:false,platDx:null,onPlatform:false
+    x,y:-BALL_R*2,vx:(Math.random()-0.5)*0.28,
+    vy:(isBomb?1.08:0.18+Math.random()*0.13)*sm,
+    val:isBomb?0:randVal(),isBomb,r:BALL_R,
+    dead:false,merging:false,flash:0,scale:1.0,
+    lastMerge:0,locked:false,platDx:null,onPlatform:false
   });
   if(!isBomb){
     linesAvail=Math.min(linesAvail+1,LINE_CAP);
-    ballCount++;
-    if(ballCount%getBombEvery()===0){pendingBomb=true;bombDelay=1600;}
+    ballCount++;if(ballCount%12===0){pendingBomb=true;bombDelay=1600;}
   } else {
     linesAvail=Math.min(linesAvail+1,LINE_CAP);
     showBombFlash();
@@ -306,21 +418,23 @@ function spawnBall(isBomb){
 }
 
 function startGame(){
-  ['sc-home','sc-end'].forEach(id=>{document.getElementById(id).classList.remove('on');document.getElementById(id).style.display='none';});
+  document.getElementById('sc-home').style.display='none';
+  document.getElementById('sc-end').classList.remove('on');
   document.getElementById('sc-game').style.display='flex';
   document.getElementById('pause-overlay').classList.remove('show');
   document.getElementById('countdown-overlay').classList.remove('show');
   hideBombFlash();
-  canvas=document.getElementById('gc');
-  canvas.width=W;canvas.height=H;ctx=canvas.getContext('2d');
+  canvas=document.getElementById('gc');canvas.width=W;canvas.height=H;
+  ctx=canvas.getContext('2d');
   balls=[];lines=[];explosions=[];
   score=0;merges=0;lost=0;highest=0;meter=METER_FULL;
-  diff=1;spawnTimer=0;pendingBomb=false;bombDelay=0;ballCount=0;bombFlashTimer=0;
+  bombsHit=0;maxBombHits=parseInt(settings.bombs)||3;
+  diff=1;spawnTimer=0;pendingBomb=false;bombDelay=0;ballCount=0;
   spawnMs=3400;linesAvail=1;paused=false;
-  GRAV=getSpeedGrav();BOMB_EVERY=getBombEvery();METER_DRAIN_MS=getTimerMs();
+  GRAV=getSpeedGrav();METER_DRAIN_MS=(parseInt(settings.timer)||35)*1000;
   document.getElementById('g-best').textContent=(stats.best||0).toLocaleString();
   document.getElementById('pause-btn').textContent='⏸';
-  initPlat();setupInput();
+  renderBombLives();initPlat();setupInput();
   alive=true;lastTime=performance.now();
   spawnBall(false);renderPips();
   cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
@@ -328,25 +442,15 @@ function startGame(){
 
 function togglePause(){
   if(!alive)return;
-  if(!paused){
-    paused=true;cancelAnimationFrame(raf);
-    document.getElementById('pause-overlay').classList.add('show');
-    document.getElementById('pause-btn').textContent='▶';
-  } else {
-    document.getElementById('pause-overlay').classList.remove('show');
-    startCountdown();
-  }
+  if(!paused){paused=true;cancelAnimationFrame(raf);document.getElementById('pause-overlay').classList.add('show');document.getElementById('pause-btn').textContent='▶';}
+  else{document.getElementById('pause-overlay').classList.remove('show');startCountdown();}
 }
 
 function startCountdown(){
   const ov=document.getElementById('countdown-overlay'),num=document.getElementById('countdown-num');
   ov.classList.add('show');let c=3;num.textContent=c;
   num.style.animation='none';num.offsetHeight;num.style.animation='cpulse 1s ease';
-  const tick=setInterval(()=>{
-    c--;
-    if(c<=0){clearInterval(tick);ov.classList.remove('show');paused=false;document.getElementById('pause-btn').textContent='⏸';lastTime=performance.now();raf=requestAnimationFrame(loop);}
-    else{num.textContent=c;num.style.animation='none';num.offsetHeight;num.style.animation='cpulse 1s ease';}
-  },1000);
+  const tick=setInterval(()=>{c--;if(c<=0){clearInterval(tick);ov.classList.remove('show');paused=false;document.getElementById('pause-btn').textContent='⏸';lastTime=performance.now();raf=requestAnimationFrame(loop);}else{num.textContent=c;num.style.animation='none';num.offsetHeight;num.style.animation='cpulse 1s ease';}},1000);
 }
 
 function renderPips(){
@@ -361,7 +465,7 @@ function loop(ts){
   spawnTimer+=dt;spawnMs=Math.max(2200,3400-diff*34);
   if(spawnTimer>spawnMs){spawnTimer=0;spawnBall(false);diff+=0.12;}
   if(pendingBomb){bombDelay-=dt;if(bombDelay<=0){pendingBomb=false;spawnBall(true);}}
-  updateBombFlash(dt);
+  if(bombFlashTimer>0){bombFlashTimer-=dt;if(bombFlashTimer<=0)hideBombFlash();}
   meter=Math.max(0,meter-(METER_FULL/METER_DRAIN_MS)*dt);
   if(meter<=0){endGame(false,'Merge timer ran out!');return;}
   update(dt);draw();raf=requestAnimationFrame(loop);
@@ -376,28 +480,23 @@ function update(dt){
 
   const live=balls.filter(b=>!b.dead&&!b.merging);
 
-  // locked balls ride platform
   live.filter(b=>b.locked).forEach(b=>{
     b.x=plat.x+b.platDx;b.y=plat.y-b.r;b.vx=0;b.vy=0;
     const iL=plat.x+WALL_W+b.r,iR=plat.x+plat.w-WALL_W-b.r;
     if(b.x<iL){b.x=iL;b.platDx=b.x-plat.x;}
     if(b.x>iR){b.x=iR;b.platDx=b.x-plat.x;}
-    // decay flash/scale even while locked
     if(b.flash>0)b.flash=Math.max(0,b.flash-dt/130);else b.flash=0;
     if(b.scale>1.0)b.scale=Math.max(1.0,b.scale-0.07*(dt/16));else b.scale=1.0;
   });
 
-  // magnetic pull between matching locked balls
   const locked=live.filter(b=>b.locked&&!b.isBomb);
   for(let i=0;i<locked.length;i++){
     for(let j=i+1;j<locked.length;j++){
-      const a=locked[i],b=locked[j];
-      if(a.val!==b.val)continue;
+      const a=locked[i],b=locked[j];if(a.val!==b.val)continue;
       const dx=b.x-a.x,dist=Math.abs(dx);
       if(dist<MAGNET_MIN_GAP||dist>MAGNET_DIST)continue;
-      // gentle horizontal nudge toward each other
-      const dir=dx>0?1:-1;
       const force=MAGNET_FORCE*(1-(dist/MAGNET_DIST));
+      const dir=dx>0?1:-1;
       const iL=plat.x+WALL_W+BALL_R,iR=plat.x+plat.w-WALL_W-BALL_R;
       a.x=Math.max(iL,Math.min(iR,a.x+dir*force));
       b.x=Math.max(iL,Math.min(iR,b.x-dir*force));
@@ -413,7 +512,6 @@ function update(dt){
     if(b.scale>1.0)b.scale=Math.max(1.0,b.scale-0.07*(dt/16));else b.scale=1.0;
   });
 
-  // air vs air
   for(let iter=0;iter<3;iter++){
     for(let i=0;i<air.length;i++){
       for(let j=i+1;j<air.length;j++){
@@ -431,13 +529,12 @@ function update(dt){
     }
   }
 
-  // air vs locked — position only, no velocity transfer from locked
   for(const a of air){
     for(const b of live.filter(x=>x.locked)){
       const dx=a.x-b.x,dy=a.y-b.y,dist=Math.sqrt(dx*dx+dy*dy),minD=a.r+b.r;
       if(dist>=minD||dist<0.001)continue;
       const nx=dx/dist,ny=dy/dist,ov=minD-dist;
-      a.x+=nx*ov*0.9;a.y+=(dy<0?ny*ov*0.6:0);
+      a.x+=nx*ov*0.9;if(dy<0)a.y+=ny*ov*0.6;
       const vd=a.vx*nx+a.vy*ny;
       if(vd<0){a.vx-=vd*nx*RESTITUTION*0.5;a.vy-=vd*ny*RESTITUTION*0.5;a.vx*=0.55;capSpeed(a);}
     }
@@ -446,12 +543,11 @@ function update(dt){
   air.forEach(b=>{
     collidePlat(b);collideLines(b);
     if(b.y>H+BALL_R*2){b.dead=true;if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE);flashPop(Math.min(W-10,Math.max(10,b.x)),H-30,"lost","#DC2626");}}
-    if(b.x<-BALL_R*6||b.x>W+BALL_R*6){b.dead=true;if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE*0.5);flashPop(b.x<0?36:W-36,H*0.6,"off edge","#DC2626");}}
+    if(b.x<-BALL_R*2||b.x>W+BALL_R*2){b.dead=true;if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE*0.5);}}
   });
 
   checkBombs();checkMerges();
   balls=balls.filter(b=>!b.dead&&!b.merging);
-  for(const b of balls){if(!b.dead&&!b.merging&&b.onPlatform&&b.y-b.r<DANGER_Y){endGame(false,'Stack reached the danger line!');return;}}
   explosions=explosions.filter(e=>{e.age+=dt;return e.age<600;});
   updateUI();
 }
@@ -468,8 +564,8 @@ function collidePlat(b){
       } else {b.vy=-Math.abs(b.vy)*RESTITUTION;b.vx*=0.5;capSpeed(b);}
     }
   }
-  if(b.x-b.r<plat.x+WALL_W&&b.x+b.r>plat.x&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H){b.x=plat.x+WALL_W+b.r;b.vx=Math.abs(b.vx)*RESTITUTION;}
-  if(b.x+b.r>plat.x+plat.w-WALL_W&&b.x-b.r<plat.x+plat.w&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H){b.x=plat.x+plat.w-WALL_W-b.r;b.vx=-Math.abs(b.vx)*RESTITUTION;}
+  if(b.x-b.r<plat.x+WALL_W&&b.x>plat.x-b.r&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H){b.x=plat.x+WALL_W+b.r;b.vx=Math.abs(b.vx)*RESTITUTION;}
+  if(b.x+b.r>plat.x+plat.w-WALL_W&&b.x<plat.x+plat.w+b.r&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H){b.x=plat.x+plat.w-WALL_W-b.r;b.vx=-Math.abs(b.vx)*RESTITUTION;}
 }
 
 function nudgeLocked(newB){
@@ -521,16 +617,17 @@ function checkBombs(){
 function doBomb(bomb){
   if(bomb.dead)return;bomb.dead=true;hideBombFlash();
   explosions.push({x:bomb.x,y:bomb.y,age:0});
-  flashPop(bomb.x,bomb.y-36,"☠ BOOM!","#DC2626");
+  bombsHit++;renderBombLives();
+  flashPop(bomb.x,bomb.y-36,"☠ BOOM! ("+bombsHit+"/"+maxBombHits+")","#DC2626");
   balls.forEach(b=>{
     if(b.dead||b.isBomb)return;
     const dx=b.x-bomb.x,dy=b.y-bomb.y;
     if(Math.sqrt(dx*dx+dy*dy)<BOMB_R+b.r){
-      const loss=b.val*5;score=Math.max(0,score-loss);meter=Math.max(0,meter-BOMB_DRAIN);
-      b.locked=false;b.platDx=null;b.vx=(b.x-bomb.x)*0.055;b.vy=-1.6-Math.random()*0.5;capSpeed(b);
-      flashPop(b.x,b.y-22,"-"+loss,"#DC2626");
+      b.locked=false;b.platDx=null;
+      b.vx=(b.x-bomb.x)*0.055;b.vy=-1.6-Math.random()*0.5;capSpeed(b);
     }
   });
+  if(bombsHit>=maxBombHits){endGame(false,'Too many bombs hit!');return;}
 }
 
 function checkMerges(){
@@ -540,14 +637,12 @@ function checkMerges(){
     const a=live[i];if(a.dead||a.merging||now-a.lastMerge<MERGE_COOLDOWN)continue;
     for(let j=i+1;j<live.length;j++){
       const b=live[j];if(b.dead||b.merging||now-b.lastMerge<MERGE_COOLDOWN||a.val!==b.val)continue;
-      const dx=a.x-b.x,dy=a.y-b.y;
-      if(Math.sqrt(dx*dx+dy*dy)>a.r+b.r+3)continue;
+      const dx=a.x-b.x,dy=a.y-b.y;if(Math.sqrt(dx*dx+dy*dy)>a.r+b.r+3)continue;
       const nv=a.val*2;
       a.val=nv;a.scale=1.28;a.flash=0.9;a.lastMerge=now;
       if(a.locked&&b.locked){a.locked=true;}
       else{a.locked=false;a.platDx=null;a.vx=(a.vx+b.vx)*0.18;a.vy=Math.min(-0.15,(a.vy+b.vy)*0.18);capSpeed(a);}
-      b.merging=true;
-      score+=nv*6;merges++;if(nv>highest)highest=nv;meter=METER_FULL;
+      b.merging=true;score+=nv*6;merges++;if(nv>highest)highest=nv;meter=METER_FULL;
       flashPop(a.x,a.y-30,nv>=48?"NICE! +"+nv*6:"+"+nv*6,nv>=24?"#7C3AED":"#059669");
       break;
     }
@@ -571,34 +666,25 @@ function updateUI(){
 }
 
 function draw(){
-  ctx.clearRect(0,0,W,H);
-  // danger
-  ctx.fillStyle='rgba(220,38,38,0.05)';ctx.fillRect(0,0,W,DANGER_Y);
-  ctx.setLineDash([5,5]);ctx.strokeStyle='#DC2626';ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(0,DANGER_Y);ctx.lineTo(W,DANGER_Y);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#DC2626';ctx.font='500 10px sans-serif';ctx.textAlign='left';ctx.fillText('DANGER — stack limit',8,DANGER_Y-5);
+  // bomb flash: black background behind everything
+  if(bombFlashActive){
+    ctx.fillStyle='#000';
+    ctx.fillRect(0,0,W,H);
+  } else {
+    ctx.clearRect(0,0,W,H);
+  }
 
-  // magnetic arcs between nearby matching locked balls
+  // magnet arcs
   const locked=balls.filter(b=>!b.dead&&!b.merging&&b.locked&&!b.isBomb);
   for(let i=0;i<locked.length;i++){
     for(let j=i+1;j<locked.length;j++){
-      const a=locked[i],b=locked[j];
-      if(a.val!==b.val)continue;
-      const dx=b.x-a.x,dist=Math.abs(dx);
-      if(dist<BALL_R*2||dist>MAGNET_DIST)continue;
-      const strength=1-(dist/MAGNET_DIST);
-      const c=ballColor(a.val);
-      // draw dotted arc above the two balls
+      const a=locked[i],b=locked[j];if(a.val!==b.val)continue;
+      const dist=Math.abs(b.x-a.x);if(dist<BALL_R*2||dist>MAGNET_DIST)continue;
+      const str=1-(dist/MAGNET_DIST),c=ballColor(a.val);
       const mx=(a.x+b.x)/2,my=Math.min(a.y,b.y)-18;
-      ctx.save();
-      ctx.setLineDash([4,5]);
-      ctx.strokeStyle=c.bg;ctx.lineWidth=2;ctx.globalAlpha=0.35+strength*0.45;
-      ctx.beginPath();
-      ctx.moveTo(a.x,a.y-a.r);
-      ctx.quadraticCurveTo(mx,my-12,b.x,b.y-b.r);
-      ctx.stroke();
-      ctx.setLineDash([]);ctx.globalAlpha=1;
-      ctx.restore();
+      ctx.save();ctx.setLineDash([4,5]);ctx.strokeStyle=c.bg;ctx.lineWidth=2;ctx.globalAlpha=0.35+str*0.45;
+      ctx.beginPath();ctx.moveTo(a.x,a.y-a.r);ctx.quadraticCurveTo(mx,my-12,b.x,b.y-b.r);ctx.stroke();
+      ctx.setLineDash([]);ctx.globalAlpha=1;ctx.restore();
     }
   }
 
@@ -640,36 +726,73 @@ function draw(){
     } else {
       const c=ballColor(b.val);
       ctx.fillStyle=c.bg;ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();
-      if(b.flash>0){ctx.globalAlpha=b.flash*0.45;ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+      if(b.flash>0){ctx.globalAlpha=b.flash*0.45;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
       ctx.fillStyle=c.tx;const fs=b.val>=1000?9:b.val>=100?11:b.val>=10?13:15;
       ctx.font=`700 ${fs}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b.val,0,0);
     }
     ctx.restore();
   });
 
+  // bomb text on top of everything
+if(bombFlashActive){
+    ctx.save();
+    
+    ctx.font = '900 52px "Press Start 2P"';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    const x = W/2;
+    const y = H/2 - 8;   // slight adjustment for better centering
+    
+    // Multiple outline layers to simulate the retro colored shadow
+    ctx.fillStyle = '#fdff2a';   // yellow
+    ctx.fillText('BOMB', x-4, y);
+    
+    ctx.fillStyle = '#df4a42';   // red
+    ctx.fillText('BOMB', x+4, y);
+    
+    ctx.fillStyle = '#91fcfe';   // cyan
+    ctx.fillText('BOMB', x-2, y-2);
+    
+    ctx.fillStyle = '#4405fc';   // purple
+    ctx.fillText('BOMB', x+2, y+2);
+    
+    // Main bright white text on top
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('BOMB', x, y);
+    
+    ctx.restore();
+}
+
   if(linesAvail<=0){
     ctx.fillStyle='rgba(220,38,38,0.05)';ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='#DC2626';ctx.font='500 11px sans-serif';ctx.textAlign='center';ctx.fillText('No lines — wait for next ball',W/2,DANGER_Y+18);
+    ctx.fillStyle='#DC2626';ctx.font='500 11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('No lines — wait for next ball',W/2,40);
   }
 }
 
 function endGame(quit,reason){
   alive=false;cancelAnimationFrame(raf);hideBombFlash();
+  lastScore=score;lastHighest=highest;lastMerges=merges;
   if(!quit||score>0){
     if(score>stats.best)stats.best=score;stats.played++;
     if(highest>stats.highTile)stats.highTile=highest;
-    stats.history=stats.history||[];stats.history.unshift({score,highest,merges});stats.history=stats.history.slice(0,20);
     saveStats();
   }
   if(quit&&score===0){goHome();return;}
   document.getElementById('sc-game').style.display='none';
-  document.getElementById('sc-end').classList.add('on');
+  const end=document.getElementById('sc-end');end.classList.add('on');end.style.display='flex';
   document.getElementById('go-reason').textContent=reason||'Game over';
   document.getElementById('go-score').textContent=score.toLocaleString();
   document.getElementById('go-high').textContent=highest||'—';
   document.getElementById('go-merges').textContent=merges;
-  document.getElementById('go-lost').textContent=lost;
+  document.getElementById('go-bombs-hit').textContent=bombsHit;
+  document.getElementById('go-best').textContent=(stats.best||0).toLocaleString();
   document.getElementById('go-share').textContent=`Gravity — highest tile: ${highest}, score: ${score.toLocaleString()}, ${merges} merges. Beat me?`;
+  document.getElementById('go-name-area').innerHTML=`
+    <div style="font-size:12px;color:#6b7280;margin-bottom:6px">Enter your name for the leaderboard</div>
+    <input id="go-name-input" maxlength="16" placeholder="Your name" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;font-family:inherit;outline:none;text-align:center"/>
+    <button class="btn" style="width:100%;margin-top:8px" onclick="saveToLB()">Save to leaderboard</button>`;
 }
 
 function shareAndCopy(){
@@ -694,7 +817,9 @@ function setupInput(){
   canvas.ontouchend=e=>{if(drawing&&curLine&&curLine.pts.length>1){lines.push(curLine);linesAvail=Math.max(0,linesAvail-1);renderPips();}drawing=false;curLine=null;};
 }
 
-loadSettings();loadStats();showTab('how');
+loadSettings();loadStats();
+document.getElementById('sc-home').style.display='flex';
+showTab('how');
 </script>
 </body>
 </html>
