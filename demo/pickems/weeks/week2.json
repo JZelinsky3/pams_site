@@ -1,7 +1,7 @@
 {
   "id": "week2",
   "label": "Week 2",
-  "openAt": "2024-01-01T00:00:00Z",
+  "openAt": "2024-01-08T00:00:00Z",
   "gameOfWeek": "m3",
   "matchups": [
     {
@@ -63,5 +63,7 @@
     "trevor": "0-1",
     "adam": "0-1",
     "ryan": "0-1"
-  }
+  },
+  "revealAt": "2099-01-01T00:00:00Z",
+  "lockAt": "2099-01-01T00:00:00Z"
 }
