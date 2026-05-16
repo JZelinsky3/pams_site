@@ -398,9 +398,9 @@ body::before {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   MATCHUP CARDS · v3 "STADIUM BOARD"
-   Two-pane split card. Each team owns a tinted half. Center column
-   holds a diamond VS badge. Vote bar + tally meter pinned to bottom.
+   MATCHUP CARDS · "ODDSBOARD LED"
+   Dark vegas-style card. Pinstripe overlay. LED-style percentages
+   right-aligned on each vote button. Proportional split bar at bottom.
    ══════════════════════════════════════════════════════════════════ */
 .pe-grid {
   display: grid;
@@ -411,123 +411,143 @@ body::before {
 
 .match {
   position: relative;
-  background: var(--pk-card);
-  border: 1px solid var(--pk-line);
+  background: #0a070d;
+  border: 1px solid #1f1727;
   overflow: hidden;
+  font-family: var(--mono);
   transition: border-color .15s;
 }
 .match:hover { border-color: var(--pk-magenta-deep); }
 
-/* Tinted vertical halves — left magenta wash, right champagne wash */
-.match::before,
-.match::after {
-  content: "";
-  position: absolute; top: 0; bottom: 0;
-  width: calc(50% - 22px);
-  pointer-events: none;
-  opacity: .55;
-}
+/* Pinstripe scanline overlay */
 .match::before {
-  left: 0;
-  background:
-    linear-gradient(135deg, rgba(255,61,139,.16) 0%, rgba(255,61,139,.04) 70%, transparent 100%);
-}
-.match::after {
-  right: 0;
-  background:
-    linear-gradient(225deg, rgba(240,196,99,.14) 0%, rgba(240,196,99,.04) 70%, transparent 100%);
+  content: "";
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(180deg,
+    rgba(255,255,255,.02) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* Game of the Week — illuminated frame + corner tag */
+/* ── Game of the Week ──────────────────────────────────────────
+   Cream-card variant. Champagne text doesn't survive on cream, so
+   the away-side accents shift from light champagne to a deep amber
+   that pops, and the home pink shifts to a deeper magenta.
+   The colored chunks (vote bar segments, picked-button fills) keep
+   their pink/champagne since they're full color blocks, not text. */
 .match[data-gotw="true"] {
-  border-color: var(--pk-champagne);
-  box-shadow:
-    inset 0 0 0 1px rgba(240,196,99,.35),
-    0 0 28px -10px rgba(240,196,99,.4);
+  background: #efe5cc;
+  border: none;
+  box-shadow: 0 16px 32px -14px rgba(0,0,0,.55);
 }
-.match[data-gotw="true"]::before { opacity: 1; }
-.match[data-gotw="true"]::after  { opacity: 1; }
+/* Cream wants to read smooth — drop the pinstripe scanline overlay */
+.match[data-gotw="true"]::before { display: none; }
 
-.match[data-gotw="true"] .match-top::before {
-  content: "★ GAME OF THE WEEK";
-  position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%);
-  background: var(--pk-champagne);
+/* Match-top inner divider needs to be dark on cream */
+.match[data-gotw="true"] .match-top { border-bottom-color: rgba(26,15,35,.32); }
+
+/* Text recolors — dark plum throughout */
+.match[data-gotw="true"] .team-name        { color: #1a0f23; }
+.match[data-gotw="true"] .team-name .record { color: rgba(26,15,35,.5); }
+.match[data-gotw="true"] .manager          { color: rgba(26,15,35,.55); }
+.match[data-gotw="true"] .lwk              { color: rgba(26,15,35,.7); }
+.match[data-gotw="true"] .lwk .lbl         { color: rgba(26,15,35,.55); }
+.match[data-gotw="true"] .lwk strong       { color: #1a0f23; }
+
+/* Center "vs" cell — home stays pink-deep, away goes deep bronze */
+.match[data-gotw="true"] .vs-pts.home {
+  color: #b8205f;
+  text-shadow: none;
+}
+.match[data-gotw="true"] .vs-pts.away {
+  color: #8c5e14;
+  text-shadow: none;
+}
+.match[data-gotw="true"] .vs-mid { color: rgba(26,15,35,.55); }
+
+/* Logo borders crisper on cream */
+.match[data-gotw="true"] .team[data-team]:first-of-type .logo { border-color: rgba(184,32,95,.5); background: #fff; }
+.match[data-gotw="true"] .team[data-team]:last-of-type  .logo { border-color: rgba(140,94,20,.5); background: #fff; }
+
+/* Vote area on cream */
+.match[data-gotw="true"] .vote {
+  background: linear-gradient(180deg, rgba(0,0,0,.04) 0%, rgba(0,0,0,.08) 100%);
+  border-top-color: rgba(26,15,35,.32);
+}
+.match[data-gotw="true"] .vote-btn {
+  color: rgba(26,15,35,.75);
+}
+.match[data-gotw="true"] .vote-btn:first-child { border-right-color: rgba(26,15,35,.32); }
+.match[data-gotw="true"] .vote-btn:hover:not(:disabled) {
+  background: rgba(26,15,35,.06);
   color: #1a0f23;
-  font-family: var(--mono); font-weight: 800;
-  font-size: .52rem; letter-spacing: .26em;
-  padding: .28rem .7rem .25rem;
-  white-space: nowrap;
-  z-index: 5;
+}
+.match[data-gotw="true"] .vote-pct           { color: #b8205f; text-shadow: none; }
+.match[data-gotw="true"] .vote-btn:last-child .vote-pct { color: #8c5e14; text-shadow: none; }
+.match[data-gotw="true"] .vote-btn[data-picked="true"] {
+  background: var(--pk-magenta);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px var(--pk-magenta), inset 0 3px 0 var(--pk-magenta-bright);
+}
+.match[data-gotw="true"] .vote-btn[data-picked="true"] .vote-pct { color: #fff; }
+.match[data-gotw="true"] .vote-btn:last-child[data-picked="true"] {
+  background: #8c5e14;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px #8c5e14, inset 0 3px 0 #b48a2e;
+}
+.match[data-gotw="true"] .vote-btn:last-child[data-picked="true"] .vote-pct { color: #fff; }
+
+/* Bar2 on cream: keep pink, swap champagne for deep amber */
+.match[data-gotw="true"] .bar2 {
+  background: rgba(26,15,35,.08);
+  border-top-color: rgba(26,15,35,.32);
+}
+.match[data-gotw="true"] .bar2 .right { background: #c8932e; }
+
+/* Recolor the corner GOTW badge for cream — dark plum block reads
+   cleanly on the cream card like a magazine callout */
+.match[data-gotw="true"]::after {
+  background: #1a0f23;
+  color: #efe5cc;
 }
 
-/* ── Top half: two-pane team layout ─────────────────────────── */
+/* GOTW size bump — taller card (not wider) than the regular matchups */
+.match[data-gotw="true"] .match-top { padding: 3.6rem 1.5rem 1.85rem; }
+.match[data-gotw="true"] .logo { width: 66px; height: 66px; }
+.match[data-gotw="true"] .team-name { font-size: 1.18rem; }
+.match[data-gotw="true"] .vs-pts { font-size: 1.42rem; }
+.match[data-gotw="true"] .vote-btn { padding: 1.25rem 1.1rem; font-size: .72rem; }
+
+/* ── Top: team row ──────────────────────────────────────────── */
 .match-top {
   position: relative; z-index: 2;
   display: grid;
-  grid-template-columns: 1fr 44px 1fr;
-  align-items: stretch;
-  gap: 0;
-  padding: 1.4rem 0 1.2rem;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 1.1rem 1.2rem 1.05rem;
+  gap: 1rem;
+  border-bottom: 1px solid #42304f;
 }
 
-/* Center column: vertical hairline + a sharp VS badge.
-   The .vs element contains the raw "vs" text node from JS — we
-   collapse it with font-size:0 and re-render via ::after. */
-.match-top > .vs {
-  position: relative;
-  align-self: stretch;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0;
-  color: transparent;
-  padding: 0;
-  border: none;
-}
-.match-top > .vs::before {
-  content: "";
-  position: absolute; top: 1.4rem; bottom: 1.4rem; left: 50%;
-  width: 1px;
-  background: var(--pk-line);
-  transform: translateX(-.5px);
-}
-.match-top > .vs::after {
-  content: "VS";
-  position: relative; z-index: 1;
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px;
-  background: var(--pk-bg);
-  border: 1px solid var(--pk-magenta);
-  color: var(--pk-magenta-bright);
-  font-family: var(--mono); font-weight: 800;
-  font-size: .62rem; letter-spacing: .14em;
-  box-shadow: 0 0 0 4px var(--pk-card), 0 0 18px -4px rgba(255,61,139,.5);
-}
-
-/* Each team panel is a vertical block now */
 .team {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: .55rem;
+  gap: .8rem;
   min-width: 0;
-  padding: 0 1rem;
-  text-align: center;
 }
-.team[data-team]:last-of-type { flex-direction: column; text-align: center; }
-.team[data-team]:last-of-type .meta { align-items: center; }
+.team[data-team]:last-of-type { flex-direction: row-reverse; text-align: right; }
+.team[data-team]:last-of-type .meta { align-items: flex-end; }
 
 .logo {
-  width: 64px; height: 64px;
+  width: 48px; height: 48px;
   flex-shrink: 0;
-  border: 1px solid var(--pk-line);
-  background: var(--pk-bg-soft);
-  display: flex; align-items: center; justify-content: center;
+  border: 1px solid #2a1d36;
+  background: #14101a;
   overflow: hidden;
-  box-shadow: 0 6px 14px -6px rgba(0,0,0,.7);
+  display: flex; align-items: center; justify-content: center;
 }
-.team[data-team="home"] .logo,
-.team[data-team]:first-of-type .logo { border-color: rgba(255,61,139,.35); }
-.team[data-team]:last-of-type .logo  { border-color: rgba(240,196,99,.35); }
+.team[data-team]:first-of-type .logo { border-color: rgba(255,61,139,.4); }
+.team[data-team]:last-of-type  .logo { border-color: rgba(240,196,99,.4); }
 
 .logo img {
   width: 100%; height: 100%;
@@ -538,68 +558,96 @@ body::before {
 .meta {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   min-width: 0;
-  gap: .25rem;
-  width: 100%;
+  gap: .22rem;
 }
+
 .team-name {
-  font-family: var(--serif);
-  font-size: 1.05rem; line-height: 1.15;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: .98rem; line-height: 1.15;
   color: var(--pk-chalk);
-  font-weight: 500;
-  letter-spacing: -.01em;
+  letter-spacing: -.005em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   max-width: 100%;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .team-name.win {
   color: var(--pk-champagne-bright);
-  font-style: italic;
 }
 .team-name .record {
   display: inline-block;
   font-family: var(--mono); font-weight: 700;
-  font-size: .55rem; letter-spacing: .12em;
+  font-size: .55rem; letter-spacing: .14em;
   color: var(--pk-chalk-mute);
   margin-left: .4rem;
   vertical-align: middle;
 }
+/* Right team: record sits BEFORE the name, so push it right not left */
+.team[data-team]:last-of-type .team-name .record {
+  margin-left: 0;
+  margin-right: .4rem;
+}
 .team-name.win .record { color: var(--pk-champagne); }
 
 .manager {
-  font-family: var(--mono); font-weight: 700;
-  font-size: .54rem; letter-spacing: .24em; text-transform: uppercase;
+  font-family: var(--mono); font-weight: 600;
+  font-size: .52rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--pk-chalk-mute);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Last week's points — quiet mono row directly under the manager */
+.lwk {
+  font-family: var(--mono); font-weight: 600;
+  font-size: .54rem; letter-spacing: .04em;
+  color: var(--pk-chalk-soft);
+  display: inline-flex;
+  align-items: baseline;
+  gap: .35rem;
+  margin-top: .05rem;
+}
+.lwk .lbl {
+  font-weight: 700;
+  font-size: .46rem; letter-spacing: .22em; text-transform: uppercase;
   color: var(--pk-chalk-mute);
 }
-.proj {
-  display: inline-block;
-  font-family: var(--mono); font-weight: 700;
-  font-size: .52rem; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--pk-chalk-soft);
-  padding: .2rem .5rem;
-  border: 1px solid var(--pk-line);
-  background: var(--pk-bg-soft);
-  margin-top: .15rem;
-}
-.proj strong {
-  color: var(--pk-champagne-bright);
+.lwk strong {
   font-family: var(--mono); font-weight: 800;
-  letter-spacing: .04em;
+  font-size: .72rem; letter-spacing: -.005em;
+  color: var(--pk-chalk);
 }
 
-/* The raw .vs styling is overridden by .match-top > .vs above, but
-   keep these defaults for safety if .vs appears elsewhere */
-.vs { color: var(--pk-chalk-mute); }
+/* Center column: "PROJ vs PROJ" — clean inline mono, no borders */
+.match-top > .vs {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: .55rem;
+  padding: 0 .35rem;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+.vs-pts {
+  font-family: var(--mono); font-weight: 800;
+  font-size: 1.1rem; letter-spacing: -.01em;
+  line-height: 1;
+}
+.vs-pts.home { color: #ff8fb6; text-shadow: 0 0 10px rgba(255,143,182,.35); }
+.vs-pts.away { color: var(--pk-champagne-bright); text-shadow: 0 0 10px rgba(249,217,138,.35); }
+.vs-mid {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .54rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--pk-chalk-mute);
+}
 
-/* ── Bottom: vote bar + tally meter ─────────────────────────── */
+/* ── Bottom: vote buttons (LED-style, team-name on one side, pct on other) ─ */
 .vote {
   position: relative; z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.45) 100%);
-  border-top: 1px solid var(--pk-line);
+  background: linear-gradient(180deg, rgba(0,0,0,.3), rgba(0,0,0,.55));
 }
 .buttons {
   display: grid;
@@ -607,79 +655,101 @@ body::before {
   gap: 0;
 }
 .vote-btn {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
   background: transparent;
   border: none;
   color: var(--pk-chalk-soft);
   font-family: var(--mono); font-weight: 700;
-  font-size: .66rem; letter-spacing: .16em; text-transform: uppercase;
-  padding: .85rem .8rem;
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  padding: .9rem 1rem;
   cursor: pointer;
-  transition: background .12s, color .12s;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  transition: background .12s, color .12s, box-shadow .12s;
+  text-align: left;
 }
-.vote-btn:first-child { border-right: 1px solid var(--pk-line); }
-.vote-btn::before {
-  content: "▸";
-  margin-right: .5em;
-  color: var(--pk-magenta);
-  font-size: .7em;
-  vertical-align: middle;
+.vote-btn:first-child { border-right: 1px solid #42304f; }
+/* Mirror the away button so its team name is right-aligned */
+.vote-btn:last-child { flex-direction: row-reverse; text-align: right; }
+
+.vote-name {
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.vote-btn:last-child::before { color: var(--pk-champagne); }
+.vote-pct {
+  flex-shrink: 0;
+  font-family: var(--mono); font-weight: 800;
+  font-size: .92rem; letter-spacing: 0;
+  color: var(--pk-magenta-bright);
+  text-shadow: 0 0 8px rgba(255,106,166,.5);
+}
+.vote-btn:last-child .vote-pct {
+  color: var(--pk-champagne-bright);
+  text-shadow: 0 0 8px rgba(240,196,99,.5);
+}
+
 .vote-btn:hover:not(:disabled) {
-  background: rgba(255,255,255,.04);
+  background: rgba(255,255,255,.03);
   color: var(--pk-chalk);
 }
 .vote-btn[data-picked="true"] {
-  background: var(--pk-magenta);
+  background: rgba(255,61,139,.14);
   color: #fff;
-  font-weight: 800;
-  box-shadow: inset 0 3px 0 var(--pk-magenta-bright);
+  box-shadow: inset 0 0 0 1px var(--pk-magenta), inset 0 3px 0 var(--pk-magenta);
 }
-.vote-btn[data-picked="true"]::before { color: #fff; }
 .vote-btn:last-child[data-picked="true"] {
-  background: var(--pk-champagne-deep);
-  box-shadow: inset 0 3px 0 var(--pk-champagne);
+  background: rgba(240,196,99,.12);
+  color: var(--pk-champagne-bright);
+  box-shadow: inset 0 0 0 1px var(--pk-champagne), inset 0 3px 0 var(--pk-champagne);
 }
 .vote-btn[data-winner="true"] {
-  background: var(--pk-champagne-deep);
-  color: #fff;
-  font-weight: 800;
-  box-shadow: inset 0 3px 0 var(--pk-champagne);
+  background: rgba(240,196,99,.16);
+  color: var(--pk-champagne-bright);
+  box-shadow: inset 0 0 0 1px var(--pk-champagne), inset 0 3px 0 var(--pk-champagne);
 }
-.vote-btn[data-winner="true"]::before { color: #fff; }
+.vote-btn[data-winner="true"] .vote-pct { color: var(--pk-champagne-bright); }
 .vote-btn:disabled { cursor: default; }
 
-/* Tally bar — flat split meter, hairline divider, big readable percents */
+/* One continuous proportional bar — JS sets widths inline.
+   Flex (not grid) so the inline width:64% / width:36% actually controls
+   each segment's size and they sit edge-to-edge as a single bar. */
 .bar2 {
   position: relative;
-  display: grid;
-  grid-template-columns: 50% 50%;
-  height: 26px;
+  display: flex;
+  height: 6px;
   overflow: hidden;
-  background: var(--pk-bg);
-  border-top: 1px solid var(--pk-line);
-  font-family: var(--mono); font-weight: 800;
-  font-size: .68rem;
-  letter-spacing: .04em;
+  background: #14101a;
+  border-top: 1px solid #42304f;
 }
-.bar2 .left {
-  background: var(--pk-magenta);
-  color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  transition: width .35s ease;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
-}
+.bar2 .left,
 .bar2 .right {
+  height: 100%;
+  display: block;
+  font-size: 0;
+  color: transparent !important;
+  transition: width .35s ease;
+}
+.bar2 .left  { background: var(--pk-magenta); }
+.bar2 .right { background: var(--pk-champagne); }
+
+/* GOTW corner tag — centered banner near the top of the card,
+   inset slightly so it's not jammed against the edge. */
+.match[data-gotw="true"]::after {
+  content: "★ GAME OF THE WEEK";
+  position: absolute; top: 10px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
   background: var(--pk-champagne);
   color: #1a0f23;
-  display: flex; align-items: center; justify-content: center;
-  transition: width .35s ease;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+  font-family: var(--mono); font-weight: 800;
+  font-size: .58rem; letter-spacing: .22em;
+  padding: .4rem 1rem .36rem;
+  white-space: nowrap;
+  border-radius: 3px;
 }
+/* GOTW: make room for the centered badge at the top of the card */
+.match[data-gotw="true"] .match-top { padding-top: 2.4rem; }
 
 /* ══════════════════════════════════════════════════════════════════
    HIGH / LOW SELECTOR CARD
@@ -899,18 +969,28 @@ body::before {
   .pe-nav-records { font-size: .5rem; padding: .35rem .55rem; letter-spacing: .16em; }
 
   .match { padding: 0; }
-  .match-top { grid-template-columns: 1fr 36px 1fr; padding: 1.2rem 0 1rem; }
-  .team { gap: .4rem; padding: 0 .55rem; }
-  .logo { width: 52px; height: 52px; }
-  .team-name { font-size: .9rem; }
-  .team-name .record { font-size: .48rem; margin-left: .3rem; }
-  .manager { font-size: .5rem; letter-spacing: .2em; }
-  .proj { font-size: .48rem; letter-spacing: .12em; padding: .18rem .4rem; }
-  .match-top > .vs::after { width: 30px; height: 30px; font-size: .56rem; }
-  .match-top > .vs::before { top: 1.1rem; bottom: 1.1rem; }
-  .match[data-gotw="true"] .match-top::before { font-size: .46rem; letter-spacing: .22em; padding: .24rem .55rem .22rem; }
-  .vote-btn { font-size: .58rem; padding: .7rem .55rem; letter-spacing: .1em; }
-  .bar2 { height: 22px; font-size: .6rem; }
+  .match-top { padding: .95rem .8rem .9rem; gap: .55rem; grid-template-columns: 1fr auto 1fr; }
+  .team { gap: .55rem; }
+  .logo { width: 40px; height: 40px; }
+  .team-name { font-size: .8rem; }
+  .team-name .record { font-size: .44rem; margin-left: .22rem; }
+  .team[data-team]:last-of-type .team-name .record { margin-left: 0; margin-right: .22rem; }
+  .manager { font-size: .48rem; letter-spacing: .18em; }
+  .lwk { font-size: .48rem; gap: .25rem; }
+  .lwk .lbl { font-size: .4rem; letter-spacing: .18em; }
+  .lwk strong { font-size: .64rem; }
+  .match-top > .vs { gap: .3rem; padding: 0 .1rem; }
+  .vs-pts { font-size: .82rem; }
+  .vs-mid { font-size: .44rem; letter-spacing: .18em; }
+  .vote-btn { font-size: .58rem; padding: .75rem .65rem; letter-spacing: .1em; gap: .35rem; }
+  .vote-pct { font-size: .78rem; }
+  .match[data-gotw="true"]::after { font-size: .64rem; letter-spacing: .18em; padding: .34rem .8rem .3rem; top: 8px; }
+  .match[data-gotw="true"] .match-top { padding: 2.8rem 1rem 1.4rem; }
+  .match[data-gotw="true"] .logo { width: 52px; height: 52px; }
+  .match[data-gotw="true"] .team-name { font-size: .94rem; }
+  .match[data-gotw="true"] .vs-pts { font-size: 1.02rem; }
+  .match[data-gotw="true"] .vote-btn { padding: 1.05rem .75rem; font-size: .62rem; }
+  .bar2 { height: 5px; }
 
   .hl-row { grid-template-columns: 1fr; gap: .7rem; }
 

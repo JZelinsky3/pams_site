@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pick'ems · Card Style Picker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   STYLE PICKER PAGE — fully self-contained.
+   Six distinct matchup-card variants. Pick the one you like and
+   I'll port it to the real pickems page.
+   ══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans:  'Inter', system-ui, sans-serif;
+  --grotesk: 'Space Grotesk', system-ui, sans-serif;
+  --mono:  'JetBrains Mono', 'SF Mono', monospace;
+}
+html, body { background: #0f0a14; color: #f5ecf5; font-family: var(--sans); }
+body {
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(255,61,139,.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 100%, rgba(240,196,99,.05) 0%, transparent 50%),
+    #0f0a14;
+  background-attachment: fixed;
+  padding: 2rem 1.5rem 5rem;
+}
+
+.wrap { max-width: 900px; margin: 0 auto; }
+
+.page-head {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.page-head h1 {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  letter-spacing: -.01em;
+  margin-bottom: .5rem;
+}
+.page-head h1 em { font-style: italic; color: #ff6aa6; }
+.page-head p {
+  font-family: var(--mono);
+  font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+  color: #9988a8;
+}
+.page-head .back {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+  color: #ff6aa6;
+  text-decoration: none;
+  border: 1px solid rgba(255,106,166,.3);
+  padding: .4rem .8rem;
+}
+.page-head .back:hover { background: rgba(255,106,166,.1); }
+
+/* Option label */
+.option {
+  margin-bottom: 4rem;
+}
+.option-head {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: .65rem;
+  border-bottom: 1px dashed rgba(255,255,255,.12);
+}
+.option-num {
+  font-family: var(--mono); font-weight: 800;
+  font-size: 1.4rem; letter-spacing: .04em;
+  color: #ff6aa6;
+}
+.option-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.3rem; color: #f5ecf5;
+}
+.option-desc {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+  color: #9988a8;
+  text-align: right;
+  max-width: 50%;
+}
+
+.cards { display: grid; gap: 1.25rem; }
+
+/* shared logo svg sizing */
+.lg { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ══════════════════════════════════════════════════════════════════
+   OPTION 1 · "STADIUM BOARD" (current v3-ish, refined)
+   Two tinted halves, centered VS badge, vertical team stacks.
+   ══════════════════════════════════════════════════════════════════ */
+.v1-card {
+  position: relative;
+  background: #241531;
+  border: 1px solid #3a2549;
+  overflow: hidden;
+}
+.v1-card::before,
+.v1-card::after {
+  content: ""; position: absolute; top: 0; bottom: 0;
+  width: calc(50% - 22px); pointer-events: none; opacity: .55;
+}
+.v1-card::before {
+  left: 0;
+  background: linear-gradient(135deg, rgba(255,61,139,.16) 0%, rgba(255,61,139,.02) 70%, transparent);
+}
+.v1-card::after {
+  right: 0;
+  background: linear-gradient(225deg, rgba(240,196,99,.14) 0%, rgba(240,196,99,.02) 70%, transparent);
+}
+.v1-gotw { border-color: #f0c463; box-shadow: inset 0 0 0 1px rgba(240,196,99,.3); }
+.v1-gotw::before, .v1-gotw::after { opacity: 1; }
+.v1-top {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 44px 1fr;
+  padding: 1.4rem 0 1.2rem;
+}
+.v1-gotw .v1-top::before {
+  content: "★ GAME OF THE WEEK";
+  position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%);
+  background: #f0c463; color: #1a0f23;
+  font-family: var(--mono); font-weight: 800;
+  font-size: .52rem; letter-spacing: .26em;
+  padding: .28rem .7rem .25rem; z-index: 5;
+}
+.v1-team {
+  display: flex; flex-direction: column; align-items: center; gap: .55rem;
+  padding: 0 1rem; text-align: center;
+}
+.v1-logo {
+  width: 64px; height: 64px;
+  border: 1px solid #3a2549;
+  background: #1c1026;
+  overflow: hidden;
+}
+.v1-name {
+  font-family: var(--serif); font-size: 1.05rem;
+  color: #f5ecf5; line-height: 1.15;
+}
+.v1-mgr {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .54rem; letter-spacing: .24em; text-transform: uppercase;
+  color: #8e7d9d;
+}
+.v1-proj {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .52rem; letter-spacing: .14em; text-transform: uppercase;
+  color: #cdb9d6;
+  padding: .2rem .5rem;
+  border: 1px solid #3a2549; background: #1c1026;
+}
+.v1-proj strong { color: #f9d98a; font-weight: 800; }
+.v1-vs {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.v1-vs::before {
+  content: ""; position: absolute; top: 1.4rem; bottom: 1.4rem; left: 50%;
+  width: 1px; background: #3a2549;
+}
+.v1-vs::after {
+  content: "VS";
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  background: #0f0a14; border: 1px solid #ff3d8b;
+  color: #ff6aa6;
+  font-family: var(--mono); font-weight: 800;
+  font-size: .62rem; letter-spacing: .14em;
+  box-shadow: 0 0 0 4px #241531;
+}
+.v1-bottom {
+  position: relative; z-index: 2;
+  border-top: 1px solid #3a2549;
+  background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.4));
+}
+.v1-btns { display: grid; grid-template-columns: 1fr 1fr; }
+.v1-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: #cdb9d6;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .66rem; letter-spacing: .16em; text-transform: uppercase;
+  padding: .85rem .8rem;
+}
+.v1-btn:first-child { border-right: 1px solid #3a2549; }
+.v1-btn.picked { background: #ff3d8b; color: #fff; box-shadow: inset 0 3px 0 #ff6aa6; }
+.v1-btn:last-child.picked { background: #b48a2e; box-shadow: inset 0 3px 0 #f0c463; }
+.v1-bar { display: grid; grid-template-columns: 64% 36%; height: 26px; border-top: 1px solid #3a2549; }
+.v1-bar .l {
+  background: #ff3d8b; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-weight: 800; font-size: .68rem;
+}
+.v1-bar .r {
+  background: #f0c463; color: #1a0f23;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-weight: 800; font-size: .68rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   OPTION 2 · "ODDSBOARD LED"
+   Black background, LED-segment percentages, neon outline, very vegas.
+   ══════════════════════════════════════════════════════════════════ */
+.v2-card {
+  background: #0a070d;
+  border: 1px solid #1f1727;
+  border-radius: 0;
+  position: relative;
+  font-family: var(--mono);
+}
+.v2-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(180deg, rgba(255,255,255,.02) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+}
+.v2-strip {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .55rem 1rem;
+  background: #14101a;
+  border-bottom: 1px solid #1f1727;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .54rem; letter-spacing: .22em; text-transform: uppercase;
+}
+.v2-strip .id { color: #ff6aa6; }
+.v2-strip .meta { color: #6a5d7a; }
+.v2-gotw .v2-strip { background: #2a1830; }
+.v2-gotw .v2-strip .id { color: #f9d98a; }
+.v2-row {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  gap: 1rem;
+}
+.v2-team { display: flex; align-items: center; gap: .85rem; min-width: 0; }
+.v2-team.away { flex-direction: row-reverse; text-align: right; }
+.v2-team.away .v2-meta { align-items: flex-end; }
+.v2-logo {
+  width: 48px; height: 48px;
+  border: 1px solid #2a1d36; background: #14101a;
+  flex-shrink: 0; overflow: hidden;
+}
+.v2-meta { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
+.v2-name {
+  font-family: var(--grotesk); font-weight: 700;
+  font-size: .95rem; letter-spacing: -.005em;
+  color: #f5ecf5;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.v2-mgr {
+  font-family: var(--mono); font-weight: 500;
+  font-size: .52rem; letter-spacing: .22em; text-transform: uppercase;
+  color: #6a5d7a;
+}
+.v2-led {
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  padding: 0 .25rem;
+}
+.v2-led .num {
+  font-family: var(--mono); font-weight: 800;
+  font-size: 1.5rem; letter-spacing: -.02em;
+  color: #ff6aa6;
+  text-shadow: 0 0 12px rgba(255,106,166,.55);
+  line-height: 1;
+}
+.v2-led .lbl {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .48rem; letter-spacing: .25em; text-transform: uppercase;
+  color: #6a5d7a;
+}
+.v2-foot {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #1f1727;
+}
+.v2-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: #cdb9d6;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  padding: .8rem 1rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.v2-btn:first-child { border-right: 1px solid #1f1727; }
+.v2-btn .pct {
+  font-family: var(--mono); font-weight: 800;
+  font-size: .8rem; letter-spacing: 0;
+  color: #ff6aa6;
+  text-shadow: 0 0 6px rgba(255,61,139,.45);
+}
+.v2-btn:last-child .pct { color: #f0c463; text-shadow: 0 0 6px rgba(240,196,99,.45); }
+.v2-btn.picked {
+  background: rgba(255,61,139,.12);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px #ff3d8b;
+}
+.v2-btn:last-child.picked {
+  background: rgba(240,196,99,.10);
+  box-shadow: inset 0 0 0 1px #f0c463;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   OPTION 3 · "BRUTALIST SLAB"
+   Heavy borders, large mono type, blocky color fields, zero decoration.
+   ══════════════════════════════════════════════════════════════════ */
+.v3-card {
+  background: #1a1024;
+  border: 3px solid #f5ecf5;
+  font-family: var(--mono);
+  position: relative;
+}
+.v3-gotw { border-color: #f0c463; background: #241531; }
+.v3-gotw::before {
+  content: "GAME OF THE WEEK";
+  display: block;
+  background: #f0c463; color: #1a0f23;
+  padding: .35rem 1rem;
+  font-family: var(--mono); font-weight: 800;
+  font-size: .64rem; letter-spacing: .3em;
+  text-align: center;
+}
+.v3-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.v3-side {
+  padding: 1.4rem 1.2rem 1.2rem;
+  display: flex; flex-direction: column; gap: .65rem;
+}
+.v3-side.home { border-right: 3px solid #f5ecf5; }
+.v3-gotw .v3-side.home { border-right-color: #f0c463; }
+.v3-tag {
+  display: inline-block;
+  font-family: var(--mono); font-weight: 800;
+  font-size: .56rem; letter-spacing: .28em; text-transform: uppercase;
+  padding: .25rem .5rem;
+  background: #ff3d8b; color: #fff;
+  align-self: flex-start;
+}
+.v3-side.away .v3-tag { background: #f0c463; color: #1a0f23; align-self: flex-end; }
+.v3-side.away { text-align: right; }
+.v3-name-block {
+  display: flex; gap: .8rem; align-items: center;
+}
+.v3-side.away .v3-name-block { flex-direction: row-reverse; }
+.v3-logo {
+  width: 56px; height: 56px;
+  border: 2px solid #f5ecf5; background: #0f0a14;
+  overflow: hidden; flex-shrink: 0;
+}
+.v3-gotw .v3-logo { border-color: #f0c463; }
+.v3-text { display: flex; flex-direction: column; min-width: 0; }
+.v3-name {
+  font-family: var(--mono); font-weight: 800;
+  font-size: 1.1rem; letter-spacing: -.01em;
+  color: #f5ecf5;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.v3-mgr {
+  font-family: var(--mono); font-weight: 500;
+  font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+  color: #9988a8;
+  margin-top: .25rem;
+}
+.v3-proj-row {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+  color: #9988a8;
+  padding-top: .55rem; margin-top: auto;
+  border-top: 1px solid #3a2549;
+}
+.v3-side.away .v3-proj-row { flex-direction: row-reverse; }
+.v3-proj-row b { color: #f5ecf5; font-weight: 800; }
+.v3-vote {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 3px solid #f5ecf5;
+}
+.v3-gotw .v3-vote { border-top-color: #f0c463; }
+.v3-btn {
+  background: #0f0a14;
+  border: none;
+  border-right: 3px solid #f5ecf5;
+  color: #f5ecf5;
+  font-family: var(--mono); font-weight: 800;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+  padding: 1rem .8rem;
+  cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.v3-btn:last-child { border-right: none; }
+.v3-btn .num {
+  font-size: 1.1rem; font-weight: 800; letter-spacing: 0;
+}
+.v3-btn.picked { background: #ff3d8b; color: #fff; }
+.v3-btn:last-child.picked { background: #f0c463; color: #1a0f23; }
+.v3-gotw .v3-btn { border-right-color: #f0c463; }
+
+/* ══════════════════════════════════════════════════════════════════
+   OPTION 4 · "EDITORIAL SPREAD"
+   Big serif names, minimal chrome, magazine vibe.
+   ══════════════════════════════════════════════════════════════════ */
+.v4-card {
+  background: linear-gradient(180deg, #1a1024 0%, #0f0a14 100%);
+  border: 1px solid #2a1d36;
+  padding: 1.6rem 1.6rem 0;
+  position: relative;
+}
+.v4-gotw { border-color: #ff3d8b; }
+.v4-kicker {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono); font-weight: 600;
+  font-size: .56rem; letter-spacing: .26em; text-transform: uppercase;
+  color: #9988a8;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #2a1d36;
+}
+.v4-kicker .star { color: #ff6aa6; font-weight: 800; }
+.v4-stack {
+  display: flex; flex-direction: column;
+  padding: 1.25rem 0 1.4rem;
+}
+.v4-row {
+  display: flex; align-items: center; gap: 1rem;
+  padding: .65rem 0;
+}
+.v4-row + .v4-row { border-top: 1px dashed #2a1d36; }
+.v4-logo {
+  width: 50px; height: 50px;
+  border: 1px solid #2a1d36; background: #14101a;
+  overflow: hidden; flex-shrink: 0;
+}
+.v4-info { flex: 1; min-width: 0; }
+.v4-name {
+  font-family: var(--serif);
+  font-size: 1.6rem; line-height: 1; letter-spacing: -.015em;
+  color: #f5ecf5;
+}
+.v4-name em { font-style: italic; color: #ff6aa6; }
+.v4-meta {
+  margin-top: .35rem;
+  font-family: var(--mono); font-weight: 600;
+  font-size: .54rem; letter-spacing: .2em; text-transform: uppercase;
+  color: #9988a8;
+}
+.v4-meta b { color: #f5ecf5; }
+.v4-pick {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: .2rem;
+}
+.v4-pick .pct {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.5rem; line-height: 1;
+  color: #ff6aa6;
+}
+.v4-row + .v4-row .v4-pick .pct { color: #f0c463; }
+.v4-pick .lbl {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .48rem; letter-spacing: .24em; text-transform: uppercase;
+  color: #9988a8;
+}
+.v4-foot {
+  margin: 0 -1.6rem;
+  border-top: 1px solid #2a1d36;
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.v4-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: #cdb9d6;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .58rem; letter-spacing: .24em; text-transform: uppercase;
+  padding: .9rem 1rem;
+}
+.v4-btn:first-child { border-right: 1px solid #2a1d36; }
+.v4-btn.picked {
+  background: rgba(255,61,139,.12); color: #ff6aa6;
+  box-shadow: inset 0 2px 0 #ff3d8b;
+}
+.v4-btn:last-child.picked {
+  background: rgba(240,196,99,.10); color: #f9d98a;
+  box-shadow: inset 0 2px 0 #f0c463;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   OPTION 5 · "TICKET STUB"
+   Looks like a torn paper betting slip. Perforated edge, type-driven.
+   ══════════════════════════════════════════════════════════════════ */
+.v5-card {
+  background: #f4ecd6;
+  color: #1a0f23;
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1px 1fr;
+  border: none;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.4));
+}
+/* Notched/perforated edge effect */
+.v5-card::before,
+.v5-card::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 10px;
+  background-image: radial-gradient(circle, #0f0a14 2px, transparent 2.5px);
+  background-size: 16px 10px;
+  background-position: 0 50%;
+}
+.v5-card::before { top: -5px; }
+.v5-card::after  { bottom: -5px; }
+.v5-gotw { background: #f9d98a; }
+.v5-side { padding: 1.3rem 1.3rem 1.2rem; position: relative; }
+.v5-side.home { text-align: left; }
+.v5-side.away { text-align: right; }
+.v5-divider {
+  background: repeating-linear-gradient(180deg, #1a0f23 0 4px, transparent 4px 8px);
+  width: 1px;
+}
+.v5-tag {
+  font-family: var(--mono); font-weight: 800;
+  font-size: .52rem; letter-spacing: .3em; text-transform: uppercase;
+  color: #b8205f;
+  margin-bottom: .65rem;
+}
+.v5-side.away .v5-tag { color: #b48a2e; }
+.v5-logo {
+  width: 52px; height: 52px;
+  border: 2px solid #1a0f23; background: #fff;
+  overflow: hidden;
+  display: inline-block;
+  margin-bottom: .7rem;
+}
+.v5-name {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.5rem; line-height: 1.05; letter-spacing: -.015em;
+  color: #1a0f23;
+}
+.v5-mgr {
+  margin-top: .35rem;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .54rem; letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(26,15,35,.55);
+}
+.v5-proj {
+  margin-top: .45rem;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(26,15,35,.7);
+}
+.v5-proj b { color: #b8205f; font-weight: 800; font-size: .75rem; letter-spacing: 0; }
+.v5-side.away .v5-proj b { color: #b48a2e; }
+.v5-vote {
+  position: absolute; bottom: 1.3rem; left: 1.3rem; right: auto;
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: #1a0f23; color: #f4ecd6;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+  padding: .5rem .8rem;
+  cursor: pointer; border: none;
+}
+.v5-side.away .v5-vote { left: auto; right: 1.3rem; }
+.v5-vote .pct {
+  background: #b8205f; color: #f4ecd6;
+  padding: .15rem .4rem;
+  font-size: .58rem; letter-spacing: 0;
+}
+.v5-side.away .v5-vote .pct { background: #b48a2e; }
+.v5-vote.picked { background: #b8205f; }
+.v5-side.away .v5-vote.picked { background: #b48a2e; }
+.v5-vote.picked .pct { background: rgba(0,0,0,.3); }
+
+/* ══════════════════════════════════════════════════════════════════
+   OPTION 6 · "MINIMAL ROW"
+   Clean, restrained, very functional. Trades drama for legibility.
+   ══════════════════════════════════════════════════════════════════ */
+.v6-card {
+  background: #16101e;
+  border: 1px solid #2a1d36;
+  font-family: var(--grotesk);
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.v6-card .hd {
+  display: flex; justify-content: space-between;
+  padding: .55rem 1rem;
+  font-family: var(--mono); font-weight: 600;
+  font-size: .52rem; letter-spacing: .22em; text-transform: uppercase;
+  color: #6a5d7a;
+  border-bottom: 1px solid #2a1d36;
+}
+.v6-gotw .hd { background: rgba(255,61,139,.08); color: #ff6aa6; }
+.v6-row {
+  display: grid; grid-template-columns: 44px 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: .9rem 1rem;
+  cursor: pointer;
+  transition: background .12s;
+}
+.v6-row:hover { background: rgba(255,255,255,.025); }
+.v6-row + .v6-row { border-top: 1px solid #2a1d36; }
+.v6-logo { width: 44px; height: 44px; border: 1px solid #2a1d36; background: #0f0a14; overflow: hidden; }
+.v6-info { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
+.v6-name { font-weight: 700; font-size: 1rem; color: #f5ecf5; letter-spacing: -.005em; }
+.v6-mgr {
+  font-family: var(--mono); font-weight: 500;
+  font-size: .55rem; letter-spacing: .2em; text-transform: uppercase;
+  color: #9988a8;
+}
+.v6-proj {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .85rem; color: #cdb9d6;
+  letter-spacing: -.01em;
+}
+.v6-pct {
+  width: 64px;
+  font-family: var(--mono); font-weight: 800;
+  font-size: 1.05rem; color: #ff6aa6;
+  text-align: right; letter-spacing: -.01em;
+}
+.v6-row:last-child .v6-pct { color: #f0c463; }
+.v6-row.picked { background: rgba(255,61,139,.10); box-shadow: inset 4px 0 0 #ff3d8b; }
+.v6-row:last-child.picked { background: rgba(240,196,99,.08); box-shadow: inset 4px 0 0 #f0c463; }
+.v6-bar {
+  height: 4px;
+  display: grid; grid-template-columns: 64% 36%;
+}
+.v6-bar .l { background: #ff3d8b; }
+.v6-bar .r { background: #f0c463; }
+
+/* ══════════════════════════════════════════════════════════════════
+   CHOOSER
+   ══════════════════════════════════════════════════════════════════ */
+.chooser {
+  margin-top: 4rem;
+  padding: 1.5rem;
+  background: rgba(255,61,139,.06);
+  border: 1px dashed rgba(255,106,166,.35);
+  text-align: center;
+}
+.chooser h3 {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.2rem; color: #f5ecf5;
+  margin-bottom: .5rem;
+}
+.chooser p {
+  font-family: var(--mono);
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: #cdb9d6;
+  line-height: 1.6;
+}
+.chooser b { color: #ff6aa6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <h1>Pick'em Card · <em>Style Picker</em></h1>
+    <p>Six options · Same data · Pick one and I'll wire it in</p>
+    <a href="./index.html" class="back">← Back to Pick'ems</a>
+  </header>
+
+  <!-- ══════════════ OPTION 1 ══════════════ -->
+  <section class="option">
+    <div class="option-head">
+      <span class="option-num">01</span>
+      <span class="option-title">Stadium Board</span>
+      <span class="option-desc">Two-pane split · centered VS badge · vertical team stacks</span>
+    </div>
+    <div class="cards">
+      <!-- regular -->
+      <article class="v1-card">
+        <div class="v1-top">
+          <div class="v1-team">
+            <div class="v1-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23a04830' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ESH%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v1-name">Stoneridge Hammers</div>
+            <div class="v1-mgr">Marcus · 3-1</div>
+            <div class="v1-proj">Proj <strong>138.5</strong></div>
+          </div>
+          <div class="v1-vs"></div>
+          <div class="v1-team">
+            <div class="v1-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%236b8aa8' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EHH%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v1-name">Highland Hawks</div>
+            <div class="v1-mgr">Jordan · 2-2</div>
+            <div class="v1-proj">Proj <strong>142.7</strong></div>
+          </div>
+        </div>
+        <div class="v1-bottom">
+          <div class="v1-btns">
+            <button class="v1-btn picked">▸ Stoneridge</button>
+            <button class="v1-btn">▸ Highland</button>
+          </div>
+          <div class="v1-bar"><span class="l">64%</span><span class="r">36%</span></div>
+        </div>
+      </article>
+      <!-- gotw -->
+      <article class="v1-card v1-gotw">
+        <div class="v1-top">
+          <div class="v1-team">
+            <div class="v1-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23e8c889' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EDO%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v1-name">Den of Thieves</div>
+            <div class="v1-mgr">Devin · 4-0</div>
+            <div class="v1-proj">Proj <strong>139.8</strong></div>
+          </div>
+          <div class="v1-vs"></div>
+          <div class="v1-team">
+            <div class="v1-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%238aad48' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ECF%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v1-name">Cold Front</div>
+            <div class="v1-mgr">Cole · 4-0</div>
+            <div class="v1-proj">Proj <strong>136.1</strong></div>
+          </div>
+        </div>
+        <div class="v1-bottom">
+          <div class="v1-btns">
+            <button class="v1-btn">▸ Den of Thieves</button>
+            <button class="v1-btn picked">▸ Cold Front</button>
+          </div>
+          <div class="v1-bar"><span class="l">48%</span><span class="r">52%</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════ OPTION 2 ══════════════ -->
+  <section class="option">
+    <div class="option-head">
+      <span class="option-num">02</span>
+      <span class="option-title">Oddsboard LED</span>
+      <span class="option-desc">Vegas dark · neon LED percentages · pure mono · pinstripe overlay</span>
+    </div>
+    <div class="cards">
+      <article class="v2-card">
+        <div class="v2-strip">
+          <span class="id">MATCH · 04</span>
+          <span class="meta">Sun 1:00pm · Locks 12:55</span>
+        </div>
+        <div class="v2-row">
+          <div class="v2-team">
+            <div class="v2-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23a04830' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ESH%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v2-meta">
+              <div class="v2-name">Stoneridge Hammers</div>
+              <div class="v2-mgr">Marcus · 3-1 · 138.5</div>
+            </div>
+          </div>
+          <div class="v2-led"><div class="num">64</div><div class="lbl">PCT</div></div>
+          <div class="v2-team away">
+            <div class="v2-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%236b8aa8' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EHH%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v2-meta">
+              <div class="v2-name">Highland Hawks</div>
+              <div class="v2-mgr">Jordan · 2-2 · 142.7</div>
+            </div>
+          </div>
+        </div>
+        <div class="v2-foot">
+          <button class="v2-btn picked">PICK HOME <span class="pct">64%</span></button>
+          <button class="v2-btn">PICK AWAY <span class="pct">36%</span></button>
+        </div>
+      </article>
+      <article class="v2-card v2-gotw">
+        <div class="v2-strip">
+          <span class="id">★ GAME OF THE WEEK</span>
+          <span class="meta">Sun 4:25pm · Spotlight</span>
+        </div>
+        <div class="v2-row">
+          <div class="v2-team">
+            <div class="v2-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23e8c889' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EDO%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v2-meta">
+              <div class="v2-name">Den of Thieves</div>
+              <div class="v2-mgr">Devin · 4-0 · 139.8</div>
+            </div>
+          </div>
+          <div class="v2-led"><div class="num">48</div><div class="lbl">PCT</div></div>
+          <div class="v2-team away">
+            <div class="v2-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%238aad48' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ECF%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v2-meta">
+              <div class="v2-name">Cold Front</div>
+              <div class="v2-mgr">Cole · 4-0 · 136.1</div>
+            </div>
+          </div>
+        </div>
+        <div class="v2-foot">
+          <button class="v2-btn">PICK HOME <span class="pct">48%</span></button>
+          <button class="v2-btn picked">PICK AWAY <span class="pct">52%</span></button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════ OPTION 3 ══════════════ -->
+  <section class="option">
+    <div class="option-head">
+      <span class="option-num">03</span>
+      <span class="option-title">Brutalist Slab</span>
+      <span class="option-desc">Heavy 3px borders · all-caps mono · blocky color fields · no glow</span>
+    </div>
+    <div class="cards">
+      <article class="v3-card">
+        <div class="v3-grid">
+          <div class="v3-side home">
+            <span class="v3-tag">PICK A</span>
+            <div class="v3-name-block">
+              <div class="v3-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23a04830' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ESH%3C/text%3E%3C/svg%3E" alt=""></div>
+              <div class="v3-text">
+                <div class="v3-name">Stoneridge</div>
+                <div class="v3-mgr">Marcus</div>
+              </div>
+            </div>
+            <div class="v3-proj-row"><span>PROJ</span><b>138.5</b></div>
+          </div>
+          <div class="v3-side away">
+            <span class="v3-tag">PICK B</span>
+            <div class="v3-name-block">
+              <div class="v3-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%236b8aa8' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EHH%3C/text%3E%3C/svg%3E" alt=""></div>
+              <div class="v3-text">
+                <div class="v3-name">Highland</div>
+                <div class="v3-mgr">Jordan</div>
+              </div>
+            </div>
+            <div class="v3-proj-row"><b>142.7</b><span>PROJ</span></div>
+          </div>
+        </div>
+        <div class="v3-vote">
+          <button class="v3-btn picked">A <span class="num">64%</span></button>
+          <button class="v3-btn">B <span class="num">36%</span></button>
+        </div>
+      </article>
+      <article class="v3-card v3-gotw">
+        <div class="v3-grid">
+          <div class="v3-side home">
+            <span class="v3-tag">PICK A</span>
+            <div class="v3-name-block">
+              <div class="v3-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23e8c889' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EDO%3C/text%3E%3C/svg%3E" alt=""></div>
+              <div class="v3-text">
+                <div class="v3-name">Thieves</div>
+                <div class="v3-mgr">Devin</div>
+              </div>
+            </div>
+            <div class="v3-proj-row"><span>PROJ</span><b>139.8</b></div>
+          </div>
+          <div class="v3-side away">
+            <span class="v3-tag">PICK B</span>
+            <div class="v3-name-block">
+              <div class="v3-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%238aad48' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ECF%3C/text%3E%3C/svg%3E" alt=""></div>
+              <div class="v3-text">
+                <div class="v3-name">Cold Front</div>
+                <div class="v3-mgr">Cole</div>
+              </div>
+            </div>
+            <div class="v3-proj-row"><b>136.1</b><span>PROJ</span></div>
+          </div>
+        </div>
+        <div class="v3-vote">
+          <button class="v3-btn">A <span class="num">48%</span></button>
+          <button class="v3-btn picked">B <span class="num">52%</span></button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════ OPTION 4 ══════════════ -->
+  <section class="option">
+    <div class="option-head">
+      <span class="option-num">04</span>
+      <span class="option-title">Editorial Spread</span>
+      <span class="option-desc">Stacked rows · big serif names · magazine kicker line · soft</span>
+    </div>
+    <div class="cards">
+      <article class="v4-card">
+        <div class="v4-kicker">
+          <span>WEEK 04 · 03 OF 05</span>
+          <span>Sun 1:00pm</span>
+        </div>
+        <div class="v4-stack">
+          <div class="v4-row">
+            <div class="v4-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23a04830' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ESH%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v4-info">
+              <div class="v4-name">Stoneridge <em>Hammers</em></div>
+              <div class="v4-meta">Marcus · 3-1 · Proj <b>138.5</b></div>
+            </div>
+            <div class="v4-pick"><span class="pct">64%</span><span class="lbl">to pick</span></div>
+          </div>
+          <div class="v4-row">
+            <div class="v4-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%236b8aa8' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EHH%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v4-info">
+              <div class="v4-name">Highland <em>Hawks</em></div>
+              <div class="v4-meta">Jordan · 2-2 · Proj <b>142.7</b></div>
+            </div>
+            <div class="v4-pick"><span class="pct">36%</span><span class="lbl">to pick</span></div>
+          </div>
+        </div>
+        <div class="v4-foot">
+          <button class="v4-btn picked">Pick Stoneridge</button>
+          <button class="v4-btn">Pick Highland</button>
+        </div>
+      </article>
+      <article class="v4-card v4-gotw">
+        <div class="v4-kicker">
+          <span><span class="star">★</span> GAME OF THE WEEK</span>
+          <span>Sun 4:25pm</span>
+        </div>
+        <div class="v4-stack">
+          <div class="v4-row">
+            <div class="v4-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23e8c889' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EDO%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v4-info">
+              <div class="v4-name">Den of <em>Thieves</em></div>
+              <div class="v4-meta">Devin · 4-0 · Proj <b>139.8</b></div>
+            </div>
+            <div class="v4-pick"><span class="pct">48%</span><span class="lbl">to pick</span></div>
+          </div>
+          <div class="v4-row">
+            <div class="v4-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%238aad48' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ECF%3C/text%3E%3C/svg%3E" alt=""></div>
+            <div class="v4-info">
+              <div class="v4-name">Cold <em>Front</em></div>
+              <div class="v4-meta">Cole · 4-0 · Proj <b>136.1</b></div>
+            </div>
+            <div class="v4-pick"><span class="pct">52%</span><span class="lbl">to pick</span></div>
+          </div>
+        </div>
+        <div class="v4-foot">
+          <button class="v4-btn">Pick Den of Thieves</button>
+          <button class="v4-btn picked">Pick Cold Front</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════ OPTION 5 ══════════════ -->
+  <section class="option">
+    <div class="option-head">
+      <span class="option-num">05</span>
+      <span class="option-title">Ticket Stub</span>
+      <span class="option-desc">Cream paper · perforated edges · italic serif names · bookmaker feel</span>
+    </div>
+    <div class="cards">
+      <article class="v5-card">
+        <div class="v5-side home">
+          <div class="v5-tag">A · Home</div>
+          <div class="v5-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23a04830' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ESH%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v5-name">Stoneridge<br>Hammers</div>
+          <div class="v5-mgr">Marcus · 3-1</div>
+          <div class="v5-proj">Proj <b>138.5</b></div>
+          <button class="v5-vote picked">Pick A <span class="pct">64%</span></button>
+        </div>
+        <div class="v5-divider"></div>
+        <div class="v5-side away">
+          <div class="v5-tag">B · Away</div>
+          <div class="v5-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%236b8aa8' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EHH%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v5-name">Highland<br>Hawks</div>
+          <div class="v5-mgr">Jordan · 2-2</div>
+          <div class="v5-proj">Proj <b>142.7</b></div>
+          <button class="v5-vote">Pick B <span class="pct">36%</span></button>
+        </div>
+      </article>
+      <article class="v5-card v5-gotw">
+        <div class="v5-side home">
+          <div class="v5-tag">★ Featured</div>
+          <div class="v5-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23e8c889' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EDO%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v5-name">Den of<br>Thieves</div>
+          <div class="v5-mgr">Devin · 4-0</div>
+          <div class="v5-proj">Proj <b>139.8</b></div>
+          <button class="v5-vote">Pick A <span class="pct">48%</span></button>
+        </div>
+        <div class="v5-divider"></div>
+        <div class="v5-side away">
+          <div class="v5-tag">★ Featured</div>
+          <div class="v5-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%238aad48' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ECF%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v5-name">Cold<br>Front</div>
+          <div class="v5-mgr">Cole · 4-0</div>
+          <div class="v5-proj">Proj <b>136.1</b></div>
+          <button class="v5-vote picked">Pick B <span class="pct">52%</span></button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════ OPTION 6 ══════════════ -->
+  <section class="option">
+    <div class="option-head">
+      <span class="option-num">06</span>
+      <span class="option-title">Minimal Row</span>
+      <span class="option-desc">Stacked one-line rows · tap to pick · functional · scans fast</span>
+    </div>
+    <div class="cards">
+      <article class="v6-card">
+        <div class="hd"><span>Match 04 · Sun 1:00pm</span><span>Locks 12:55</span></div>
+        <div class="v6-row picked">
+          <div class="v6-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23a04830' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ESH%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v6-info"><div class="v6-name">Stoneridge Hammers</div><div class="v6-mgr">Marcus · 3-1</div></div>
+          <div class="v6-proj">138.5</div>
+          <div class="v6-pct">64%</div>
+        </div>
+        <div class="v6-row">
+          <div class="v6-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%236b8aa8' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EHH%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v6-info"><div class="v6-name">Highland Hawks</div><div class="v6-mgr">Jordan · 2-2</div></div>
+          <div class="v6-proj">142.7</div>
+          <div class="v6-pct">36%</div>
+        </div>
+        <div class="v6-bar"><span class="l"></span><span class="r"></span></div>
+      </article>
+      <article class="v6-card v6-gotw">
+        <div class="hd"><span>★ Game of the Week</span><span>Sun 4:25pm</span></div>
+        <div class="v6-row">
+          <div class="v6-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%23e8c889' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3EDO%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v6-info"><div class="v6-name">Den of Thieves</div><div class="v6-mgr">Devin · 4-0</div></div>
+          <div class="v6-proj">139.8</div>
+          <div class="v6-pct">48%</div>
+        </div>
+        <div class="v6-row picked">
+          <div class="v6-logo"><img class="lg" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='36' fill='%238aad48' stroke='%230e1620' stroke-width='3'/%3E%3Ctext x='40' y='52' font-family='Georgia' font-style='italic' font-size='32' font-weight='700' text-anchor='middle' fill='%23f4ebd8'%3ECF%3C/text%3E%3C/svg%3E" alt=""></div>
+          <div class="v6-info"><div class="v6-name">Cold Front</div><div class="v6-mgr">Cole · 4-0</div></div>
+          <div class="v6-proj">136.1</div>
+          <div class="v6-pct">52%</div>
+        </div>
+        <div class="v6-bar" style="grid-template-columns: 48% 52%;"><span class="l"></span><span class="r"></span></div>
+      </article>
+    </div>
+  </section>
+
+  <div class="chooser">
+    <h3>Pick one</h3>
+    <p>Tell me <b>01</b>, <b>02</b>, <b>03</b>, <b>04</b>, <b>05</b>, or <b>06</b><br>and I'll wire it into the real pick'ems page.</p>
+  </div>
+
+</div>
+</body>
+</html>
