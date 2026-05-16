@@ -1,0 +1,60 @@
+{
+  "seasons": [
+    {
+      "year": 2019,
+      "champion_name": "Marcus",
+      "champion_team_name": "Hammer Time",
+      "champion_user_id": 1001,
+      "total_teams": 14,
+      "has_complete_data": true
+    },
+    {
+      "year": 2020,
+      "champion_name": "Ethan",
+      "champion_team_name": "East End",
+      "champion_user_id": 1004,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2021,
+      "champion_name": "Tyler",
+      "champion_team_name": "Crosstown Comets",
+      "champion_user_id": 1002,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2022,
+      "champion_name": "Jordan",
+      "champion_team_name": "Highland Hawks",
+      "champion_user_id": 1003,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2023,
+      "champion_name": "Marcus",
+      "champion_team_name": "Stoneridge Hammers",
+      "champion_user_id": 1001,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2024,
+      "champion_name": "Devin",
+      "champion_team_name": "Den of Thieves",
+      "champion_user_id": 1006,
+      "total_teams": 12,
+      "has_complete_data": true
+    },
+    {
+      "year": 2025,
+      "champion_name": "Cole",
+      "champion_team_name": "Cold Front",
+      "champion_user_id": 1007,
+      "total_teams": 12,
+      "has_complete_data": true
+    }
+  ]
+}

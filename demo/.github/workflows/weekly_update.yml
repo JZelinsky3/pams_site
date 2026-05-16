@@ -1,0 +1,39 @@
+name: Weekly Sleeper Update
+
+on:
+  schedule:
+    # Every Tuesday at 4pm UTC (noon EDT / 11am EST)
+    - cron: '0 16 * * 2'
+  workflow_dispatch:   # allow manual trigger from GitHub Actions tab
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run weekly update
+        run: python scripts/sleeper_update.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pickems/teams.json pickems/manifest.json pickems/weeks/ \
+                  powerrank/manifest.json powerrank/weeks/
+          git diff --staged --quiet && echo "No changes." || (
+            git commit -m "auto: weekly update $(date -u +%Y-%m-%d)" &&
+            git push
+          )

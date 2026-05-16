@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft History · The Lakeside League</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+/* ============================================================
+   DRAFT HISTORY — Black / Gold Palette
+   ============================================================ */
+
+:root {
+    --dg-bg:          #0d0d0d;
+    --dg-soft:        #131313;
+    --dg-card:        #1a1a1a;
+    --dg-card-hover:  #212121;
+    --dg-line:        #2c2c2c;
+    --dg-line-soft:   #1f1f1f;
+    --dg-accent:      #e8c889;
+    --dg-bright:      #f4d9a4;
+    --dg-mute:        #8a7a60;
+}
+
+body { background: var(--dg-bg); }
+
+.site-glow {
+    background-image:
+        radial-gradient(circle at 15% 25%, rgba(232,200,137,.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(244,217,164,.03) 0%, transparent 50%);
+}
+
+.nav { background: rgba(13, 13, 13, .94); border-bottom-color: var(--dg-line); }
+
+/* Themed nav dropdown — draft history dark */
+:root {
+    --nav-drop-bg:           rgba(13,13,13,.97);
+    --nav-drop-border:       var(--dg-line);
+    --nav-drop-text:         #c9c0ad;
+    --nav-drop-text-mute:    var(--dg-mute);
+    --nav-drop-accent:       var(--dg-accent);
+    --nav-drop-hover-bg:     rgba(232,200,137,.07);
+    --nav-drop-sub-bg:       rgba(0,0,0,.35);
+    --nav-drop-accent-line:  rgba(232,200,137,.15);
+}
+
+/* ── Page header ── */
+.page-header {
+    text-align: center;
+    padding: 3.5rem 1.5rem 2.5rem;
+    max-width: 960px; margin: 0 auto;
+    position: relative; z-index: 10;
+}
+.page-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--dg-accent); margin-bottom: 1.5rem;
+}
+.page-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: .95; letter-spacing: -.025em;
+    color: var(--cream); margin-bottom: 1rem;
+}
+.page-title em { font-style: italic; color: var(--gold); }
+.page-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.15rem; color: var(--cream-soft);
+    max-width: 520px; margin: 0 auto;
+}
+
+/* ── Hero stats ── */
+.hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--dg-line);
+    border: 1px solid var(--dg-line);
+    max-width: 760px; margin: 2.5rem auto 0;
+}
+.hero-stat {
+    background: var(--dg-card);
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+.hero-stat-num {
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1; letter-spacing: -.02em;
+    color: var(--gold);
+}
+.hero-stat-label {
+    font-family: var(--mono); font-size: .6rem;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--dg-accent); margin-top: .5rem;
+}
+
+/* ── Main layout ── */
+.draft-main {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+    position: relative; z-index: 10;
+}
+
+/* ── Top-level page tabs ── */
+.draft-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--dg-line);
+    margin-bottom: 3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 0;
+}
+.draft-tabs::-webkit-scrollbar { display: none; }
+.draft-tab {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
+    padding: .85rem 1.6rem;
+    border: none; border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--cream-mute);
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.draft-tab:hover { color: var(--cream); }
+.draft-tab.active {
+    color: var(--dg-accent);
+    border-bottom-color: var(--dg-accent);
+}
+.draft-panel { display: none; }
+.draft-panel.active { display: block; }
+
+/* ── Section chrome ── */
+.draft-section { margin-bottom: 4rem; }
+.section-header {
+    display: flex; align-items: baseline; gap: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--dg-line);
+    margin-bottom: 1.75rem;
+}
+.section-num {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--dg-accent); flex-shrink: 0;
+}
+.section-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.7rem; letter-spacing: -.02em;
+    color: var(--cream);
+}
+.section-note {
+    margin-left: auto; flex-shrink: 0;
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+/* ── Split layout for panels ── */
+.panel-split {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 3rem;
+    align-items: start;
+}
+@media (max-width: 960px) { .panel-split { grid-template-columns: 1fr; } }
+
+/* ── Year tabs ── */
+.year-tabs {
+    display: flex; gap: .5rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+.year-tab {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .45rem .85rem;
+    border: 1px solid var(--dg-line);
+    background: var(--dg-card);
+    color: var(--cream-soft);
+    cursor: pointer;
+    transition: all .15s;
+}
+.year-tab:hover { background: var(--dg-card-hover); color: var(--cream); }
+.year-tab.active {
+    background: var(--dg-accent);
+    border-color: var(--dg-accent);
+    color: var(--dg-bg);
+}
+
+/* ── Draft board ── */
+.board-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--dg-line);
+}
+.board-table {
+    border-collapse: collapse;
+    width: max-content;
+    min-width: 100%;
+    font-size: .72rem;
+}
+.board-table thead th {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .65rem .5rem;
+    background: var(--dg-soft);
+    border-bottom: 2px solid var(--dg-line);
+    border-right: 1px solid var(--dg-line);
+    white-space: nowrap;
+    text-align: center;
+    color: var(--dg-accent);
+}
+.board-table thead th:first-child {
+    text-align: left;
+    padding-left: 1rem;
+    position: sticky; left: 0; z-index: 2;
+    background: var(--dg-soft);
+    min-width: 120px;
+}
+.board-table tbody tr:nth-child(odd) .board-cell,
+.board-table tbody tr:nth-child(odd) .board-mgr-td { background: var(--dg-card); }
+.board-table tbody tr:nth-child(even) .board-cell,
+.board-table tbody tr:nth-child(even) .board-mgr-td { background: var(--dg-soft); }
+.board-table tbody tr:hover .board-cell,
+.board-table tbody tr:hover .board-mgr-td { background: var(--dg-card-hover); }
+
+.board-mgr-td {
+    position: sticky; left: 0; z-index: 1;
+    padding: .55rem 1rem;
+    border-right: 2px solid var(--dg-line);
+    min-width: 120px;
+    white-space: nowrap;
+}
+.board-mgr-name {
+    display: block;
+    font-family: var(--sans); font-weight: 600;
+    font-size: .78rem; color: var(--cream);
+}
+.board-team-name {
+    display: block;
+    font-family: var(--mono); font-size: .55rem;
+    color: var(--cream-mute); letter-spacing: .05em;
+    margin-top: .1rem;
+    max-width: 110px; overflow: hidden; text-overflow: ellipsis;
+}
+.board-cell {
+    padding: .45rem .55rem;
+    border-right: 1px solid var(--dg-line-soft);
+    vertical-align: top;
+    min-width: 90px; max-width: 110px;
+    cursor: default;
+}
+.board-player {
+    display: block;
+    font-family: var(--sans); font-size: .72rem;
+    color: var(--cream); line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 100px;
+}
+.board-pos {
+    display: inline-block;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .52rem; letter-spacing: .08em;
+    padding: .1rem .3rem; margin-top: .25rem;
+    border-radius: 2px;
+}
+.board-empty { color: var(--cream-mute); text-align: center; vertical-align: middle; font-size: .65rem; }
+
+.board-cell.p-rb .board-player { color: #6dc28c; }
+.board-cell.p-rb .board-pos  { background: rgba(74,154,106,.2); color: #6dc28c; }
+.board-cell.p-wr .board-player { color: var(--gold-bright); }
+.board-cell.p-wr .board-pos  { background: rgba(232,200,137,.15); color: var(--gold); }
+.board-cell.p-qb .board-player { color: #8aaccc; }
+.board-cell.p-qb .board-pos  { background: rgba(107,138,168,.2); color: #8aaccc; }
+.board-cell.p-te .board-player { color: #c4a3e8; }
+.board-cell.p-te .board-pos  { background: rgba(155,123,184,.2); color: #b89fd8; }
+.board-cell.p-k  .board-player,
+.board-cell.p-def .board-player { color: var(--cream-soft); }
+.board-cell.p-k  .board-pos,
+.board-cell.p-def .board-pos  { background: rgba(100,100,100,.2); color: var(--cream-mute); }
+
+/* ── Position legend ── */
+.pos-legend {
+    display: flex; gap: 1.25rem; flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+.pos-legend-item {
+    display: flex; align-items: center; gap: .4rem;
+    font-family: var(--mono); font-size: .6rem; letter-spacing: .1em;
+    color: var(--cream-soft);
+}
+.pos-dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-rb  { background: #6dc28c; }
+.dot-wr  { background: var(--gold); }
+.dot-qb  { background: #8aaccc; }
+.dot-te  { background: #c4a3e8; }
+.dot-def { background: var(--cream-mute); }
+
+/* ── Loading state ── */
+.board-loading {
+    padding: 3rem; text-align: center;
+    font-family: var(--mono); font-size: .7rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--dg-accent);
+}
+
+/* ── First round pivot table ── */
+.r1-pivot-wrap { overflow-x: auto; border: 1px solid var(--dg-line); }
+.r1-pivot {
+    border-collapse: collapse; min-width: 100%; width: max-content;
+}
+.r1-pivot th {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .65rem .75rem;
+    background: var(--dg-soft);
+    border-bottom: 2px solid var(--dg-line);
+    border-right: 1px solid var(--dg-line);
+    color: var(--dg-accent); text-align: center;
+    white-space: nowrap;
+}
+.r1-pivot th:first-child { text-align: left; min-width: 90px; }
+.r1-pivot td {
+    padding: .6rem .75rem;
+    border-right: 1px solid var(--dg-line-soft);
+    border-bottom: 1px solid var(--dg-line-soft);
+    vertical-align: top; min-width: 110px;
+}
+.r1-pivot tbody tr:last-child td { border-bottom: none; }
+.r1-pivot tbody tr:nth-child(odd) td  { background: var(--dg-card); }
+.r1-pivot tbody tr:nth-child(even) td { background: var(--dg-soft); }
+.r1-pivot tbody tr:hover td { background: var(--dg-card-hover) !important; }
+.r1-mgr-cell {
+    font-family: var(--sans); font-weight: 700;
+    font-size: .82rem; color: var(--cream);
+    border-right: 2px solid var(--dg-line) !important;
+    white-space: nowrap;
+    position: sticky; left: 0; z-index: 1;
+}
+.r1-year-cell { text-align: center; }
+.r1-pick-name {
+    display: block; font-weight: 600; font-size: .75rem;
+    line-height: 1.2; margin-bottom: .25rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 100px;
+}
+.r1-pick-meta { display: flex; align-items: center; gap: .35rem; justify-content: center; }
+.r1-pick-ovr {
+    font-family: var(--mono); font-size: .57rem;
+    color: var(--cream-mute); letter-spacing: .03em;
+}
+.r1-pos-pill {
+    display: inline-block;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .52rem; letter-spacing: .08em;
+    padding: .1rem .28rem; border-radius: 2px;
+}
+.r1-empty-cell { text-align: center; color: var(--dg-line); font-size: 1rem; vertical-align: middle !important; }
+.r1-year-cell.p-rb .r1-pick-name { color: #6dc28c; }
+.r1-year-cell.p-wr .r1-pick-name { color: var(--gold-bright); }
+.r1-year-cell.p-qb .r1-pick-name { color: #8aaccc; }
+.r1-year-cell.p-te .r1-pick-name { color: #c4a3e8; }
+
+/* ── Draft order history ── */
+.do-table { border-collapse: collapse; min-width: 100%; }
+.do-table th {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .65rem .6rem;
+    background: var(--dg-soft);
+    border-bottom: 2px solid var(--dg-line);
+    border-right: 1px solid var(--dg-line);
+    color: var(--dg-accent); text-align: center;
+    white-space: nowrap;
+}
+.do-table th:first-child { text-align: left; padding-left: 1rem; min-width: 90px; }
+.do-table td {
+    padding: .55rem .6rem;
+    border-right: 1px solid var(--dg-line-soft);
+    border-bottom: 1px solid var(--dg-line-soft);
+    text-align: center;
+}
+.do-table tbody tr:last-child td { border-bottom: none; }
+.do-table tbody tr:nth-child(odd) td  { background: var(--dg-card); }
+.do-table tbody tr:nth-child(even) td { background: var(--dg-soft); }
+.do-table tbody tr:hover td { background: var(--dg-card-hover) !important; }
+.do-mgr { font-family: var(--sans); font-weight: 700; font-size: .82rem; color: var(--cream); text-align: left !important; padding-left: 1rem !important; border-right: 2px solid var(--dg-line) !important; white-space: nowrap; }
+.do-slot { font-family: var(--mono); font-weight: 700; font-size: .82rem; }
+.do-avg  { font-family: var(--mono); font-size: .72rem; color: var(--cream-mute); border-left: 1px solid var(--dg-line) !important; }
+
+/* ── Manager DNA ── */
+.mgr-dna-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--dg-line);
+    border: 1px solid var(--dg-line);
+}
+@media (max-width: 760px) { .mgr-dna-grid { grid-template-columns: 1fr; } }
+
+.mgr-dna-row {
+    background: var(--dg-card);
+    padding: 1rem 1.25rem;
+}
+.mgr-dna-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: .7rem;
+}
+.mgr-dna-name { font-family: var(--sans); font-weight: 700; font-size: .9rem; color: var(--cream); }
+.mgr-dna-total { font-family: var(--mono); font-size: .58rem; letter-spacing: .15em; color: var(--cream-mute); }
+.dna-bar {
+    display: flex; height: 10px; border-radius: 2px;
+    overflow: hidden; gap: 1px;
+    margin-bottom: .6rem;
+}
+.dna-seg { height: 100%; transition: width .4s ease; }
+.dna-seg.rb  { background: #6dc28c; }
+.dna-seg.wr  { background: var(--gold); }
+.dna-seg.qb  { background: #8aaccc; }
+.dna-seg.te  { background: #c4a3e8; }
+.dna-seg.k   { background: var(--cream-mute); }
+.dna-seg.def { background: #5a6a60; }
+.dna-labels { display: flex; flex-wrap: wrap; gap: .4rem .75rem; }
+.dna-label {
+    font-family: var(--mono); font-size: .58rem;
+    letter-spacing: .05em; color: var(--cream-soft);
+    display: flex; align-items: center; gap: .3rem;
+}
+.dna-swatch { width: 7px; height: 7px; border-radius: 1px; flex-shrink: 0; }
+
+/* ── Manager tendencies table ── */
+.tend-wrap { overflow-x: auto; border: 1px solid var(--dg-line); }
+.tend-table { border-collapse: collapse; min-width: 100%; }
+.tend-table th {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+    padding: .6rem .8rem;
+    background: var(--dg-soft);
+    border-bottom: 2px solid var(--dg-line);
+    border-right: 1px solid var(--dg-line);
+    color: var(--dg-accent); text-align: center;
+    white-space: nowrap;
+}
+.tend-table th:first-child { text-align: left; padding-left: 1rem; }
+.tend-table td {
+    padding: .6rem .8rem;
+    border-right: 1px solid var(--dg-line-soft);
+    border-bottom: 1px solid var(--dg-line-soft);
+    text-align: center;
+    font-family: var(--mono); font-size: .78rem;
+}
+.tend-table tbody tr:last-child td { border-bottom: none; }
+.tend-table tbody tr:nth-child(odd) td  { background: var(--dg-card); }
+.tend-table tbody tr:nth-child(even) td { background: var(--dg-soft); }
+.tend-table tbody tr:hover td { background: var(--dg-card-hover) !important; }
+.tend-mgr { font-family: var(--sans) !important; font-weight: 700; font-size: .82rem !important; color: var(--cream); text-align: left !important; padding-left: 1rem !important; border-right: 2px solid var(--dg-line) !important; white-space: nowrap; }
+.tend-note { font-family: var(--mono); font-size: .6rem; color: var(--cream-mute); margin-top: 1rem; letter-spacing: .05em; }
+
+/* ── Most coveted ── */
+.coveted-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--dg-line);
+    border: 1px solid var(--dg-line);
+}
+.coveted-card { background: var(--dg-card); padding: 1.1rem 1.25rem; }
+.coveted-count {
+    font-family: var(--serif); font-size: 2.2rem;
+    line-height: 1; letter-spacing: -.02em;
+    color: var(--gold); margin-bottom: .25rem;
+}
+.coveted-count span {
+    font-family: var(--mono); font-size: .62rem;
+    letter-spacing: .15em; text-transform: uppercase;
+    color: var(--dg-accent); margin-left: .35rem;
+    vertical-align: middle;
+}
+.coveted-name { font-family: var(--sans); font-weight: 600; font-size: .95rem; color: var(--cream); margin-bottom: .2rem; }
+.coveted-pos {
+    display: inline-block;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .1em;
+    padding: .12rem .35rem; border-radius: 2px;
+    margin-bottom: .5rem;
+}
+.coveted-years { font-family: var(--mono); font-size: .58rem; letter-spacing: .05em; color: var(--cream-mute); line-height: 1.6; }
+.coveted-yr-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--dg-accent); margin-right: .3rem; vertical-align: middle; }
+
+/* ── Best / Worst by year ── */
+.bw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--dg-line);
+    border: 1px solid var(--dg-line);
+}
+.bw-card { background: var(--dg-card); padding: 1rem 1.25rem; }
+@media (max-width: 640px) {
+    .bw-card { padding: .7rem .8rem; }
+    .bw-year { font-size: .55rem; letter-spacing: .15em; margin-bottom: .65rem; padding-bottom: .35rem; }
+    .bw-pick { margin-bottom: .5rem; }
+    .bw-label { font-size: .46rem; letter-spacing: .18em; }
+    .bw-player { font-size: .78rem; }
+    .bw-meta { font-size: .54rem; }
+
+    /* Top-level page tabs — equally spaced to fill full width */
+    .draft-tabs {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0;
+        margin-bottom: 2rem;
+        overflow-x: visible;
+    }
+    .draft-tabs .draft-tab {
+        font-size: .46rem; letter-spacing: .06em;
+        padding: .65rem .2rem;
+        text-align: center;
+        white-space: nowrap;
+        min-width: 0;
+    }
+}
+@media (max-width: 420px) {
+    .draft-tabs .draft-tab {
+        font-size: .42rem; letter-spacing: .04em;
+        padding: .6rem .15rem;
+    }
+}
+.bw-year {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .85rem;
+    padding-bottom: .5rem; border-bottom: 1px solid var(--dg-line-soft);
+}
+.bw-pick { margin-bottom: .65rem; }
+.bw-pick:last-child { margin-bottom: 0; }
+.bw-label {
+    font-family: var(--mono); font-size: .52rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .2rem;
+}
+.bw-player { font-weight: 600; font-size: .85rem; }
+.bw-meta { font-family: var(--mono); font-size: .6rem; color: var(--cream-mute); margin-top: .1rem; }
+
+/* ── Pick slot value ── */
+.slot-wrap { overflow-x: auto; border: 1px solid var(--dg-line); }
+.slot-table { border-collapse: collapse; min-width: 100%; width: max-content; }
+.slot-table th {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .65rem .7rem;
+    background: var(--dg-soft);
+    border-bottom: 2px solid var(--dg-line);
+    border-right: 1px solid var(--dg-line);
+    color: var(--dg-accent); text-align: center;
+    white-space: nowrap;
+}
+.slot-table th:first-child { text-align: center; min-width: 52px; }
+.slot-table th:nth-child(2) { min-width: 52px; }
+.slot-table td {
+    padding: .5rem .7rem;
+    border-right: 1px solid var(--dg-line-soft);
+    border-bottom: 1px solid var(--dg-line-soft);
+    vertical-align: top;
+}
+.slot-table tbody tr:last-child td { border-bottom: none; }
+.slot-table tbody tr:nth-child(odd) td  { background: var(--dg-card); }
+.slot-table tbody tr:nth-child(even) td { background: var(--dg-soft); }
+.slot-table tbody tr:hover td { background: var(--dg-card-hover) !important; }
+.slot-num { font-family: var(--mono); font-weight: 700; font-size: .85rem; text-align: center; }
+.slot-pos { font-family: var(--mono); font-weight: 700; font-size: .72rem; text-align: center; }
+.slot-cell { min-width: 108px; }
+.slot-player { font-size: .72rem; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; display: block; }
+.slot-mgr { font-family: var(--mono); font-size: .55rem; color: var(--cream-mute); display: block; margin-top: .15rem; }
+
+/* ── Draft value analysis ── */
+.value-unavail {
+    padding: 2.5rem 1.5rem; text-align: center;
+    background: var(--dg-card); border: 1px solid var(--dg-line);
+}
+.value-unavail p {
+    font-family: var(--mono); font-size: .65rem;
+    letter-spacing: .15em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .75rem;
+}
+.value-unavail code {
+    font-family: var(--mono); font-size: .72rem; color: var(--dg-accent);
+    background: var(--dg-line); padding: .15rem .5rem; border-radius: 2px;
+}
+.value-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+@media (max-width: 700px) { .value-cols { grid-template-columns: 1fr; } }
+.value-panel { background: var(--dg-card); border: 1px solid var(--dg-line); }
+.value-panel-header {
+    padding: .8rem 1.1rem; border-bottom: 1px solid var(--dg-line);
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--dg-accent);
+}
+.value-row {
+    display: grid; grid-template-columns: 1.5ch 1fr auto;
+    align-items: center; gap: .65rem;
+    padding: .6rem 1.1rem;
+    border-bottom: 1px solid var(--dg-line-soft);
+}
+.value-row:last-child { border-bottom: none; }
+.value-rank { font-family: var(--mono); font-size: .6rem; color: var(--cream-mute); }
+.value-player { font-weight: 600; font-size: .82rem; color: var(--cream); }
+.value-meta { font-family: var(--mono); font-size: .6rem; color: var(--cream-mute); margin-top: .1rem; }
+.value-badge {
+    font-family: var(--mono); font-weight: 700; font-size: .7rem;
+    padding: .25rem .45rem; border-radius: 2px; white-space: nowrap;
+}
+.badge-good { background: rgba(232,200,137,.18); color: var(--gold-bright); }
+.badge-bad  { background: rgba(160,72,48,.18); color: #d48070; }
+/* ── Heartbreaker (2-col card grid) ── */
+.heartbreak-section-hdr {
+    padding: .8rem 1.1rem;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-line); border-bottom: none;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--dg-accent);
+}
+.hb-two-col {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px; background: var(--dg-line);
+    border: 1px solid var(--dg-line); border-top: none;
+}
+@media (max-width: 960px) { .hb-two-col { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .hb-two-col { grid-template-columns: 1fr; } }
+.hb-card2 { background: var(--dg-card); padding: 1rem 1.15rem; }
+.hb-card2-header {
+    display: flex; align-items: center; gap: .5rem;
+    margin-bottom: .7rem; padding-bottom: .55rem;
+    border-bottom: 1px solid var(--dg-line-soft);
+}
+.hb-card2-year {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold);
+}
+.hb-card2-picks {
+    font-family: var(--sans); font-size: .72rem; font-weight: 600;
+    color: var(--cream-soft);
+}
+.hb-card2-gap {
+    margin-left: auto;
+    font-family: var(--mono); font-weight: 700; font-size: .72rem;
+    color: #c87060; background: rgba(160,72,48,.15);
+    padding: .18rem .45rem; border-radius: 2px;
+}
+.hb-card2-versus {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 0;
+}
+.hb-card2-label {
+    font-family: var(--mono); font-size: .52rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .2rem;
+}
+.hb-card2-player { font-weight: 700; font-size: .9rem; line-height: 1.2; }
+.hb-card2-info { font-family: var(--mono); font-size: .6rem; color: var(--cream-mute); margin-top: .15rem; }
+.hb-card2-arrow { color: var(--dg-line); font-size: 1rem; padding: 1.2rem .35rem 0; flex-shrink: 0; }
+
+/* ── Alumni / Retired separator ── */
+.alumni-divider td {
+    background: var(--dg-soft) !important;
+    border-top: 2px solid rgba(232,200,137,.18) !important;
+    border-bottom: 2px solid rgba(232,200,137,.18) !important;
+    padding: .32rem 1rem;
+    font-family: var(--mono); font-size: .5rem;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--dg-mute);
+}
+.alumni-row { opacity: 0.65; }
+.mgr-dna-divider {
+    grid-column: 1 / -1;
+    padding: .38rem 1.25rem;
+    background: var(--dg-soft);
+    border-top: 2px solid rgba(232,200,137,.18);
+    border-bottom: 1px solid var(--dg-line);
+    font-family: var(--mono); font-size: .5rem;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--dg-mute);
+}
+.alumni-dna-row { opacity: 0.65; }
+
+.value-pos-tabs {
+    display: flex; gap: .4rem; flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+.value-pos-tab {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+    padding: .4rem .9rem;
+    border: 1px solid var(--dg-line);
+    background: var(--dg-card);
+    color: var(--cream-soft);
+    cursor: pointer;
+    transition: all .15s;
+}
+.value-pos-tab:hover { background: var(--dg-card-hover); color: var(--cream); }
+.value-pos-tab.active { background: var(--dg-accent); border-color: var(--dg-accent); color: var(--dg-bg); }
+
+@media (max-width: 640px) {
+    .coveted-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .coveted-card { padding: .55rem .6rem; }
+    .coveted-count { font-size: 1.4rem; margin-bottom: .1rem; }
+    .coveted-count span { display: none; }
+    .coveted-name { font-size: .65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .coveted-pos { font-size: .48rem; padding: .08rem .25rem; margin-bottom: .3rem; }
+    .coveted-years { font-size: .45rem; letter-spacing: 0; line-height: 1.5; }
+    .coveted-yr-dot { width: 3.7px; height: 3.7px; margin-right: .2rem; }
+}
+</style>
+</head>
+<body>
+<div class="site-glow" aria-hidden="true"></div>
+<div class="site-grain" aria-hidden="true"></div>
+
+<nav id="site-nav"
+     data-page="draft"
+     data-chapter="CH. VII · DRAFT HISTORY"
+     data-back-label="← The Hub"
+     data-back-href="index.html"></nav>
+<script src="../assets/js/nav.js"></script>
+
+<header class="page-header">
+    <div class="page-kicker">The Lakeside League · 2019 – 2025</div>
+    <h1 class="page-title">Draft <em>History.</em></h1>
+    <p class="page-sub">Seven years of picks, patterns, and poor decisions.</p>
+
+    <div class="hero-stats" id="heroStats">
+        <div class="hero-stat">
+            <div class="hero-stat-num">7</div>
+            <div class="hero-stat-label">Seasons</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-num" id="heroTotalPicks">—</div>
+            <div class="hero-stat-label">Total Picks</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-num" id="heroManagers">—</div>
+            <div class="hero-stat-label">Managers</div>
+        </div>
+    </div>
+</header>
+
+<main class="draft-main">
+
+    <!-- ── Page-level tab navigation ── -->
+    <nav class="draft-tabs" aria-label="Draft sections">
+        <button class="draft-tab active" onclick="setTab('board')">Board</button>
+        <button class="draft-tab" onclick="setTab('history')">History</button>
+        <button class="draft-tab" onclick="setTab('tendencies')">Tendencies</button>
+        <button class="draft-tab" onclick="setTab('players')">Players</button>
+        <button class="draft-tab" onclick="setTab('value')">Value</button>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════
+         BOARD TAB
+    ═══════════════════════════════════════════════════════ -->
+    <div class="draft-panel active" id="panel-board">
+        <section class="draft-section" id="sec-board">
+            <div class="section-header">
+                <span class="section-num">§ I</span>
+                <h2 class="section-title">Draft Board</h2>
+                <span class="section-note" id="boardNote"></span>
+            </div>
+
+            <div class="year-tabs" id="yearTabs"></div>
+
+            <div class="pos-legend">
+                <span class="pos-legend-item"><span class="pos-dot dot-qb"></span>QB</span>
+                <span class="pos-legend-item"><span class="pos-dot dot-rb"></span>RB</span>
+                <span class="pos-legend-item"><span class="pos-dot dot-wr"></span>WR</span>
+                <span class="pos-legend-item"><span class="pos-dot dot-te"></span>TE</span>
+                <span class="pos-legend-item"><span class="pos-dot dot-def"></span>K / DEF</span>
+            </div>
+
+            <div class="board-scroll" id="boardWrap">
+                <div class="board-loading">Loading draft data…</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         HISTORY TAB
+    ═══════════════════════════════════════════════════════ -->
+    <div class="draft-panel" id="panel-history">
+
+        <!-- First Round History -->
+        <section class="draft-section" id="sec-r1">
+            <div class="section-header">
+                <span class="section-num">§ II</span>
+                <h2 class="section-title">First Round History</h2>
+                <span class="section-note">All 7 seasons · R1 picks by manager</span>
+            </div>
+            <div id="r1Container"><div class="board-loading">Loading…</div></div>
+        </section>
+
+        <!-- Draft Order History -->
+        <section class="draft-section" id="sec-order">
+            <div class="section-header">
+                <span class="section-num">§ III</span>
+                <h2 class="section-title">Draft Order History</h2>
+                <span class="section-note">Pick slot per season · sorted by avg</span>
+            </div>
+            <div style="overflow-x:auto;border:1px solid var(--dg-line)" id="draftOrderWrap">
+                <div class="board-loading">Loading…</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         TENDENCIES TAB
+    ═══════════════════════════════════════════════════════ -->
+    <div class="draft-panel" id="panel-tendencies">
+
+        <!-- Manager DNA -->
+        <section class="draft-section" id="sec-dna">
+            <div class="section-header">
+                <span class="section-num">§ IV</span>
+                <h2 class="section-title">Manager DNA</h2>
+                <span class="section-note">Position mix · all seasons combined</span>
+            </div>
+            <div class="mgr-dna-grid" id="dnagrid"></div>
+        </section>
+
+        <!-- Manager Round Tendencies -->
+        <section class="draft-section" id="sec-tend">
+            <div class="section-header">
+                <span class="section-num">§ V</span>
+                <h2 class="section-title">Round Tendencies</h2>
+                <span class="section-note">Avg round of first pick by position</span>
+            </div>
+            <div class="tend-wrap" id="tendContainer">
+                <div class="board-loading">Loading…</div>
+            </div>
+            <p class="tend-note">Lower = earlier. Averaged across all seasons the manager participated in.</p>
+        </section>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         PLAYERS TAB
+    ═══════════════════════════════════════════════════════ -->
+    <div class="draft-panel" id="panel-players">
+
+        <!-- Most Coveted -->
+        <section class="draft-section" id="sec-coveted">
+            <div class="section-header">
+                <span class="section-num">§ VI</span>
+                <h2 class="section-title">Most Coveted</h2>
+                <span class="section-note">Rounds 1–3 · all time</span>
+            </div>
+            <div class="coveted-grid" id="covetedGrid"></div>
+        </section>
+
+        <!-- Best & Worst by Year -->
+        <section class="draft-section" id="sec-bw">
+            <div class="section-header">
+                <span class="section-num">§ VII</span>
+                <h2 class="section-title">Best &amp; Worst by Year</h2>
+                <span class="section-note" id="bwNote">Requires rankings data</span>
+            </div>
+            <div id="bestWorstContainer">
+                <div class="value-unavail">
+                    <p>Rankings data not yet available</p>
+                    <p>Run <code>08_scrape_fantasy_ranks.py</code> to unlock steal &amp; bust of the year</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         VALUE TAB
+    ═══════════════════════════════════════════════════════ -->
+    <div class="draft-panel" id="panel-value">
+
+        <!-- Pick Slot History -->
+        <section class="draft-section" id="sec-slots">
+            <div class="section-header">
+                <span class="section-num">§ VIII</span>
+                <h2 class="section-title">Pick Slot History</h2>
+                <span class="section-note">Round 1 · each slot across all years</span>
+            </div>
+            <div class="slot-wrap" id="pickSlotContainer">
+                <div class="board-loading">Loading…</div>
+            </div>
+        </section>
+
+        <!-- Draft Value (steals / busts / heartbreakers) -->
+        <section class="draft-section" id="sec-value">
+            <div class="section-header">
+                <span class="section-num">§ IX</span>
+                <h2 class="section-title">Draft Value</h2>
+                <span class="section-note" id="valueNote">Loading rankings…</span>
+            </div>
+            <div class="value-pos-tabs" id="valueTabs" style="display:none">
+                <button class="value-pos-tab active" onclick="setValuePos('QB')">QB</button>
+                <button class="value-pos-tab" onclick="setValuePos('RB')">RB</button>
+                <button class="value-pos-tab" onclick="setValuePos('WR')">WR</button>
+                <button class="value-pos-tab" onclick="setValuePos('TE')">TE</button>
+            </div>
+            <div id="valueContainer">
+                <div class="value-unavail">
+                    <p>Rankings data not yet available</p>
+                    <p>Run <code>08_scrape_fantasy_ranks.py</code> to unlock steals, busts &amp; heartbreakers</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+<script>
+(function () {
+'use strict';
+
+var YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
+var POS_COLORS = {
+    QB:  { bg: 'rgba(107,138,168,.2)',  text: '#8aaccc', swatch: '#8aaccc' },
+    RB:  { bg: 'rgba(74,154,106,.2)',   text: '#6dc28c', swatch: '#6dc28c' },
+    WR:  { bg: 'rgba(232,200,137,.15)', text: '#e8c889', swatch: '#e8c889' },
+    TE:  { bg: 'rgba(155,123,184,.2)',  text: '#c4a3e8', swatch: '#c4a3e8' },
+    K:   { bg: 'rgba(100,100,100,.15)', text: '#837b6a', swatch: '#666' },
+    DEF: { bg: 'rgba(100,100,100,.15)', text: '#837b6a', swatch: '#5a6a60' },
+};
+var POS_ORDER = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
+
+var yearData      = {};
+var rankData      = {};
+var draftPosRanks = {};
+var allPicks      = [];
+var activeYear    = null;
+var activeValuePos = 'QB';
+
+var RETIRED = ['Pete', 'Dave', 'Greg', 'Sam', 'Nathan'];
+function isRetired(mgr) { return RETIRED.indexOf(mgr) >= 0; }
+
+// ── Tab navigation ────────────────────────────────────────────────────────
+window.setTab = function setTab(name) {
+    document.querySelectorAll('.draft-tab').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('onclick') === "setTab('" + name + "')");
+    });
+    document.querySelectorAll('.draft-panel').forEach(function(p) {
+        p.classList.toggle('active', p.id === 'panel-' + name);
+    });
+};
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+buildYearTabs();
+loadAllYears();
+
+// ── Year tabs (board) ─────────────────────────────────────────────────────
+function buildYearTabs() {
+    var container = document.getElementById('yearTabs');
+    YEARS.forEach(function (y) {
+        var btn = document.createElement('button');
+        btn.className = 'year-tab';
+        btn.textContent = y;
+        btn.onclick = function () { selectYear(y); };
+        container.appendChild(btn);
+    });
+}
+
+function selectYear(year) {
+    activeYear = year;
+    document.querySelectorAll('.year-tab').forEach(function (b) {
+        b.classList.toggle('active', parseInt(b.textContent) === year);
+    });
+    if (yearData[year]) {
+        renderBoard(year);
+    } else {
+        document.getElementById('boardWrap').innerHTML = '<div class="board-loading">Loading ' + year + '…</div>';
+        loadYear(year, function () { renderBoard(year); });
+    }
+}
+
+// ── Data loading ──────────────────────────────────────────────────────────
+function loadYear(year, cb) {
+    fetch('../data/drafts/' + year + '.json')
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            yearData[year] = d.picks;
+            if (cb) cb();
+        })
+        .catch(function (e) {
+            console.error('Failed to load ' + year, e);
+            document.getElementById('boardWrap').innerHTML =
+                '<div class="board-loading" style="color:#a04830">Failed to load ' + year + '</div>';
+        });
+}
+
+function loadAllYears() {
+    var remaining = YEARS.length;
+    YEARS.forEach(function (y) {
+        fetch('../data/drafts/' + y + '.json')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                yearData[y] = d.picks;
+                d.picks.forEach(function (p) { allPicks.push(Object.assign({year: y}, p)); });
+                remaining--;
+                if (remaining === 0) onAllLoaded();
+            })
+            .catch(function (e) {
+                console.error('Failed to load drafts/' + y, e);
+                remaining--;
+                if (remaining === 0) onAllLoaded();
+            });
+    });
+}
+
+function loadAllRankings(cb) {
+    var remaining = YEARS.length;
+    var anyLoaded = false;
+    YEARS.forEach(function (y) {
+        fetch('../data/fantasy_ranks/' + y + '.json')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                var players = d.players || [];
+                var byPos = {};
+                players.forEach(function (p) {
+                    var pos = (p.position || '?').toUpperCase();
+                    if (!byPos[pos]) byPos[pos] = [];
+                    byPos[pos].push(p);
+                });
+                Object.keys(byPos).forEach(function (pos) {
+                    byPos[pos].sort(function (a, b) { return (b.fpts || 0) - (a.fpts || 0); });
+                });
+                var lookup = {};
+                players.forEach(function (p) {
+                    var pos = (p.position || '?').toUpperCase();
+                    var pList = byPos[pos] || [];
+                    var pr = pList.findIndex(function (q) { return q.player_name === p.player_name; }) + 1;
+                    lookup[normName(p.player_name)] = {
+                        rank:        p.rank,
+                        pos_rank:    pr > 0 ? pr : null,
+                        position:    pos,
+                        fpts:        p.fpts,
+                        player_name: p.player_name,
+                    };
+                });
+                rankData[y] = lookup;
+                anyLoaded = true;
+                remaining--;
+                if (remaining === 0 && cb) cb(anyLoaded);
+            })
+            .catch(function () {
+                remaining--;
+                if (remaining === 0 && cb) cb(anyLoaded);
+            });
+    });
+}
+
+function buildDraftPosRanks() {
+    YEARS.forEach(function (y) {
+        if (!yearData[y]) return;
+        var byPos = {};
+        yearData[y].forEach(function (p) {
+            if (!p.manager_name) return;
+            var pos = (p.position || '').toUpperCase();
+            if (['QB','RB','WR','TE'].indexOf(pos) < 0) return;
+            if (!byPos[pos]) byPos[pos] = [];
+            byPos[pos].push(p);
+        });
+        draftPosRanks[y] = {};
+        Object.keys(byPos).forEach(function (pos) {
+            byPos[pos].sort(function (a, b) { return a.overall_pick - b.overall_pick; });
+            byPos[pos].forEach(function (p, i) {
+                draftPosRanks[y][normName(p.player_name)] = {
+                    pos_draft_rank: i + 1,
+                    position:       pos,
+                    overall_pick:   p.overall_pick,
+                    manager_name:   p.manager_name,
+                    player_name:    p.player_name,
+                    year:           y,
+                };
+            });
+        });
+    });
+}
+
+function onAllLoaded() {
+    var mgrs = new Set(allPicks.map(function(p){return p.manager_name;}).filter(Boolean));
+    document.getElementById('heroTotalPicks').textContent = allPicks.length.toLocaleString();
+    document.getElementById('heroManagers').textContent = mgrs.size;
+
+    renderR1Table();
+    renderDraftOrderHistory();
+    renderDNA();
+    renderMgrTendencies();
+    renderCoveted();
+    renderPickSlotHistory();
+    selectYear(YEARS[YEARS.length - 1]);
+
+    buildDraftPosRanks();
+    loadAllRankings(function (anyLoaded) {
+        if (anyLoaded) {
+            renderValue();
+            renderBestWorstByYear();
+        }
+    });
+}
+
+// ── Draft board ───────────────────────────────────────────────────────────
+function truncName(name) {
+    if (!name) return '—';
+    var parts = name.trim().split(' ');
+    if (parts.length >= 2 && name.length > 15) {
+        return parts[0][0] + '. ' + parts.slice(1).join(' ');
+    }
+    return name;
+}
+
+function renderBoard(year) {
+    var picks = yearData[year];
+    if (!picks || !picks.length) {
+        document.getElementById('boardWrap').innerHTML =
+            '<div class="board-loading">No data for ' + year + '</div>';
+        return;
+    }
+    var r1 = picks.filter(function(p){ return p.round === 1; })
+                  .sort(function(a,b){ return a.round_pick - b.round_pick; });
+    var managerOrder = r1.map(function(p){ return p.manager_name; });
+    var grid = {};
+    picks.forEach(function(p) {
+        if (!p.manager_name) return;
+        if (!grid[p.manager_name]) grid[p.manager_name] = {};
+        grid[p.manager_name][p.round] = p;
+    });
+    var teamNames = {};
+    r1.forEach(function(p) { teamNames[p.manager_name] = p.team_name || ''; });
+    var maxRound = 0;
+    picks.forEach(function(p){ if (p.round > maxRound) maxRound = p.round; });
+    document.getElementById('boardNote').textContent =
+        year + ' · ' + managerOrder.length + ' teams · ' + maxRound + ' rounds';
+
+    var html = '<table class="board-table"><thead><tr>';
+    html += '<th>Manager</th>';
+    for (var r = 1; r <= maxRound; r++) { html += '<th>Rd ' + r + '</th>'; }
+    html += '</tr></thead><tbody>';
+
+    managerOrder.forEach(function(mgr) {
+        html += '<tr>';
+        var team = teamNames[mgr] || '';
+        html += '<td class="board-mgr-td">'
+              + '<span class="board-mgr-name">' + esc(mgr) + '</span>'
+              + '<span class="board-team-name" title="' + esc(team) + '">' + esc(team) + '</span>'
+              + '</td>';
+        for (var r = 1; r <= maxRound; r++) {
+            var pick = grid[mgr] && grid[mgr][r];
+            if (pick) {
+                var pos = (pick.position || '?').toUpperCase();
+                var cls = 'p-' + pos.toLowerCase();
+                html += '<td class="board-cell ' + cls + '">'
+                      + '<span class="board-player" title="' + esc(pick.player_name) + '">'
+                      + esc(truncName(pick.player_name)) + '</span>'
+                      + '<span class="board-pos">' + esc(pos) + '</span>'
+                      + '</td>';
+            } else {
+                html += '<td class="board-cell board-empty">—</td>';
+            }
+        }
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('boardWrap').innerHTML = html;
+}
+
+// ── First round history pivot (manager × year) ────────────────────────────
+function renderR1Table() {
+    var pivot = {};
+    var allMgrs = [];
+    YEARS.forEach(function(y) {
+        if (!yearData[y]) return;
+        yearData[y].filter(function(p){ return p.round === 1; })
+                   .sort(function(a,b){ return a.overall_pick - b.overall_pick; })
+                   .forEach(function(p) {
+                       var m = p.manager_name || '?';
+                       if (!pivot[m]) { pivot[m] = {}; allMgrs.push(m); }
+                       pivot[m][y] = p;
+                   });
+    });
+    var seen = {};
+    allMgrs = allMgrs.filter(function(m){ return seen[m] ? false : (seen[m]=true); });
+    var sortFn = function(a, b) {
+        var as = Object.keys(pivot[a]||{}).length;
+        var bs = Object.keys(pivot[b]||{}).length;
+        return bs - as || a.localeCompare(b);
+    };
+    var activeMgrs  = allMgrs.filter(function(m){ return !isRetired(m); }).sort(sortFn);
+    var retiredMgrs = allMgrs.filter(function(m){ return  isRetired(m); }).sort(sortFn);
+    allMgrs = activeMgrs.concat(retiredMgrs);
+
+    var html = '<div class="r1-pivot-wrap"><table class="r1-pivot"><thead><tr>'
+             + '<th>Manager</th>';
+    YEARS.forEach(function(y){ html += '<th>' + y + '</th>'; });
+    html += '</tr></thead><tbody>';
+
+    var sep = false;
+    allMgrs.forEach(function(mgr) {
+        if (!sep && isRetired(mgr)) {
+            sep = true;
+            html += '<tr class="alumni-divider"><td colspan="' + (YEARS.length + 1) + '">— Alumni —</td></tr>';
+        }
+        html += '<tr' + (isRetired(mgr) ? ' class="alumni-row"' : '') + '>';
+        html += '<td class="r1-mgr-cell">' + esc(mgr) + '</td>';
+        YEARS.forEach(function(y) {
+            var p = pivot[mgr] && pivot[mgr][y];
+            if (p) {
+                var pos = (p.position || '?').toUpperCase();
+                var pc  = POS_COLORS[pos] || POS_COLORS['K'];
+                var ovr = p.overall_pick;
+                html += '<td class="r1-year-cell p-' + pos.toLowerCase() + '">'
+                      + '<span class="r1-pick-name" title="' + esc(p.player_name) + '">'
+                      + esc(truncName(p.player_name)) + '</span>'
+                      + '<span class="r1-pick-meta">'
+                      + '<span class="r1-pick-ovr">' + ordinal(ovr) + '</span>'
+                      + '<span class="r1-pos-pill" style="background:' + pc.bg + ';color:' + pc.text + '">' + pos + '</span>'
+                      + '</span></td>';
+            } else {
+                html += '<td class="r1-year-cell r1-empty-cell">—</td>';
+            }
+        });
+        html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    document.getElementById('r1Container').innerHTML = html;
+}
+
+// ── Draft order history (manager × year → pick slot #) ───────────────────
+function renderDraftOrderHistory() {
+    var pivot = {};
+    var allMgrs = [];
+    YEARS.forEach(function(y) {
+        if (!yearData[y]) return;
+        yearData[y].filter(function(p){ return p.round === 1; })
+                   .forEach(function(p) {
+                       var m = p.manager_name;
+                       if (!m) return;
+                       if (!pivot[m]) { pivot[m] = {}; allMgrs.push(m); }
+                       pivot[m][y] = p.round_pick;
+                   });
+    });
+    var seen = {};
+    allMgrs = allMgrs.filter(function(m){ return seen[m] ? false : (seen[m]=true); });
+    var avgOf = function(m) {
+        var vals = Object.values(pivot[m]||{});
+        return vals.length ? vals.reduce(function(s,v){return s+v;},0)/vals.length : 99;
+    };
+    var sortFn = function(a, b) { return avgOf(a) - avgOf(b) || a.localeCompare(b); };
+    var activeMgrs  = allMgrs.filter(function(m){ return !isRetired(m); }).sort(sortFn);
+    var retiredMgrs = allMgrs.filter(function(m){ return  isRetired(m); }).sort(sortFn);
+    allMgrs = activeMgrs.concat(retiredMgrs);
+
+    var html = '<table class="do-table"><thead><tr><th>Manager</th>';
+    YEARS.forEach(function(y){ html += '<th>' + y + '</th>'; });
+    html += '<th>Avg</th></tr></thead><tbody>';
+
+    var sep = false;
+    allMgrs.forEach(function(mgr) {
+        if (!sep && isRetired(mgr)) {
+            sep = true;
+            html += '<tr class="alumni-divider"><td colspan="' + (YEARS.length + 2) + '">— Alumni —</td></tr>';
+        }
+        html += '<tr' + (isRetired(mgr) ? ' class="alumni-row"' : '') + '>';
+        html += '<td class="do-mgr">' + esc(mgr) + '</td>';
+        var vals = [];
+        YEARS.forEach(function(y) {
+            var slot = pivot[mgr] && pivot[mgr][y];
+            if (slot != null) {
+                vals.push(slot);
+                var col = slot <= 4  ? 'var(--gold)'
+                        : slot <= 8  ? 'var(--dg-accent)'
+                        : slot <= 11 ? 'var(--cream-soft)'
+                        : 'var(--cream-mute)';
+                html += '<td><span class="do-slot" style="color:' + col + '">' + ordinal(slot) + '</span></td>';
+            } else {
+                html += '<td class="r1-empty-cell">—</td>';
+            }
+        });
+        var avg = vals.length ? (vals.reduce(function(s,v){return s+v;},0)/vals.length).toFixed(1) : '—';
+        html += '<td class="do-avg">' + avg + '</td>';
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    document.getElementById('draftOrderWrap').innerHTML = html;
+}
+
+// ── Manager DNA (position mix across all seasons) ─────────────────────────
+function renderDNA() {
+    var container = document.getElementById('dnagrid');
+    var mgrs = {};
+    allPicks.forEach(function(p) {
+        var m = p.manager_name;
+        if (!m) return;
+        if (!mgrs[m]) mgrs[m] = { total: 0 };
+        mgrs[m].total++;
+        var pos = (p.position || '?').toUpperCase();
+        mgrs[m][pos] = (mgrs[m][pos] || 0) + 1;
+    });
+    var sortFn = function(a, b) { return mgrs[b].total - mgrs[a].total || a.localeCompare(b); };
+    var allMgrKeys = Object.keys(mgrs);
+    var activeMgrs  = allMgrKeys.filter(function(m){ return !isRetired(m); }).sort(sortFn);
+    var retiredMgrs = allMgrKeys.filter(function(m){ return  isRetired(m); }).sort(sortFn);
+
+    function buildCard(mgr, dimmed) {
+        var data = mgrs[mgr];
+        var total = data.total;
+        var html = '<div class="mgr-dna-row' + (dimmed ? ' alumni-dna-row' : '') + '">';
+        html += '<div class="mgr-dna-header">'
+              + '<span class="mgr-dna-name">' + esc(mgr) + '</span>'
+              + '<span class="mgr-dna-total">' + total + ' picks</span>'
+              + '</div>';
+        html += '<div class="dna-bar">';
+        POS_ORDER.forEach(function(pos) {
+            var cnt = data[pos] || 0;
+            if (!cnt) return;
+            var pct = (cnt / total * 100).toFixed(1);
+            html += '<div class="dna-seg ' + pos.toLowerCase() + '" style="width:' + pct + '%"></div>';
+        });
+        html += '</div>';
+        html += '<div class="dna-labels">';
+        POS_ORDER.forEach(function(pos) {
+            var cnt = data[pos] || 0;
+            if (!cnt) return;
+            var pct = Math.round(cnt / total * 100);
+            var pc = POS_COLORS[pos] || POS_COLORS['K'];
+            html += '<span class="dna-label">'
+                  + '<span class="dna-swatch" style="background:' + pc.swatch + '"></span>'
+                  + pos + ' ' + pct + '%'
+                  + '</span>';
+        });
+        html += '</div></div>';
+        return html;
+    }
+
+    var html = activeMgrs.map(function(m){ return buildCard(m, false); }).join('');
+    if (retiredMgrs.length) {
+        html += '<div class="mgr-dna-divider">— Alumni —</div>';
+        html += retiredMgrs.map(function(m){ return buildCard(m, true); }).join('');
+    }
+    container.innerHTML = html;
+}
+
+// ── Manager round tendencies (avg round of first positional pick) ──────────
+function renderMgrTendencies() {
+    var CORE = ['RB', 'WR', 'QB', 'TE'];
+
+    // For each manager + position, collect the round of their FIRST pick of that position per year
+    var firstRounds = {}; // mgr -> pos -> [round, ...]
+
+    YEARS.forEach(function(y) {
+        if (!yearData[y]) return;
+        var sorted = yearData[y].slice().sort(function(a,b){ return a.overall_pick - b.overall_pick; });
+        var seen = {}; // mgr|pos key
+        sorted.forEach(function(p) {
+            var m = p.manager_name;
+            var pos = (p.position||'').toUpperCase();
+            if (!m || CORE.indexOf(pos) < 0) return;
+            var key = m + '|' + pos + '|' + y;
+            if (seen[key]) return;
+            seen[key] = true;
+            if (!firstRounds[m]) firstRounds[m] = {};
+            if (!firstRounds[m][pos]) firstRounds[m][pos] = [];
+            firstRounds[m][pos].push(p.round);
+        });
+    });
+
+    var alphaSort = function(a, b) { return a.localeCompare(b); };
+    var allMgrKeys = Object.keys(firstRounds);
+    var activeMgrs  = allMgrKeys.filter(function(m){ return !isRetired(m); }).sort(alphaSort);
+    var retiredMgrs = allMgrKeys.filter(function(m){ return  isRetired(m); }).sort(alphaSort);
+    var mgrs = activeMgrs.concat(retiredMgrs);
+
+    var html = '<table class="tend-table"><thead><tr>';
+    html += '<th style="text-align:left;padding-left:1rem">Manager</th>';
+    CORE.forEach(function(pos) {
+        var pc = POS_COLORS[pos];
+        html += '<th style="color:' + pc.text + '">1st ' + pos + '</th>';
+    });
+    html += '</tr></thead><tbody>';
+
+    var sep = false;
+    mgrs.forEach(function(mgr) {
+        if (!sep && isRetired(mgr)) {
+            sep = true;
+            html += '<tr class="alumni-divider"><td colspan="' + (CORE.length + 1) + '">— Alumni —</td></tr>';
+        }
+        html += '<tr' + (isRetired(mgr) ? ' class="alumni-row"' : '') + '>';
+        html += '<td class="tend-mgr">' + esc(mgr) + '</td>';
+        CORE.forEach(function(pos) {
+            var rounds = (firstRounds[mgr]||{})[pos] || [];
+            if (rounds.length) {
+                var avg = (rounds.reduce(function(s,v){return s+v;},0) / rounds.length).toFixed(1);
+                var pc = POS_COLORS[pos];
+                var avgNum = parseFloat(avg);
+                var opacity = avgNum <= 3 ? 1 : avgNum <= 6 ? .8 : .6;
+                html += '<td style="color:' + pc.text + ';opacity:' + opacity + ';font-weight:700">' + avg + '</td>';
+            } else {
+                html += '<td style="color:var(--cream-mute)">—</td>';
+            }
+        });
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    document.getElementById('tendContainer').innerHTML = html;
+}
+
+// ── Most coveted ───────────────────────────────────────────────────────────
+function renderCoveted() {
+    var earlyPicks = allPicks.filter(function(p){ return p.round <= 3; });
+    var counts = {};
+    var posMap  = {};
+    var yearMap = {};
+    earlyPicks.forEach(function(p) {
+        var n = p.player_name;
+        counts[n] = (counts[n] || 0) + 1;
+        posMap[n]  = p.position ? p.position.toUpperCase() : '?';
+        if (!yearMap[n]) yearMap[n] = [];
+        if (yearMap[n].indexOf(p.year) < 0) yearMap[n].push(p.year);
+    });
+    var sorted = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a]; }).slice(0,12);
+
+    var html = '';
+    sorted.forEach(function(name) {
+        var cnt  = counts[name];
+        var pos  = posMap[name];
+        var yrs  = yearMap[name].sort();
+        var pc   = POS_COLORS[pos] || POS_COLORS['K'];
+        html += '<div class="coveted-card">';
+        html += '<div class="coveted-count">' + cnt + '<span>× drafted</span></div>';
+        html += '<div class="coveted-name">' + esc(name) + '</div>';
+        html += '<span class="coveted-pos" style="background:' + pc.bg + ';color:' + pc.text + '">' + pos + '</span>';
+        html += '<div class="coveted-years">';
+        yrs.forEach(function(y) { html += '<span class="coveted-yr-dot"></span>' + y + ' '; });
+        html += '</div></div>';
+    });
+    document.getElementById('covetedGrid').innerHTML = html;
+}
+
+// ── Best & Worst pick by year (requires rank data) ────────────────────────
+function renderBestWorstByYear() {
+    var yearsWithRanks = YEARS.filter(function(y){
+        return rankData[y] && Object.keys(rankData[y]).length > 0;
+    });
+    if (!yearsWithRanks.length) return;
+
+    document.getElementById('bwNote').textContent = yearsWithRanks.length + ' seasons with rankings';
+
+    var bwData = [];
+    yearsWithRanks.forEach(function(y) {
+        if (!draftPosRanks[y] || !rankData[y]) return;
+        var allValues = [];
+        Object.keys(draftPosRanks[y]).forEach(function(nn) {
+            var draft = draftPosRanks[y][nn];
+            var final = rankData[y][nn];
+            if (!final || !draft) return;
+            if (['QB','RB','WR','TE'].indexOf(draft.position) < 0) return;
+            allValues.push({
+                player_name:    draft.player_name,
+                manager_name:   draft.manager_name,
+                pos:            draft.position,
+                pos_draft_rank: draft.pos_draft_rank,
+                pos_final_rank: final.pos_rank,
+                overall_pick:   draft.overall_pick,
+                value: draft.pos_draft_rank - (final.pos_rank || 999),
+            });
+        });
+        if (!allValues.length) return;
+        allValues.sort(function(a,b){ return b.value - a.value; });
+        var steal = allValues[0];
+        var bust = allValues.filter(function(p){ return p.pos_draft_rank <= 12; })
+                            .sort(function(a,b){ return a.value - b.value; })[0] || null;
+        bwData.push({ year: y, steal: steal, bust: bust });
+    });
+
+    bwData.sort(function(a,b){ return b.year - a.year; });
+
+    var html = '<div class="bw-grid">';
+    bwData.forEach(function(bw) {
+        html += '<div class="bw-card">';
+        html += '<div class="bw-year">' + bw.year + '</div>';
+        if (bw.steal) {
+            var spc = POS_COLORS[bw.steal.pos] || POS_COLORS['K'];
+            var sDr = bw.steal.pos + bw.steal.pos_draft_rank;
+            var sFr = bw.steal.pos_final_rank ? bw.steal.pos + bw.steal.pos_final_rank : '?';
+            html += '<div class="bw-pick">'
+                  + '<div class="bw-label">Steal</div>'
+                  + '<div class="bw-player" style="color:' + spc.text + '">' + esc(bw.steal.player_name) + '</div>'
+                  + '<div class="bw-meta">' + esc(bw.steal.manager_name) + ' · ' + sDr + ' → ' + sFr + '</div>'
+                  + '</div>';
+        }
+        if (bw.bust) {
+            var bpc = POS_COLORS[bw.bust.pos] || POS_COLORS['K'];
+            var bDr = bw.bust.pos + bw.bust.pos_draft_rank;
+            var bFr = bw.bust.pos_final_rank ? bw.bust.pos + bw.bust.pos_final_rank : 'NR';
+            html += '<div class="bw-pick">'
+                  + '<div class="bw-label">Bust</div>'
+                  + '<div class="bw-player" style="color:#d48070">' + esc(bw.bust.player_name) + '</div>'
+                  + '<div class="bw-meta">' + esc(bw.bust.manager_name) + ' · ' + bDr + ' → ' + bFr + '</div>'
+                  + '</div>';
+        }
+        html += '</div>';
+    });
+    html += '</div>';
+    document.getElementById('bestWorstContainer').innerHTML = html;
+}
+
+// ── Pick slot history (R1 slot 1-14 across all years) ────────────────────
+function renderPickSlotHistory() {
+    var slotData = {};
+    YEARS.forEach(function(y) {
+        if (!yearData[y]) return;
+        yearData[y].filter(function(p){ return p.round === 1; })
+                   .forEach(function(p) {
+                       var slot = p.round_pick;
+                       if (!slotData[slot]) slotData[slot] = { pos: {}, players: [] };
+                       var pos = (p.position||'?').toUpperCase();
+                       slotData[slot].pos[pos] = (slotData[slot].pos[pos]||0) + 1;
+                       slotData[slot].players.push({ year: y, player: p.player_name, pos: pos, mgr: p.manager_name });
+                   });
+    });
+
+    // Find max slot
+    var maxSlot = 14;
+    YEARS.forEach(function(y) {
+        if (!yearData[y]) return;
+        yearData[y].filter(function(p){ return p.round === 1; })
+                   .forEach(function(p){ if (p.round_pick > maxSlot) maxSlot = p.round_pick; });
+    });
+
+    var html = '<table class="slot-table"><thead><tr>';
+    html += '<th>Slot</th><th>Common</th>';
+    YEARS.forEach(function(y){ html += '<th>' + y + '</th>'; });
+    html += '</tr></thead><tbody>';
+
+    for (var slot = 1; slot <= maxSlot; slot++) {
+        var data = slotData[slot] || { pos: {}, players: [] };
+        var topPos = Object.keys(data.pos).sort(function(a,b){ return data.pos[b]-data.pos[a]; })[0] || '—';
+        var tpc = POS_COLORS[topPos] || { text: 'var(--cream-mute)' };
+
+        html += '<tr>';
+        html += '<td class="slot-num" style="color:' + (slot<=4?'var(--gold)':slot<=8?'var(--dg-accent)':'var(--cream-mute)') + '">' + ordinal(slot) + '</td>';
+        html += '<td class="slot-pos" style="color:' + tpc.text + '">' + topPos + '</td>';
+
+        YEARS.forEach(function(y) {
+            var pick = null;
+            data.players.forEach(function(p){ if (p.year === y) pick = p; });
+            if (pick) {
+                var ppc = POS_COLORS[pick.pos] || { text: 'var(--cream)' };
+                html += '<td class="slot-cell">'
+                      + '<span class="slot-player" style="color:' + ppc.text + '" title="' + esc(pick.player) + '">' + esc(truncName(pick.player)) + '</span>'
+                      + '<span class="slot-mgr">' + esc(pick.mgr) + '</span>'
+                      + '</td>';
+            } else {
+                html += '<td style="text-align:center;color:var(--dg-line)">—</td>';
+            }
+        });
+        html += '</tr>';
+    }
+
+    html += '</tbody></table>';
+    document.getElementById('pickSlotContainer').innerHTML = html;
+}
+
+// ── Draft value analysis (existing) ──────────────────────────────────────
+function normName(name) {
+    return (name || '').toLowerCase()
+        .replace(/[.'''']/g, '')
+        .replace(/\s+(jr|sr|ii|iii|iv|v)$/i, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+window.setValuePos = function setValuePos(pos) {
+    activeValuePos = pos;
+    document.querySelectorAll('.value-pos-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.textContent === pos);
+    });
+    renderValuePos();
+};
+
+function renderValue() {
+    var yearsWithRanks = YEARS.filter(function(y){ return rankData[y] && Object.keys(rankData[y]).length > 0; });
+    if (!yearsWithRanks.length) return;
+
+    document.getElementById('valueNote').textContent =
+        yearsWithRanks.length + ' seasons · Full PPR + 6pt Pass TD';
+    document.getElementById('valueTabs').style.display = '';
+
+    window._valueByPos = { QB: [], RB: [], WR: [], TE: [] };
+    YEARS.forEach(function(y) {
+        if (!draftPosRanks[y] || !rankData[y]) return;
+        Object.keys(draftPosRanks[y]).forEach(function(nn) {
+            var draft = draftPosRanks[y][nn];
+            var final = rankData[y][nn];
+            if (!final || !draft) return;
+            var pos = draft.position;
+            if (!window._valueByPos[pos]) return;
+            window._valueByPos[pos].push({
+                year:           y,
+                player_name:    draft.player_name,
+                manager_name:   draft.manager_name,
+                pos:            pos,
+                pos_draft_rank: draft.pos_draft_rank,
+                pos_final_rank: final.pos_rank,
+                overall_pick:   draft.overall_pick,
+                final_rank:     final.rank,
+                value:          draft.pos_draft_rank - (final.pos_rank || 999),
+            });
+        });
+    });
+
+    var VALID_PAIRS = { QB:['QB'], RB:['RB','WR'], WR:['WR','RB'], TE:['TE'] };
+    window._hearts = [];
+    YEARS.forEach(function(y) {
+        if (!rankData[y]) return;
+        var ypicks = (yearData[y] || [])
+            .filter(function(p){
+                return p.overall_pick <= 84 && p.manager_name &&
+                       ['QB','RB','WR','TE'].indexOf((p.position||'').toUpperCase()) >= 0;
+            })
+            .sort(function(a,b){ return a.overall_pick - b.overall_pick; });
+
+        for (var i = 0; i < ypicks.length - 1; i++) {
+            var taken  = ypicks[i];
+            var missed = ypicks[i + 1];
+            if (missed.overall_pick - taken.overall_pick > 1) continue;
+            var posA = (taken.position  || '').toUpperCase();
+            var posB = (missed.position || '').toUpperCase();
+            if (!VALID_PAIRS[posA] || VALID_PAIRS[posA].indexOf(posB) < 0) continue;
+            var missedFinal = rankData[y][normName(missed.player_name)];
+            var takenFinal  = rankData[y][normName(taken.player_name)];
+            if (!missedFinal) continue;
+            if (!takenFinal || takenFinal.rank > 200) continue;
+            if (missedFinal.rank > 36 && (missedFinal.pos_rank == null || missedFinal.pos_rank > 8)) continue;
+            if (missedFinal.rank > missed.overall_pick + 18) continue;
+            var gap = takenFinal.rank - missedFinal.rank;
+            if (gap < 25) continue;
+            window._hearts.push({
+                year: y, taken: Object.assign({}, taken, { final: takenFinal }),
+                missed: Object.assign({}, missed, { final: missedFinal }), gap: gap,
+            });
+        }
+    });
+    window._hearts.sort(function(a,b){ return b.gap - a.gap; });
+    window._hearts = window._hearts.slice(0, 15);
+    renderValuePos();
+}
+
+function renderValuePos() {
+    var pos = activeValuePos;
+    var picks = (window._valueByPos || {})[pos] || [];
+    var steals = picks.filter(function(p){ return p.value > 0; })
+                      .sort(function(a,b){ return b.value - a.value; }).slice(0, 8);
+    var busts  = picks.filter(function(p){ return p.pos_draft_rank <= 12 && p.value < 0; })
+                      .sort(function(a,b){ return a.value - b.value; }).slice(0, 8);
+
+    var html = '<div class="value-cols">';
+    html += buildValuePanel('Best ' + pos + ' Steals', steals, true, pos);
+    html += buildValuePanel('Biggest ' + pos + ' Busts', busts, false, pos);
+    html += '</div>';
+
+    var hearts = window._hearts || [];
+    if (hearts.length) {
+        html += '<div style="margin-top:1.75rem">';
+        html += '<div class="heartbreak-section-hdr">Heartbreakers — One Pick Too Late · Rounds 1–7</div>';
+        html += '<div class="hb-two-col">';
+        hearts.forEach(function(h) {
+            var missedFinal = h.missed.final;
+            var takenFinal  = h.taken.final;
+            var posA = (h.taken.position  || '').toUpperCase();
+            var posB = (h.missed.position || '').toUpperCase();
+            var pcA = POS_COLORS[posA] || POS_COLORS['K'];
+            var pcB = POS_COLORS[posB] || POS_COLORS['K'];
+            html += '<div class="hb-card2">';
+            html += '<div class="hb-card2-header">'
+                  + '<span class="hb-card2-year">' + h.year + '</span>'
+                  + '<span class="hb-card2-picks">Picks ' + h.taken.overall_pick + ' → ' + h.missed.overall_pick + '</span>'
+                  + '<span class="hb-card2-gap">+' + h.gap + ' spots</span>'
+                  + '</div>';
+            html += '<div class="hb-card2-versus">';
+            html += '<div>'
+                  + '<div class="hb-card2-label">Took · <span style="color:' + pcA.text + '">' + posA + '</span></div>'
+                  + '<div class="hb-card2-player">' + esc(h.taken.player_name) + '</div>'
+                  + '<div class="hb-card2-info">' + esc(h.taken.manager_name)
+                  + ' · ' + (takenFinal ? 'Finished #' + takenFinal.rank : 'No data') + '</div>'
+                  + '</div>';
+            html += '<div class="hb-card2-arrow">→</div>';
+            html += '<div>'
+                  + '<div class="hb-card2-label">Missed · <span style="color:' + pcB.text + '">' + posB + '</span></div>'
+                  + '<div class="hb-card2-player" style="color:#c87060">' + esc(h.missed.player_name) + '</div>'
+                  + '<div class="hb-card2-info">' + esc(h.missed.manager_name)
+                  + ' · Finished #' + missedFinal.rank + '</div>'
+                  + '</div>';
+            html += '</div></div>';
+        });
+        html += '</div></div>';
+    }
+    document.getElementById('valueContainer').innerHTML = html;
+}
+
+function buildValuePanel(title, picks, isGood, pos) {
+    var pc = POS_COLORS[pos] || POS_COLORS['K'];
+    var html = '<div class="value-panel"><div class="value-panel-header">' + title + '</div>';
+    if (!picks.length) {
+        html += '<div style="padding:1.25rem 1.1rem;font-family:var(--mono);font-size:.65rem;color:var(--cream-mute)">No data</div>';
+    } else {
+        picks.forEach(function(p, i) {
+            var dRank = pos + p.pos_draft_rank;
+            var fRank = p.pos_final_rank ? pos + p.pos_final_rank : '—';
+            var absVal = Math.abs(p.value);
+            var badge  = isGood
+                ? '<span class="value-badge badge-good">+' + absVal + '</span>'
+                : '<span class="value-badge badge-bad">−' + absVal + '</span>';
+            html += '<div class="value-row">'
+                  + '<span class="value-rank">' + (i + 1) + '</span>'
+                  + '<div>'
+                  + '<div class="value-player">' + esc(p.player_name) + '</div>'
+                  + '<div class="value-meta">' + p.year + ' · ' + esc(p.manager_name)
+                  + ' · <span style="color:' + pc.text + '">' + dRank + '</span>'
+                  + ' → <span style="color:' + pc.text + '">' + fRank + '</span>'
+                  + '</div></div>' + badge + '</div>';
+        });
+    }
+    html += '</div>';
+    return html;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function ordinal(n) {
+    if (n >= 11 && n <= 13) return n + 'th';
+    var last = n % 10;
+    if (last === 1) return n + 'st';
+    if (last === 2) return n + 'nd';
+    if (last === 3) return n + 'rd';
+    return n + 'th';
+}
+
+})();
+</script>
+</body>
+</html>

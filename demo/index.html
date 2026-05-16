@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lakeside League · LSL</title>
+<style>
+/* ============================================================
+   THE LAKESIDE LEAGUE — Vintage Creamery Design System
+   Editorial almanac aesthetic, navy/cream/gold palette
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    /* Palette — Vintage Creamery */
+    --ink:           #0e1620;   /* deep night-navy, the milkman's predawn */
+    --ink-soft:      #16202c;
+    --ink-card:      #1a2532;
+    --ink-line:      #2a3645;
+    --ink-line-soft: #1e2937;
+
+    --cream:         #f4ebd8;   /* paper / milk */
+    --cream-soft:    #c9c0ad;
+    --cream-mute:    #837b6a;
+
+    --gold:          #e8c889;   /* the cap on a glass bottle */
+    --gold-bright:   #f4d9a4;
+    --gold-deep:     #a88a4a;
+
+    --rust:          #a04830;   /* Grade A stamp red */
+    --steel:         #6b8aa8;   /* cold-blue accent */
+
+    /* Typography */
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans:  'Inter', system-ui, sans-serif;
+    --mono:  'JetBrains Mono', 'SF Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--sans);
+    background: var(--ink);
+    color: var(--cream);
+    min-height: 100vh;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   ATMOSPHERIC BACKDROP — grain + radial glow
+   ============================================================ */
+.site-glow {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(232, 200, 137, .07) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(160, 72, 48, .04) 0%, transparent 50%);
+}
+.site-grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 0.92 0 0 0 0 0.8 0 0 0 0.04 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+}
+
+/* ============================================================
+   TICKER — top scrolling banner
+   ============================================================ */
+.ticker {
+    position: relative; z-index: 10;
+    background: var(--gold);
+    color: var(--ink);
+    border-bottom: 3px solid var(--ink);
+    height: 38px;
+    display: flex; align-items: center; overflow: hidden;
+}
+.ticker-track {
+    display: flex; gap: 3rem; white-space: nowrap; padding-left: 3rem;
+    animation: ticker-scroll 50s linear infinite;
+}
+.ticker-group { display: flex; gap: 3rem; }
+.ticker-item {
+    font-family: var(--mono); font-size: .72rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: .6rem;
+}
+.ticker-star { color: var(--rust); }
+@keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   NAV / MASTHEAD
+   ============================================================ */
+.nav {
+    position: sticky; top: 0; z-index: 30;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem;
+    padding: 1.2rem 2rem;
+    background: rgba(14, 22, 32, .92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--ink-line);
+}
+.nav-back, .nav-link {
+    color: var(--gold); text-decoration: none;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    transition: color .2s;
+}
+.nav-back { justify-self: start; }
+.nav-link { justify-self: end; }
+.nav-back:hover, .nav-link:hover { color: var(--gold-bright); }
+
+.nav-center { text-align: center; justify-self: center; }
+.nav-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .3rem;
+}
+.nav-title {
+    font-family: var(--serif);
+    font-size: 1.4rem; letter-spacing: .02em; color: var(--cream);
+}
+.nav-title em { font-style: italic; color: var(--gold); }
+
+/* Nav dropdown */
+.nav-drop {
+    position: relative;
+    justify-self: start;
+}
+.nav-drop-btn {
+    color: var(--gold);
+    background: none; border: none; cursor: pointer; padding: 2px;
+    transition: color .2s;
+    display: flex; align-items: center; line-height: 1;
+}
+.nav-drop-btn:hover { color: var(--gold-bright); }
+.nav-icon { display: block; }
+.nav-drop-menu {
+    display: none;
+    position: absolute; top: calc(100% + .75rem); left: 0;
+    background: rgba(14,22,32,.97);
+    border: 1px solid var(--ink-line);
+    border-radius: 3px;
+    min-width: 190px;
+    backdrop-filter: blur(12px);
+    z-index: 50;
+    overflow: hidden;
+}
+.nav-drop.open .nav-drop-menu { display: block; }
+.nav-drop-menu a {
+    display: block; padding: .7rem 1.1rem;
+    color: var(--cream-soft); text-decoration: none;
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    border-bottom: 1px solid var(--ink-line-soft);
+    transition: background .15s, color .15s;
+}
+.nav-drop-menu a:last-child { border-bottom: none; }
+.nav-drop-menu a:hover { background: rgba(232,200,137,.07); color: var(--gold); }
+.nav-drop-label {
+    display: block; padding: .45rem 1.1rem .3rem;
+    font-family: var(--mono); font-size: .55rem;
+    letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute); border-bottom: 1px solid var(--ink-line-soft);
+}
+.nav-drop-group { position: relative; }
+.nav-drop-group-lbl {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .42rem 1.1rem .38rem;
+    font-family: var(--mono); font-size: .75rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cream-mute);
+    border-bottom: 1px solid var(--ink-line-soft);
+    cursor: default; user-select: none;
+    transition: color .15s;
+}
+.nav-drop-group:hover .nav-drop-group-lbl { color: var(--gold); }
+.nav-group-arr { display: inline-block; font-size: .75rem; transition: transform .15s; }
+.nav-drop-group:hover .nav-group-arr { transform: rotate(90deg); }
+.nav-drop-sub {
+    max-height: 0; overflow: hidden;
+    background: rgba(0,0,0,.12);
+    transition: max-height .18s ease;
+}
+.nav-drop-group:hover .nav-drop-sub { max-height: 200px; border-bottom: 1px solid var(--ink-line-soft); }
+.nav-drop-sub a {
+    display: block; padding: .65rem 1.1rem .65rem 1.65rem;
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-soft); text-decoration: none;
+    border-bottom: 1px solid var(--ink-line-soft);
+    border-left: 2px solid rgba(232,200,137,.12);
+    transition: background .15s, color .15s, border-left-color .15s;
+}
+.nav-drop-sub a:last-child { border-bottom: none; }
+.nav-drop-sub a:hover { background: rgba(232,200,137,.07); color: var(--gold); border-left-color: rgba(232,200,137,.4); }
+.nav-drop-group:last-child .nav-drop-group-lbl { border-bottom: none; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 4rem 1.5rem 3rem;
+    max-width: 1100px; margin: 0 auto;
+}
+.hero-sup {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+}
+.hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 9vw, 7.5rem);
+    line-height: .92; letter-spacing: -.025em;
+    color: var(--cream); margin-bottom: 1.5rem;
+}
+.hero-title em {
+    font-style: italic; color: var(--gold);
+}
+.hero-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.55; color: var(--cream-soft);
+    max-width: 580px; margin: 0 auto;
+}
+.hero-meta {
+    margin-top: 1.5rem;
+    font-family: var(--mono);
+    font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section {
+    position: relative; z-index: 10;
+    max-width: 1200px; margin: 3rem auto 0;
+    padding: 0 2rem;
+}
+.section-header {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
+    gap: .75rem; padding-bottom: 1rem; margin-bottom: 2rem;
+    border-bottom: 3px double var(--ink-line);
+}
+.section-num {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold);
+}
+.section-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.01em;
+    color: var(--cream);
+}
+.section-meta {
+    font-family: var(--mono);
+    font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+.italic-gold { font-style: italic; color: var(--gold); }
+
+/* ============================================================
+   CARD GRID — used on Hub for section navigation
+   ============================================================ */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.card {
+    position: relative;
+    padding: 2rem 1.75rem 1.75rem;
+    display: flex; flex-direction: column; gap: .9rem;
+    background: linear-gradient(160deg, var(--ink-card), var(--ink-soft));
+    border: 1px solid var(--ink-line);
+    text-decoration: none; color: inherit;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1),
+                box-shadow .3s, border-color .3s;
+    overflow: hidden;
+    cursor: pointer;
+}
+.card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--gold); transition: width .3s ease;
+}
+.card:hover {
+    border-color: rgba(232, 200, 137, .5);
+    box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 30px rgba(232, 200, 137, .08);
+    transform: translateY(-4px);
+}
+.card:hover::before { width: 5px; }
+
+.card-corner {
+    position: absolute; top: 1.2rem; right: 1.4rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .2em;
+    color: var(--gold);
+}
+.card-roman {
+    font-family: var(--serif); font-style: italic;
+    font-size: 3rem; line-height: 1;
+    color: var(--gold);
+    letter-spacing: -.02em;
+}
+.card-title {
+    font-family: var(--serif);
+    font-size: 1.85rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--cream);
+}
+.card-title em { font-style: italic; color: var(--gold); }
+.card-desc {
+    font-family: var(--sans);
+    font-size: .92rem; line-height: 1.55;
+    color: var(--cream-soft); flex: 1;
+}
+.card-cta {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold);
+    margin-top: .7rem; padding-top: 1rem;
+    border-top: 1px solid var(--ink-line);
+    transition: color .2s;
+}
+.card:hover .card-cta { color: var(--gold-bright); }
+.card-arrow { display: inline-block; transition: transform .25s ease; }
+.card:hover .card-arrow { transform: translateX(4px); }
+
+/* ============================================================
+   HERO STAT BAR — for top records on landing
+   ============================================================ */
+.stat-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+.stat {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+    padding: 1.2rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+}
+.stat::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--gold);
+}
+.stat-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .5rem;
+}
+.stat-value {
+    font-family: var(--serif);
+    font-size: 2.2rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--gold); margin-bottom: .4rem;
+}
+.stat-detail {
+    font-family: var(--sans);
+    font-size: .82rem; color: var(--cream-soft);
+    line-height: 1.4;
+}
+.stat-detail strong { color: var(--cream); }
+
+/* ============================================================
+   BADGES & PILLS
+   ============================================================ */
+.badge {
+    display: inline-flex; align-items: center; gap: .45rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+    padding: .35rem .65rem; border-radius: 2px;
+}
+.badge.live {
+    background: rgba(232, 200, 137, .1);
+    color: var(--gold);
+    border: 1px solid rgba(232, 200, 137, .3);
+}
+.badge.alert {
+    background: rgba(160, 72, 48, .12);
+    color: var(--rust);
+    border: 1px solid rgba(160, 72, 48, .35);
+}
+.badge.current {
+    background: rgba(107, 138, 168, .12);
+    color: var(--steel);
+    border: 1px solid rgba(107, 138, 168, .3);
+}
+.badge-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--rust);
+    box-shadow: 0 0 8px rgba(160, 72, 48, .6);
+    animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: .5; transform: scale(.8); }
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+.table-wrap {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-line);
+    overflow-x: auto;
+}
+table.data {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--sans);
+}
+table.data thead {
+    background: var(--ink-soft);
+    border-bottom: 1px solid var(--ink-line);
+}
+table.data th {
+    padding: .85rem 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute);
+    text-align: left;
+    white-space: nowrap;
+}
+table.data th.num { text-align: right; }
+table.data td {
+    padding: .85rem 1rem;
+    border-top: 1px solid var(--ink-line-soft);
+    font-size: .9rem;
+    color: var(--cream-soft);
+}
+table.data td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data td.name { color: var(--cream); font-weight: 500; }
+table.data td.rank {
+    font-family: var(--mono); font-weight: 700;
+    color: var(--gold);
+}
+table.data tbody tr:hover {
+    background: rgba(232, 200, 137, .03);
+}
+table.data tbody tr.highlight {
+    background: rgba(232, 200, 137, .06);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+    position: relative; z-index: 10;
+    margin-top: 5rem;
+    padding: 2rem;
+    border-top: 1px solid var(--ink-line);
+    text-align: center;
+    font-family: var(--mono);
+    font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.site-footer em { color: var(--gold); font-style: italic; font-family: var(--serif); }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.divider-dotted {
+    border-top: 1px dotted var(--ink-line);
+    margin: 1.5rem 0;
+}
+.text-mono { font-family: var(--mono); }
+.text-serif { font-family: var(--serif); }
+.text-gold { color: var(--gold); }
+.text-cream-mute { color: var(--cream-mute); }
+
+</style>
+<style>
+/* ============================================================
+   SECTION-SPECIFIC LAYOUTS (hub middle overrides)
+   ============================================================ */
+
+/* === § 01 BENCHMARKS — hero on top, 2-col list below === */
+.benchmarks {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.hero-stat {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 1rem;
+}
+.hero-stat-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .32em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+}
+.hero-stat-value {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(6rem, 14vw, 11rem);
+    line-height: .9; letter-spacing: -.04em;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+}
+.hero-stat-detail {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.3rem; line-height: 1.4;
+    color: var(--cream-soft);
+    max-width: 56ch;
+    margin: 0 auto;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--ink-line);
+}
+.hero-stat-detail strong { color: var(--gold); font-style: normal; font-family: var(--sans); font-weight: 700; letter-spacing: .02em; }
+.hero-stat-detail .game-context {
+    display: block;
+    font-family: var(--mono); font-style: normal;
+    font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .85rem;
+}
+
+/* Two-column grid of secondary stats — with vertical divider between cols */
+.stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem;
+    border-top: 1px solid var(--ink-line);
+    position: relative;
+}
+/* Vertical center divider line, hidden on mobile */
+.stat-grid::before {
+    content: '';
+    position: absolute;
+    top: 1.75rem;     /* match top padding of first row */
+    bottom: 1.75rem;  /* match bottom padding of last row */
+    left: 50%;
+    width: 1px;
+    background: var(--ink-line);
+    transform: translateX(-50%);
+}
+@media (max-width: 720px) {
+    .stat-grid { column-gap: 1.25rem; }
+    .stat-grid::before { display: none; }
+    .stat-row { gap: .75rem; padding: 1.1rem 0; }
+    .stat-row-num { font-size: 1.9rem; min-width: 4rem; }
+    .stat-row-name { font-size: .92rem; }
+    .stat-row-detail { font-size: .58rem; }
+    .stat-row-label { font-size: .52rem; letter-spacing: .18em; }
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 1.75rem 0;
+    border-bottom: 1px dotted var(--ink-line);
+}
+/* On desktop, last two rows (one per column) have no border */
+@media (min-width: 721px) {
+    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: none; }
+}
+@media (max-width: 720px) {
+    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: none; }
+    .stat-grid .stat-row:last-child { border-bottom: none; }
+}
+
+.stat-row-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.8rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--gold);
+    min-width: 6rem;
+    text-align: right;
+}
+.stat-row-body { display: flex; flex-direction: column; gap: .3rem; }
+.stat-row-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.stat-row-name {
+    font-family: var(--serif);
+    font-size: 1.15rem; line-height: 1.2;
+    color: var(--cream);
+}
+.stat-row-name em { font-style: italic; color: var(--gold); }
+.stat-row-detail {
+    font-family: var(--mono);
+    font-size: .65rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .2rem;
+}
+
+
+/* === § 02 NAVIGATION — Ledger table of contents === */
+.toc {
+    background: linear-gradient(180deg, rgba(26, 37, 50, .4) 0%, rgba(22, 32, 44, .2) 100%);
+    border: 1px solid var(--ink-line);
+}
+.toc-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+}
+.toc-body::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 1px;
+    background: var(--ink-line-soft);
+    pointer-events: none;
+}
+.toc-body .toc-row:nth-last-child(-n+2) { border-bottom: none; }
+@media (max-width: 860px) {
+    .toc-body { grid-template-columns: 1fr; }
+    .toc-body::before { display: none; }
+    .toc-body .toc-row:nth-last-child(-n+2) { border-bottom: 1px solid var(--ink-line-soft); }
+    .toc-body .toc-row:last-child { border-bottom: none; }
+}
+.toc-header {
+    padding: 1.25rem 2rem;
+    background: var(--ink-soft);
+    border-bottom: 1px solid var(--ink-line);
+    display: flex; justify-content: space-between; align-items: baseline;
+}
+.toc-header-title {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .68rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--gold);
+}
+.toc-header-meta {
+    font-family: var(--mono);
+    font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.toc-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--ink-line-soft);
+    transition: background .2s;
+}
+.toc-row:last-child { border-bottom: none; }
+.toc-row:hover {
+    background: rgba(232, 200, 137, .03);
+}
+.toc-row:hover .toc-arrow { transform: translateX(4px); color: var(--gold-bright); }
+.toc-row:hover .toc-title { color: var(--gold); }
+
+.toc-chapter {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold);
+    min-width: 5.5rem;
+}
+.toc-title-wrap { display: flex; flex-direction: column; }
+.toc-title {
+    font-family: var(--serif);
+    font-size: 1.7rem; line-height: 1.1;
+    color: var(--cream);
+    transition: color .2s;
+}
+.toc-title em { font-style: italic; color: var(--gold); }
+.toc-desc {
+    font-family: var(--sans);
+    font-size: .85rem;
+    color: var(--cream-soft);
+    margin-top: .35rem;
+    max-width: 50ch;
+}
+.toc-badge {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    padding: .3rem .6rem;
+    border: 1px solid rgba(232, 200, 137, .3);
+    color: var(--gold);
+    background: rgba(232, 200, 137, .06);
+    border-radius: 2px;
+    white-space: nowrap;
+}
+.toc-badge.alert {
+    border-color: rgba(160, 72, 48, .4);
+    color: var(--rust);
+    background: rgba(160, 72, 48, .08);
+}
+.toc-badge.steel {
+    border-color: rgba(107, 138, 168, .35);
+    color: var(--steel);
+    background: rgba(107, 138, 168, .08);
+}
+.toc-badge.sage {
+    border-color: rgba(107, 154, 110, .35);
+    color: #7aad8e;
+    background: rgba(107, 154, 110, .08);
+}
+.toc-badge.warm {
+    border-color: rgba(168, 112, 80, .35);
+    color: #c08060;
+    background: rgba(168, 112, 80, .08);
+}
+.toc-badge.ember {
+    border-color: rgba(200, 168, 48, .35);
+    color: #d4bc60;
+    background: rgba(200, 168, 48, .08);
+}
+.toc-badge.violet {
+    border-color: rgba(154, 130, 184, .35);
+    color: #b09ad8;
+    background: rgba(154, 130, 184, .08);
+}
+.toc-badge.teal {
+    border-color: rgba(90, 154, 150, .35);
+    color: #6abdb8;
+    background: rgba(90, 154, 150, .08);
+}
+.toc-badge.rose {
+    border-color: #b8688059;
+    color: #d494a8;
+    background: #b8688014;
+}
+.toc-badge.fire {
+    border-color: #b3606559;
+    color: #d25555;
+    background: #b25e6214;
+}
+.toc-arrow {
+    color: var(--gold);
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    transition: transform .25s ease, color .2s;
+    min-width: 1.5rem;
+    text-align: right;
+}
+
+/* === § 03 CHAMPION SEAL === */
+.champion-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding: 1rem 0;
+}
+@media (max-width: 700px) {
+    .champion-row { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; text-align: center; }
+}
+.champion-seal { width: 200px; height: 200px; flex-shrink: 0; }
+.champion-text-block { max-width: 50ch; }
+.champion-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .8rem;
+}
+.champion-name {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    line-height: .95; letter-spacing: -.025em;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+}
+.champion-name em { font-style: italic; color: var(--gold); }
+.champion-blurb {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.15rem; line-height: 1.5;
+    color: var(--cream-soft);
+    margin-bottom: 1.4rem;
+}
+.champion-blurb strong { color: var(--cream); font-style: normal; font-family: var(--sans); font-weight: 600; }
+.champion-link {
+    display: inline-flex; align-items: center; gap: .8rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    padding-top: 1rem; border-top: 1px solid var(--ink-line);
+    transition: color .2s;
+}
+.champion-link:hover { color: var(--gold-bright); }
+.champion-link:hover .arrow { transform: translateX(4px); }
+.arrow { transition: transform .25s ease; display: inline-block; }
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .nav { padding: .9rem 1.25rem; gap: .5rem; }
+    .nav-link { display: none; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .hero-stat-detail .game-context { font-size: .45rem; letter-spacing: .11em; margin-top: .65rem; word-spacing: -.15em; }
+    .section { padding: 0 1.25rem; margin-top: 2rem; }
+    .toc-row { padding: 1.2rem 1.5rem; gap: 1rem; }
+    .toc-title { font-size: 1.4rem; }
+    .stat-bar { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+    .nav { padding: .75rem 1rem; }
+    .nav-title { font-size: 1.2rem; }
+    .nav-kicker { font-size: .5rem; letter-spacing: .2em; }
+    .nav-link { font-size: .62rem; letter-spacing: .12em; }
+
+    .hero { padding: 2.5rem 1rem 2rem; }
+    .hero-sub { font-size: 1rem; }
+
+    .section { padding: 0 1rem; margin-top: 1.5rem; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: .3rem; padding-bottom: .75rem; margin-bottom: 1.25rem; }
+    .section-title { font-size: 1.35rem; }
+
+    .toc-row {
+        grid-template-columns: auto 1fr auto;
+        padding: 1rem 1.1rem;
+        gap: .6rem;
+    }
+    .toc-badge { display: none; }
+    .toc-desc  { display: none; }
+    .toc-title { font-size: 1.15rem; }
+    .toc-chapter { min-width: 3.5rem; font-size: .56rem; }
+    .toc-arrow { font-size: 1.2rem; min-width: 1.2rem; }
+
+    .hero-stat-value { font-size: clamp(4.5rem, 20vw, 11rem); }
+    .hero-stat-detail { font-size: 1.05rem; }
+
+    /* Records grid — 2-column equal-size table on mobile */
+    .stat-grid {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 0;
+        row-gap: 0;
+        border: 1px solid var(--ink-line);
+    }
+    .stat-row {
+        display: flex;
+        flex-direction: column;
+        gap: .18rem;
+        padding: .6rem .55rem;
+        border-bottom: 1px solid var(--ink-line);
+        border-right: 1px solid var(--ink-line);
+        align-items: flex-start;
+    }
+    .stat-grid .stat-row:nth-child(2n) { border-right: none; }
+    .stat-grid .stat-row:nth-last-child(-n+2) { border-bottom: none; }
+    .stat-row-num { font-size: 1.4rem; min-width: unset; text-align: left; }
+    .stat-row-label { font-size: .46rem; letter-spacing: .13em; }
+    .stat-row-name { font-size: .75rem; line-height: 1.25; }
+    .stat-row-detail { font-size: .5rem; }
+
+    .stat-bar { grid-template-columns: 1fr; }
+    .champion-seal { width: 150px; height: 150px; }
+    .champion-name { font-size: clamp(2rem, 7vw, 3.8rem); }
+}
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<!-- TICKER -->
+<div class="ticker">
+    <div class="ticker-track">
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE LAKESIDE LEAGUE · EST. 2019</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 644 GAMES</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> ALL-TIME RECORDS · UPDATED WEEKLY</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> TWELVE MANAGERS · ONE LEAGUE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> 17 MANAGERS · 12 CURRENT</span>
+        </div>
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE LAKESIDE LEAGUE · EST. 2019</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 644 GAMES</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> ALL-TIME RECORDS · UPDATED WEEKLY</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> TWELVE MANAGERS · ONE LEAGUE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> 17 MANAGERS · 12 CURRENT</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav id="site-nav"
+     data-page="hub"
+     data-chapter="THE LAKESIDE LEAGUE · VOL. II"
+     data-right-label="Standings"
+     data-right-href="standings.html"></nav>
+<script src="assets/js/nav.js"></script>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-sup">★ LSL · Fantasy Football Almanac ★</div>
+    <h1 class="hero-title">
+        The Lakeside<br>
+        <em>League.</em>
+    </h1>
+    <p class="hero-sub">
+        Seven seasons of champions, blowouts, and grudge matches.
+        Every record, every rivalry, every Sunday — kept in the books.
+    </p>
+    <div class="hero-meta">2019 — 2025 · 644 MATCHUPS · 17 MANAGERS</div>
+</div>
+
+
+<!-- § 01 — BENCHMARKS (rendered by JS from records array) -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-num">§ 01 · Benchmarks</span>
+        <span class="section-title">The records of record —</span>
+        <span class="section-meta">Who will be next</span>
+    </div>
+
+    <div class="benchmarks">
+        <!-- Hero record (cycled on each page load) -->
+        <div class="hero-stat" id="hero-stat">
+            <!-- populated by JS -->
+        </div>
+
+        <!-- 6 randomly chosen small records -->
+        <div class="stat-grid" id="stat-grid">
+            <!-- populated by JS -->
+        </div>
+    </div>
+</div>
+
+
+<!-- § 02 — LEDGER / TABLE OF CONTENTS -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-num">§ 02 · The Almanac</span>
+        <span class="section-title">Table of contents —</span>
+        <span class="section-meta">eight chapters</span>
+    </div>
+
+    <div class="toc">
+        <div class="toc-header">
+            <span class="toc-header-title">Vol. 02 · Index</span>
+            <span class="toc-header-meta">Updated weekly</span>
+        </div>
+
+        <div class="toc-body">
+
+        <a href="standings.html" class="toc-row">
+            <div class="toc-chapter">Ch. I</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">All-Time <em>Standings.</em></div>
+                <div class="toc-desc">Every manager's career record, split by regular season and playoffs.</div>
+            </div>
+            <span class="toc-badge rose">History</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="managers/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. II</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">The <em>Managers.</em></div>
+                <div class="toc-desc">Twelve active profiles. Championship banners, streaks, and head-to-head records.</div>
+            </div>
+            <span class="toc-badge steel">12 Active</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="seasons/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. III</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Season <em>Archives.</em></div>
+                <div class="toc-desc">Year by year — standings, champions, and the games that defined each campaign.</div>
+            </div>
+            <span class="toc-badge sage">7 Years</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="records.html" class="toc-row">
+            <div class="toc-chapter">Ch. IV</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Record <em>Book.</em></div>
+                <div class="toc-desc">Career, season, and weekly marks. Shootouts, snoozers, and unluckiest losses.</div>
+            </div>
+            <span class="toc-badge warm">The Book</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="pickems/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. V</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Weekly <em>Pick'ems.</em></div>
+                <div class="toc-desc">Pick the winner of every matchup each week. Login with your name and PIN — same accounts as the old site.</div>
+            </div>
+            <span class="toc-badge ember">2026 Live</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="powerrank/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. VI</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Power <em>Rankings.</em></div>
+                <div class="toc-desc">Auto-calculated each week using record, points for, efficiency, recent form, and 7-season history.</div>
+            </div>
+            <span class="toc-badge violet">Formula</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="draft/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. VII</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">Draft <em>History.</em></div>
+                <div class="toc-desc">Every pick from every draft since 2019. Round-by-round breakdowns across all seven seasons.</div>
+            </div>
+            <span class="toc-badge teal">Archive</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        <a href="rivalries/index.html" class="toc-row">
+            <div class="toc-chapter">Ch. VIII</div>
+            <div class="toc-title-wrap">
+                <div class="toc-title">The <em>Rivalries.</em></div>
+                <div class="toc-desc">Six assigned feuds. All-time head-to-head records, dominance bars, and key moments.</div>
+            </div>
+            <span class="toc-badge fire">6 Feuds</span>
+            <div class="toc-arrow">→</div>
+        </a>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- § 03 — CHAMPION SEAL -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-num">§ 03 · Reigning</span>
+        <span class="section-title">The defending champion —</span>
+        <span class="section-meta">2025 season</span>
+    </div>
+
+    <div class="champion-row">
+
+        <svg class="champion-seal" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="2025 Champion Seal">
+            <defs>
+                <path id="topArc" d="M 20,100 A 80,80 0 0 1 180,100" fill="none"/>
+                <path id="bottomArc" d="M 24,108 A 76,76 0 0 0 176,108" fill="none"/>
+            </defs>
+            <circle cx="100" cy="100" r="92" fill="none" stroke="#e8c889" stroke-width="1.5" opacity="0.4"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="#e8c889" stroke-width="0.5" opacity="0.6"/>
+            <g fill="#e8c889">
+                <circle cx="100" cy="14" r="1.5"/>
+                <circle cx="161" cy="39" r="1.5"/>
+                <circle cx="186" cy="100" r="1.5"/>
+                <circle cx="161" cy="161" r="1.5"/>
+                <circle cx="100" cy="186" r="1.5"/>
+                <circle cx="39" cy="161" r="1.5"/>
+                <circle cx="14" cy="100" r="1.5"/>
+                <circle cx="39" cy="39" r="1.5"/>
+            </g>
+            <text fill="#e8c889" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" letter-spacing="3">
+                <textPath href="#topArc" startOffset="50%" text-anchor="middle">
+                    ★ LSL · CHAMPION ·
+                </textPath>
+            </text>
+            <text fill="#e8c889" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" letter-spacing="3">
+                <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">
+                    MMXXV
+                </textPath>
+            </text>
+            <g stroke="#e8c889" stroke-width="1.2" fill="none" opacity="0.85">
+                <path d="M 50,110 Q 55,95 50,80"/>
+                <path d="M 52,110 Q 47,100 42,90"/>
+                <path d="M 54,103 Q 50,93 44,85"/>
+                <path d="M 56,96 Q 52,87 46,80"/>
+                <path d="M 58,90 Q 54,82 49,76"/>
+                <path d="M 150,110 Q 145,95 150,80"/>
+                <path d="M 148,110 Q 153,100 158,90"/>
+                <path d="M 146,103 Q 150,93 156,85"/>
+                <path d="M 144,96 Q 148,87 154,80"/>
+                <path d="M 142,90 Q 146,82 151,76"/>
+            </g>
+            <g fill="#e8c889">
+                <polygon points="100,42 102,49 109,49 103,53 105,60 100,56 95,60 97,53 91,49 98,49"/>
+            </g>
+            <text x="100" y="125" fill="#f4ebd8" font-family="DM Serif Display, serif" font-style="italic"
+                  font-size="58" font-weight="400" letter-spacing="-0.04em" text-anchor="middle">I</text>
+            <line x1="78" y1="138" x2="122" y2="138" stroke="#e8c889" stroke-width="0.8"/>
+            <text x="100" y="152" fill="#c9c0ad" font-family="JetBrains Mono, monospace"
+                  font-size="6.5" font-weight="700" letter-spacing="2" text-anchor="middle">
+                FIRST · PLACE
+            </text>
+        </svg>
+
+        <div class="champion-text-block">
+            <div class="champion-kicker">★ 2025 · Reigning Champion ★</div>
+            <h2 class="champion-name">The <em>Cold Front.</em></h2>
+            <p class="champion-blurb">
+                <strong>Cole</strong> closed out the 2025 season 10-4-0 and ran the
+                playoff bracket clean — the first championship for the Cold Front
+                franchise.
+            </p>
+            <a href="seasons/season.html?year=2025&ref=hub" class="champion-link">
+                <span>View the 2025 season</span>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <span>The Lakeside League · <em>LSL</em> · Since MMXIX</span>
+</footer>
+
+
+<script>
+
+// Hub records are loaded from data/record_book.json — edit there, not here.
+let records = [];
+
+async function loadAndRender() {
+    try {
+        const res = await fetch('data/record_book.json');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        records = data.hub_records || [];
+    } catch (e) {
+        // Fall back to a one-line empty state
+        document.getElementById('hero-stat').innerHTML = '<div class="hero-stat-detail">Records will appear here once the season starts.</div>';
+        return;
+    }
+    renderRecords();
+}
+
+function renderRecords() {
+    const shuffled = [...records].sort(() => Math.random() - 0.5);
+    const hero  = shuffled[0];
+    const small = shuffled.slice(1, 7);
+
+    document.getElementById('hero-stat').innerHTML = `
+        <div class="hero-stat-label">${hero.label}</div>
+        <div class="hero-stat-value">${hero.value}</div>
+        <div class="hero-stat-detail">
+            ${hero.prose}
+            <span class="game-context">${hero.gameContext}</span>
+        </div>
+    `;
+
+    document.getElementById('stat-grid').innerHTML = small.map(r => `
+        <div class="stat-row">
+            <div class="stat-row-num">${r.value}</div>
+            <div class="stat-row-body">
+                <div class="stat-row-label">${r.label}</div>
+                <div class="stat-row-name">${r.name}</div>
+                <div class="stat-row-detail">${r.detail}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+loadAndRender();
+</script>
+
+</body>
+</html>

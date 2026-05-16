@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Season Archives · The Lakeside League</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+/* ============================================================
+   SEASON ARCHIVES INDEX
+   ============================================================ */
+
+.page-header {
+    text-align: center;
+    padding: 3.5rem 1.5rem 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative; z-index: 10;
+}
+.page-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+}
+.page-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: .95; letter-spacing: -.025em;
+    color: var(--cream); margin-bottom: 1rem;
+}
+.page-title em { font-style: italic; color: var(--gold); }
+.page-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.2rem; line-height: 1.5;
+    color: var(--cream-soft); max-width: 540px; margin: 0 auto;
+}
+
+/* ─── Chronicle list ─── */
+.chronicle { display: flex; flex-direction: column; }
+
+.season-entry {
+    display: grid;
+    grid-template-columns: 8rem 1fr auto;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 2.25rem 2rem;
+    text-decoration: none; color: inherit;
+    border-bottom: 1px solid var(--ink-line-soft);
+    position: relative;
+    transition: background .2s, padding-left .25s ease;
+    overflow: hidden;
+}
+.season-entry::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--gold);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.season-entry:hover {
+    background: rgba(232, 200, 137, .04);
+    padding-left: 2.5rem;
+}
+.season-entry:hover::before { transform: scaleY(1); }
+.season-entry:last-child { border-bottom: none; }
+
+/* Featured (latest) season */
+.season-entry.featured {
+    background: linear-gradient(135deg, rgba(232,200,137,.06) 0%, rgba(232,200,137,.02) 100%);
+    border-bottom: 2px solid var(--ink-line);
+}
+.season-entry.featured::before { background: var(--gold); transform: scaleY(1); }
+
+/* ─── Year column (LEFT) ─── */
+.entry-year-col {
+    display: flex; flex-direction: column;
+    align-items: flex-end;
+    border-right: 1px solid var(--ink-line);
+    padding-right: 2rem;
+    flex-shrink: 0;
+}
+.entry-year {
+    font-family: var(--serif); font-style: italic;
+    font-size: 3.8rem; line-height: .9; letter-spacing: -.04em;
+    color: var(--gold);
+}
+.entry-roman {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .35rem;
+}
+
+/* ─── Center column (CHAMPION) ─── */
+.entry-center { min-width: 0; }
+
+.entry-badge {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .25em; text-transform: uppercase;
+    padding: .28rem .6rem; border-radius: 2px; margin-bottom: .75rem;
+}
+.entry-badge.champ {
+    color: var(--gold);
+    background: rgba(232,200,137,.1);
+    border: 1px solid rgba(232,200,137,.3);
+}
+.entry-badge.current {
+    color: var(--ink); background: var(--gold);
+    border: 1px solid var(--gold-deep);
+}
+
+.champ-team {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1; letter-spacing: -.025em;
+    color: var(--cream);
+    margin-bottom: .45rem;
+}
+.champ-owner {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold);
+}
+.champ-record {
+    font-family: var(--mono);
+    font-size: .6rem; letter-spacing: .15em;
+    color: var(--cream-mute);
+    margin-top: .25rem;
+}
+
+/* ─── Right column (PODIUM + META) ─── */
+.entry-right {
+    display: flex; flex-direction: column;
+    gap: .6rem; align-items: flex-end;
+    flex-shrink: 0; min-width: 180px;
+}
+.podium-item {
+    display: flex; align-items: center; gap: .6rem;
+    font-family: var(--sans); font-size: .85rem;
+}
+.podium-medal {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .6rem; letter-spacing: .15em;
+    width: 1.8rem; text-align: right; flex-shrink: 0;
+}
+.podium-medal.silver { color: #b0b8c0; }
+.podium-medal.bronze { color: #a07848; }
+.podium-name {
+    font-family: var(--serif);
+    font-size: .95rem;
+    color: var(--cream-soft);
+}
+.entry-meta {
+    display: flex; align-items: center; gap: .5rem;
+    font-family: var(--mono);
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-top: .4rem;
+}
+.entry-arrow {
+    font-family: var(--serif); font-size: 1.4rem;
+    color: var(--gold); margin-top: .25rem;
+    transition: transform .25s ease;
+}
+.season-entry:hover .entry-arrow { transform: translateX(5px); }
+
+@media (max-width: 800px) {
+    .season-entry {
+        grid-template-columns: 6rem 1fr;
+        gap: 1.5rem;
+    }
+    .entry-right { display: none; }
+    .entry-year { font-size: 2.8rem; }
+}
+
+.loading-state {
+    text-align: center; padding: 4rem 2rem;
+    font-family: var(--serif); font-style: italic;
+    color: var(--cream-mute);
+}
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<!-- TICKER -->
+<div class="ticker">
+    <div class="ticker-track">
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> SEASON ARCHIVES · THE LAKESIDE LEAGUE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 2019 — 2025</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SIX CHAMPIONS · ONE DYNASTY IN THE MAKING</span>
+        </div>
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> SEASON ARCHIVES · THE LAKESIDE LEAGUE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · 2019 — 2025</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SIX CHAMPIONS · ONE DYNASTY IN THE MAKING</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav id="site-nav"
+     data-page="seasons"
+     data-chapter="CH. III · ARCHIVES"
+     data-back-label="← The Hub"
+     data-back-href="index.html"></nav>
+<script src="../assets/js/nav.js"></script>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-kicker">★ Seven Volumes · Seven Campaigns ★</div>
+    <h1 class="page-title">Season <em>Archives.</em></h1>
+    <p class="page-sub">
+        From the founding year to the present — every champion, every campaign, every chapter of the league.
+    </p>
+</div>
+
+<div class="section">
+    <div id="chronicle-container">
+        <div class="loading-state">Loading the archives…</div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <span>The Lakeside League · <em>LSL</em> · Since MMXIX</span>
+</footer>
+
+
+<script>
+
+function toRoman(n) {
+    const vals = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],
+                  [50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+    let r = '';
+    for (const [v, s] of vals) { while (n >= v) { r += s; n -= v; } }
+    return r;
+}
+
+async function load() {
+    try {
+        // Get directory for the list of years
+        const dirRes = await fetch('../data/seasons_directory.json');
+        if (!dirRes.ok) throw new Error(`HTTP ${dirRes.status}`);
+        const dir = await dirRes.json();
+        const years = dir.seasons.map(s => s.year);
+
+        // Fetch all individual season files in parallel for runner-up / 3rd / champion record
+        const seasonData = await Promise.all(
+            years.map(y =>
+                fetch(`../data/seasons/${y}.json`)
+                    .then(r => r.ok ? r.json() : null)
+                    .catch(() => null)
+            )
+        );
+
+        // Most recent first
+        const seasons = seasonData.filter(Boolean).sort((a, b) => b.year - a.year);
+        const latest = seasons[0].year;
+        render(seasons, latest);
+    } catch (err) {
+        document.getElementById('chronicle-container').innerHTML = `
+            <div class="loading-state" style="color:var(--rust);">
+                Couldn't load season data.<br><small>${err.message}</small>
+            </div>`;
+    }
+}
+
+function render(seasons, latest) {
+    document.getElementById('chronicle-container').innerHTML = `
+        <div class="chronicle">
+            ${seasons.map(s => buildEntry(s, s.year === latest)).join('')}
+        </div>`;
+}
+
+function buildEntry(s, isFeatured) {
+    const badge = isFeatured
+        ? `<span class="entry-badge current">★ Reigning Champion</span>`
+        : `<span class="entry-badge champ">★ Champion</span>`;
+
+    const record = s.champion?.record ?? '';
+    const pf = s.champion?.points_for ? Math.round(s.champion.points_for) + ' PF' : '';
+    const recordLine = record
+        ? `<div class="champ-record">${record}${pf ? ' · ' + pf : ''}</div>`
+        : '';
+
+    const runner = s.runner_up?.owner_name
+        ? `<div class="podium-item">
+               <span class="podium-medal silver">2nd</span>
+               <span class="podium-name">${s.runner_up.owner_name}</span>
+           </div>`
+        : '';
+    const third = s.third_place?.owner_name
+        ? `<div class="podium-item">
+               <span class="podium-medal bronze">3rd</span>
+               <span class="podium-name">${s.third_place.owner_name}</span>
+           </div>`
+        : '';
+
+    return `
+        <a href="season.html?year=${s.year}" class="season-entry${isFeatured ? ' featured' : ''}">
+            <div class="entry-year-col">
+                <div class="entry-year">${s.year}</div>
+                <div class="entry-roman">${toRoman(s.year)}</div>
+            </div>
+
+            <div class="entry-center">
+                ${badge}
+                <div class="champ-team">${s.champion?.team_name ?? '—'}</div>
+                <div class="champ-owner">${s.champion?.owner_name ?? '—'}</div>
+                ${recordLine}
+            </div>
+
+            <div class="entry-right">
+                ${runner}
+                ${third}
+                <div class="entry-meta">${s.total_teams} teams</div>
+                <div class="entry-arrow">→</div>
+            </div>
+        </a>
+    `;
+}
+
+load();
+</script>
+
+</body>
+</html>

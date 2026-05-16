@@ -1,0 +1,318 @@
+{
+  "hub_records": [
+    {
+      "label": "Highest Single-Week Score",
+      "value": "188.74",
+      "name": "<em>Brandon</em>, untouchable",
+      "detail": "2021 \u00b7 W1 \u00b7 vs Trevor",
+      "prose": "<strong>Brandon</strong> dropped 188.74 on Trevor in week 1 of the 2021 season \u2014 the highest single-week output in league history.",
+      "gameContext": "2021 \u00b7 Week 1 \u00b7 188.74 \u2014 101.40"
+    },
+    {
+      "label": "Biggest Blowout",
+      "value": "110.03",
+      "name": "<em>Devin</em> over Trevor",
+      "detail": "2019 \u00b7 W2 \u00b7 150.03 \u2014 40.00",
+      "prose": "<strong>Devin</strong> hung 150 on Trevor in week 2 of 2019, 110 points clear \u2014 the most lopsided result in league history.",
+      "gameContext": "2019 \u00b7 Week 2 \u00b7 150.03 \u2014 40.00"
+    },
+    {
+      "label": "Longest Win Streak",
+      "value": "10",
+      "name": "<em>Jordan</em> on a heater",
+      "detail": "W4 2024 \u2192 W13 2024",
+      "prose": "<strong>Jordan</strong> ran off 10 straight wins \u2014 the longest unbroken stretch any manager has put together.",
+      "gameContext": "W4 2024 \u2192 W13 2024 \u00b7 10 straight wins"
+    },
+    {
+      "label": "Highest Season Total",
+      "value": "1,864",
+      "name": "<em>Tyler</em> \u2014 \"Crosstown Comets\"",
+      "detail": "2025 \u00b7 133.2 ppg avg",
+      "prose": "<strong>Tyler</strong>'s 2025 \"Crosstown Comets\" piled up 1,864 regular-season points, averaging 133.2 a game.",
+      "gameContext": "2025 Season \u00b7 1,864 PF \u00b7 133.2 ppg"
+    },
+    {
+      "label": "Closest Game Ever",
+      "value": "0.03",
+      "name": "<em>Ryan</em> over Ethan",
+      "detail": "2024 \u00b7 W11 \u00b7 89.10 \u2014 89.07",
+      "prose": "<strong>Ryan</strong> edged Ethan by 0.03 in week 11 of 2024 \u2014 the tightest margin on the books.",
+      "gameContext": "2024 \u00b7 Week 11 \u00b7 89.10 \u2014 89.07"
+    },
+    {
+      "label": "Shootout (Highest Combined)",
+      "value": "335.9",
+      "name": "<em>Devin</em> vs Cole",
+      "detail": "2023 \u00b7 W1 \u00b7 172.75 \u2014 163.11",
+      "prose": "<strong>Devin</strong> and <strong>Cole</strong> combined for 335.9 in week 1 of 2023 \u2014 the highest-scoring matchup ever played.",
+      "gameContext": "2023 \u00b7 Week 1 \u00b7 172.75 \u2014 163.11"
+    },
+    {
+      "label": "Longest Losing Streak",
+      "value": "10",
+      "name": "<em>Trevor</em>'s cold stretch",
+      "detail": "W9 2019 \u2192 W4 2020",
+      "prose": "<strong>Trevor</strong> dropped 10 in a row \u2014 the longest cold stretch any manager has endured in league history.",
+      "gameContext": "W9 2019 \u2192 W4 2020 \u00b7 10 straight losses"
+    },
+    {
+      "label": "Best Regular Season Record",
+      "value": "12-2",
+      "name": "<em>Tyler</em> \u2014 \"Crosstown Comets\"",
+      "detail": "2023 \u00b7 seed 1",
+      "prose": "<strong>Tyler</strong>'s 2023 \"Crosstown Comets\" team went 12-2 in the regular season \u2014 the best single-season record in league history.",
+      "gameContext": "2023 Regular Season \u00b7 12-2 \u00b7 Seed 1"
+    }
+  ],
+  "full_book": {
+    "weekly": {
+      "highest_single_week_score": [
+        {
+          "score": 188.74,
+          "owner": "Brandon",
+          "user_id": 1005,
+          "opp_owner": "Trevor",
+          "opp_user_id": 1008,
+          "opp_score": 101.4,
+          "season": 2021,
+          "week": 1,
+          "team_name": "Brimstone FC"
+        },
+        {
+          "score": 183.69,
+          "owner": "Marcus",
+          "user_id": 1001,
+          "opp_owner": "Ryan",
+          "opp_user_id": 1011,
+          "opp_score": 80.34,
+          "season": 2019,
+          "week": 6,
+          "team_name": "Hammer Time"
+        },
+        {
+          "score": 182.71,
+          "owner": "Ethan",
+          "user_id": 1004,
+          "opp_owner": "Adam",
+          "opp_user_id": 1009,
+          "opp_score": 104.06,
+          "season": 2021,
+          "week": 12,
+          "team_name": "Eastside Express"
+        },
+        {
+          "score": 179.67,
+          "owner": "Jordan",
+          "user_id": 1003,
+          "opp_owner": "Dave",
+          "opp_user_id": 1014,
+          "opp_score": 116.76,
+          "season": 2020,
+          "week": 11,
+          "team_name": "Highland Hawks"
+        },
+        {
+          "score": 179.5,
+          "owner": "Cole",
+          "user_id": 1007,
+          "opp_owner": "Jordan",
+          "opp_user_id": 1003,
+          "opp_score": 103.44,
+          "season": 2021,
+          "week": 17,
+          "team_name": "Cold Front"
+        },
+        {
+          "score": 177.78,
+          "owner": "Cole",
+          "user_id": 1007,
+          "opp_owner": "Ethan",
+          "opp_user_id": 1004,
+          "opp_score": 119.64,
+          "season": 2022,
+          "week": 15,
+          "team_name": "Cold Front"
+        },
+        {
+          "score": 174.82,
+          "owner": "Cole",
+          "user_id": 1007,
+          "opp_owner": "Tyler",
+          "opp_user_id": 1002,
+          "opp_score": 141.07,
+          "season": 2025,
+          "week": 3,
+          "team_name": "Cold Front"
+        },
+        {
+          "score": 173.95,
+          "owner": "Devin",
+          "user_id": 1006,
+          "opp_owner": "Marcus",
+          "opp_user_id": 1001,
+          "opp_score": 111.36,
+          "season": 2020,
+          "week": 7,
+          "team_name": "Den of Thieves"
+        },
+        {
+          "score": 172.85,
+          "owner": "Cole",
+          "user_id": 1007,
+          "opp_owner": "Marcus",
+          "opp_user_id": 1001,
+          "opp_score": 123.24,
+          "season": 2025,
+          "week": 17,
+          "team_name": "Cold Front"
+        },
+        {
+          "score": 172.75,
+          "owner": "Devin",
+          "user_id": 1006,
+          "opp_owner": "Cole",
+          "opp_user_id": 1007,
+          "opp_score": 163.11,
+          "season": 2023,
+          "week": 1,
+          "team_name": "Den of Thieves"
+        }
+      ],
+      "highest_combined_score": [
+        {
+          "score": 172.75,
+          "owner": "Devin",
+          "user_id": 1006,
+          "opp_owner": "Cole",
+          "opp_user_id": 1007,
+          "opp_score": 163.11,
+          "combined_score": 335.86,
+          "season": 2023,
+          "week": 1,
+          "team_name": "Den of Thieves",
+          "result": "W"
+        },
+        {
+          "score": 150.75,
+          "owner": "Owen",
+          "user_id": 1012,
+          "opp_owner": "Tyler",
+          "opp_user_id": 1002,
+          "opp_score": 172.66,
+          "combined_score": 323.41,
+          "season": 2025,
+          "week": 6,
+          "team_name": "Old Glory",
+          "result": "L"
+        },
+        {
+          "score": 148.87,
+          "owner": "Ethan",
+          "user_id": 1004,
+          "opp_owner": "Cole",
+          "opp_user_id": 1007,
+          "opp_score": 167.5,
+          "combined_score": 316.37,
+          "season": 2022,
+          "week": 13,
+          "team_name": "Eastside Express",
+          "result": "L"
+        },
+        {
+          "score": 141.07,
+          "owner": "Tyler",
+          "user_id": 1002,
+          "opp_owner": "Cole",
+          "opp_user_id": 1007,
+          "opp_score": 174.82,
+          "combined_score": 315.89,
+          "season": 2025,
+          "week": 3,
+          "team_name": "Crosstown Comets",
+          "result": "L"
+        },
+        {
+          "score": 169.12,
+          "owner": "Ethan",
+          "user_id": 1004,
+          "opp_owner": "Cole",
+          "opp_user_id": 1007,
+          "opp_score": 145.84,
+          "combined_score": 314.96,
+          "season": 2025,
+          "week": 2,
+          "team_name": "Eastside Express",
+          "result": "W"
+        },
+        {
+          "score": 153.45,
+          "owner": "Ethan",
+          "user_id": 1004,
+          "opp_owner": "Brandon",
+          "opp_user_id": 1005,
+          "opp_score": 158.16,
+          "combined_score": 311.61,
+          "season": 2022,
+          "week": 3,
+          "team_name": "Eastside Express",
+          "result": "L"
+        },
+        {
+          "score": 141.17,
+          "owner": "Ethan",
+          "user_id": 1004,
+          "opp_owner": "Cole",
+          "opp_user_id": 1007,
+          "opp_score": 164.1,
+          "combined_score": 305.27,
+          "season": 2023,
+          "week": 2,
+          "team_name": "Eastside Express",
+          "result": "L"
+        },
+        {
+          "score": 154.49,
+          "owner": "Devin",
+          "user_id": 1006,
+          "opp_owner": "Jordan",
+          "opp_user_id": 1003,
+          "opp_score": 148.06,
+          "combined_score": 302.55,
+          "season": 2024,
+          "week": 16,
+          "team_name": "Den of Thieves",
+          "result": "W"
+        },
+        {
+          "score": 141.67,
+          "owner": "Devin",
+          "user_id": 1006,
+          "opp_owner": "Cole",
+          "opp_user_id": 1007,
+          "opp_score": 160.02,
+          "combined_score": 301.69,
+          "season": 2022,
+          "week": 12,
+          "team_name": "Den of Thieves",
+          "result": "L"
+        },
+        {
+          "score": 143.5,
+          "owner": "Brandon",
+          "user_id": 1005,
+          "opp_owner": "Jordan",
+          "opp_user_id": 1003,
+          "opp_score": 155.95,
+          "combined_score": 299.45,
+          "season": 2022,
+          "week": 9,
+          "team_name": "Brimstone FC",
+          "result": "L"
+        }
+      ]
+    },
+    "season": {},
+    "career": {}
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "week1",
+  "label": "Week 1",
+  "openAt": "2024-01-01T00:00:00Z",
+  "gameOfWeek": "m1",
+  "matchups": [
+    {
+      "id": "m1",
+      "home": "marcus",
+      "away": "tyler"
+    },
+    {
+      "id": "m2",
+      "home": "jordan",
+      "away": "ethan"
+    },
+    {
+      "id": "m3",
+      "home": "brandon",
+      "away": "devin"
+    },
+    {
+      "id": "m4",
+      "home": "cole",
+      "away": "trevor"
+    },
+    {
+      "id": "m5",
+      "home": "adam",
+      "away": "noah"
+    },
+    {
+      "id": "m6",
+      "home": "ryan",
+      "away": "owen"
+    }
+  ],
+  "winners": {
+    "m1": "marcus",
+    "m2": "jordan",
+    "m3": "devin",
+    "m4": "cole",
+    "m5": "noah",
+    "m6": "owen"
+  },
+  "highestLowestOptions": [
+    "marcus",
+    "jordan",
+    "devin",
+    "cole",
+    "noah",
+    "owen",
+    "tyler",
+    "ethan",
+    "brandon",
+    "trevor",
+    "adam",
+    "ryan"
+  ],
+  "highest": "marcus",
+  "lowest": "trevor",
+  "records": {
+    "marcus": "0-0",
+    "jordan": "0-0",
+    "devin": "0-0",
+    "cole": "0-0",
+    "noah": "0-0",
+    "owen": "0-0",
+    "tyler": "0-0",
+    "ethan": "0-0",
+    "brandon": "0-0",
+    "trevor": "0-0",
+    "adam": "0-0",
+    "ryan": "0-0"
+  }
+}

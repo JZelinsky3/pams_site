@@ -1,0 +1,67 @@
+{
+  "id": "week2",
+  "label": "Week 2",
+  "openAt": "2024-01-01T00:00:00Z",
+  "gameOfWeek": "m3",
+  "matchups": [
+    {
+      "id": "m1",
+      "home": "marcus",
+      "away": "jordan"
+    },
+    {
+      "id": "m2",
+      "home": "tyler",
+      "away": "ethan"
+    },
+    {
+      "id": "m3",
+      "home": "brandon",
+      "away": "cole"
+    },
+    {
+      "id": "m4",
+      "home": "devin",
+      "away": "trevor"
+    },
+    {
+      "id": "m5",
+      "home": "adam",
+      "away": "ryan"
+    },
+    {
+      "id": "m6",
+      "home": "noah",
+      "away": "owen"
+    }
+  ],
+  "winners": {},
+  "highestLowestOptions": [
+    "marcus",
+    "jordan",
+    "devin",
+    "cole",
+    "noah",
+    "owen",
+    "tyler",
+    "ethan",
+    "brandon",
+    "trevor",
+    "adam",
+    "ryan"
+  ],
+  "records": {
+    "marcus": "1-0",
+    "jordan": "1-0",
+    "devin": "1-0",
+    "cole": "1-0",
+    "noah": "1-0",
+    "owen": "1-0",
+    "tyler": "0-1",
+    "ethan": "0-1",
+    "brandon": "0-1",
+    "trevor": "0-1",
+    "adam": "0-1",
+    "ryan": "0-1"
+  }
+}

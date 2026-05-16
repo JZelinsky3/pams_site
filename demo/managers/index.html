@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Managers · The Lakeside League</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+/* ============================================================
+   MANAGERS DIRECTORY PAGE
+   ============================================================ */
+
+.page-header {
+    text-align: center;
+    padding: 3.5rem 1.5rem 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+.page-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+}
+.page-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: .95; letter-spacing: -.025em;
+    color: var(--cream); margin-bottom: 1rem;
+}
+.page-title em { font-style: italic; color: var(--gold); }
+.page-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.2rem; line-height: 1.5;
+    color: var(--cream-soft);
+    max-width: 540px; margin: 0 auto;
+}
+
+.sort-bar {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 1.5rem;
+    padding: 1.25rem 0;
+    margin-bottom: 2rem;
+    border-top: 1px solid var(--ink-line);
+    border-bottom: 1px solid var(--ink-line);
+}
+.sort-bar-label {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.sort-options { display: flex; flex-wrap: wrap; gap: .25rem; }
+.sort-option {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--cream-soft);
+    font-family: var(--mono); font-weight: 500;
+    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+    padding: .5rem .85rem;
+    cursor: pointer;
+    transition: all .2s;
+    border-radius: 2px;
+}
+.sort-option:hover { color: var(--cream); }
+.sort-option.active {
+    color: var(--gold);
+    border-color: rgba(232, 200, 137, .3);
+    background: rgba(232, 200, 137, .06);
+}
+
+/* 2-column landscape grid */
+.managers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+@media (max-width: 900px) { .managers-grid { grid-template-columns: 1fr; } }
+
+/* ─── Ticket-stub manager card ─── */
+.ts-card {
+    position: relative;
+    display: flex;
+    background: linear-gradient(160deg, var(--ink-card) 0%, var(--ink-soft) 100%);
+    border: 1px solid var(--ink-line);
+    text-decoration: none; color: inherit;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+    min-height: 168px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.28);
+}
+.ts-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(232,200,137,.4);
+    box-shadow: 0 14px 28px rgba(0,0,0,.45), 0 0 14px rgba(232,200,137,.08);
+}
+.ts-card:hover .ts-arrow { transform: translateX(4px); }
+
+/* Half-circle notches on the divider so it reads as perforated */
+.ts-card::before, .ts-card::after {
+    content: '';
+    position: absolute; left: 70px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--ink);
+    transform: translateX(-50%);
+    z-index: 2;
+}
+.ts-card::before { top: -6px; }
+.ts-card::after  { bottom: -6px; }
+
+.ts-stub {
+    width: 70px; flex-shrink: 0;
+    background: linear-gradient(180deg, rgba(232,200,137,.1), rgba(232,200,137,.02));
+    border-right: 2px dashed rgba(232,200,137,.35);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: .9rem .4rem;
+    text-align: center;
+}
+.ts-stub-lbl {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .46rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .35rem;
+}
+.ts-stub-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 2.4rem; line-height: 1; letter-spacing: -.04em;
+    color: var(--gold); margin-bottom: .25rem;
+}
+.ts-stub-foot {
+    font-family: var(--mono);
+    font-size: .42rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+.ts-body {
+    flex: 1; min-width: 0;
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+.ts-conf {
+    position: absolute; top: .85rem; right: 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .5rem; letter-spacing: .2em; text-transform: uppercase;
+    padding: .25rem .55rem;
+    border: 1px solid;
+    border-radius: 2px;
+}
+.ts-conf.north {
+    color: var(--gold);
+    background: rgba(232,200,137,.1);
+    border-color: rgba(232,200,137,.4);
+}
+.ts-conf.south {
+    color: #6b8aa8;
+    background: rgba(107,138,168,.1);
+    border-color: rgba(107,138,168,.4);
+}
+
+.ts-name {
+    font-family: var(--serif);
+    font-size: 1.55rem; line-height: 1; letter-spacing: -.02em;
+    color: var(--cream);
+    margin-bottom: .2rem;
+    padding-right: 4.5rem;
+}
+.ts-team {
+    font-family: var(--mono);
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute); margin-bottom: .5rem;
+}
+.ts-chips {
+    display: flex; flex-direction: column; gap: .2rem;
+    min-height: 1rem;
+}
+.ts-chip-line {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .55rem; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: .35rem;
+}
+.ts-chip-star { color: var(--gold); font-size: .85rem; line-height: 1; }
+.ts-chips.empty {
+    font-family: var(--mono);
+    font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+.ts-statline {
+    display: flex; gap: 1.1rem; align-items: center;
+    border-top: 1px dotted var(--ink-line);
+    padding-top: .65rem; margin-top: .75rem;
+    flex-wrap: wrap;
+}
+.ts-stat { display: flex; flex-direction: column; gap: .15rem; }
+.ts-stat-lbl {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .46rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.ts-stat-val {
+    font-family: var(--serif); font-size: 1rem; line-height: 1;
+    color: var(--cream);
+}
+.ts-stat-val.gold { color: var(--gold); font-style: italic; }
+.ts-arrow {
+    margin-left: auto;
+    font-family: var(--serif); font-size: 1.3rem;
+    color: var(--gold);
+    transition: transform .25s ease;
+}
+
+@media (max-width: 520px) {
+    .ts-stub { width: 56px; }
+    .ts-card::before, .ts-card::after { left: 56px; }
+    .ts-stub-num { font-size: 2rem; }
+    .ts-body { padding: 1rem 1rem .9rem; }
+    .ts-name { font-size: 1.3rem; padding-right: 4rem; }
+    .ts-conf { top: .7rem; right: .75rem; font-size: .46rem; padding: .2rem .45rem; }
+    .ts-statline { gap: .85rem; }
+    .ts-stat-val { font-size: .9rem; }
+}
+
+.former-wrap {
+    margin-top: 4rem;
+    border-top: 3px double var(--ink-line);
+    padding-top: 2rem;
+}
+.former-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.former-kicker {
+    font-family: var(--mono); font-weight: 700;
+    font-size: .62rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: .5rem;
+}
+.former-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.8rem; letter-spacing: -.01em;
+    color: var(--cream);
+}
+.former-title em { color: var(--gold); }
+.former-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0;
+    background: rgba(26, 37, 50, .25);
+    border: 1px solid var(--ink-line);
+}
+.former-item {
+    padding: 1rem 1.3rem;
+    border-right: 1px solid var(--ink-line-soft);
+    border-bottom: 1px solid var(--ink-line-soft);
+    display: flex; flex-direction: column;
+    gap: .25rem;
+}
+.former-name {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--cream);
+}
+.former-detail {
+    font-family: var(--mono);
+    font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+
+.loading-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    font-family: var(--serif); font-style: italic;
+    color: var(--cream-mute);
+}
+</style>
+</head>
+<body>
+
+<div class="site-glow"></div>
+<div class="site-grain"></div>
+
+<!-- TICKER -->
+<div class="ticker">
+    <div class="ticker-track">
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE MANAGERS · THE LAKESIDE LEAGUE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · TWELVE ACTIVE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> EVERY STREAK · EVERY RIVALRY · EVERY CHIP</span>
+        </div>
+        <div class="ticker-group">
+            <span class="ticker-item"><span class="ticker-star">★</span> THE MANAGERS · THE LAKESIDE LEAGUE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> SEVEN SEASONS · TWELVE ACTIVE</span>
+            <span class="ticker-item"><span class="ticker-star">★</span> EVERY STREAK · EVERY RIVALRY · EVERY CHIP</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav id="site-nav"
+     data-page="managers"
+     data-chapter="CH. II · MANAGERS"
+     data-back-label="← The Hub"
+     data-back-href="index.html"></nav>
+<script src="../assets/js/nav.js"></script>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-kicker">★ Twelve Managers · One League ★</div>
+    <h1 class="page-title">The <em>Managers.</em></h1>
+    <p class="page-sub">
+        The active society — twelve commissioners of their own destinies.
+        Click any name for the full profile: streaks, rivalries, finishes, and championship banners.
+    </p>
+</div>
+
+<!-- SORT BAR + GRID -->
+<div class="section">
+    <div class="sort-bar">
+        <span class="sort-bar-label">Sort —</span>
+        <div class="sort-options" id="sort-options">
+            <button class="sort-option active" data-sort="winpct">Win %</button>
+            <button class="sort-option" data-sort="chips">Championships</button>
+            <button class="sort-option" data-sort="games">Games Played</button>
+            <button class="sort-option" data-sort="pf">Total Points</button>
+            <button class="sort-option" data-sort="name">Alphabetical</button>
+        </div>
+    </div>
+
+    <div class="managers-grid" id="managers-grid">
+        <div class="loading-state">Loading the league…</div>
+    </div>
+
+    <div class="former-wrap">
+        <div class="former-header">
+            <div class="former-kicker">★ Alumni · Hall of Past Members ★</div>
+            <h2 class="former-title">Former <em>society.</em></h2>
+        </div>
+        <div class="former-list" id="former-list">
+            <div class="loading-state">Loading alumni…</div>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <span>The Lakeside League · <em>LSL</em> · Since MMXIX</span>
+</footer>
+
+
+<script>
+
+let allManagers = [];
+let divisionMap = {};
+let currentSort = 'winpct';
+
+async function loadData() {
+    try {
+        const [dirRes, seasonRes] = await Promise.all([
+            fetch('../data/managers_directory.json'),
+            fetch('../data/seasons/2025.json'),
+        ]);
+        if (!dirRes.ok) throw new Error(`HTTP ${dirRes.status}`);
+        const data = await dirRes.json();
+        allManagers = data.managers;
+
+        if (seasonRes.ok) {
+            const season = await seasonRes.json();
+            (season.standings || []).forEach(s => {
+                if (s.owner_user_id && s.division) {
+                    divisionMap[s.owner_user_id] = s.division;
+                }
+            });
+        }
+        render();
+    } catch (err) {
+        document.getElementById('managers-grid').innerHTML = `
+            <div class="loading-state" style="color: var(--rust);">
+                Couldn't load manager data — make sure you've run build_data.py.<br>
+                <small>${err.message}</small>
+            </div>
+        `;
+    }
+}
+
+function render() {
+    renderCurrent();
+    renderFormer();
+}
+
+function renderCurrent() {
+    const grid = document.getElementById('managers-grid');
+    let current = allManagers.filter(m => m.is_current);
+
+    const sorts = {
+        winpct: (a, b) => b.win_pct - a.win_pct,
+        chips:  (a, b) => (b.championships - a.championships) || (b.win_pct - a.win_pct),
+        games:  (a, b) => (b.wins + b.losses + b.ties) - (a.wins + a.losses + a.ties),
+        pf:     (a, b) => b.total_pf - a.total_pf,
+        name:   (a, b) => a.name.localeCompare(b.name),
+    };
+    current.sort(sorts[currentSort] || sorts.winpct);
+
+    const ROMAN = ['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'];
+
+    grid.innerHTML = current.map((m, idx) => {
+        let chipRow;
+        if (m.championships > 0) {
+            const lines = [...m.championship_seasons]
+                .sort((a, b) => b - a)
+                .map(y => `<div class="ts-chip-line">* ${y} Champion</div>`)
+                .join('');
+            chipRow = `<div class="ts-chips">${lines}</div>`;
+        } else {
+            chipRow = `<div class="ts-chips empty">— No chips yet —</div>`;
+        }
+
+        const pctDisplay = m.win_pct.toFixed(3).replace(/^0\./, '.');
+        const rank = idx + 1;
+        const roman = ROMAN[rank] || rank;
+        const rankNum = String(rank).padStart(2, '0');
+        const division = divisionMap[m.user_id];
+        const confBadge = division
+            ? `<span class="ts-conf ${division.toLowerCase()}">${division}</span>`
+            : '';
+
+        return `
+            <a href="manager.html?id=${m.user_id}" class="ts-card">
+                <div class="ts-stub">
+                    <div class="ts-stub-lbl">Admit</div>
+                    <div class="ts-stub-num">${roman}</div>
+                    <div class="ts-stub-foot">Mgr № ${rankNum}</div>
+                </div>
+                <div class="ts-body">
+                    ${confBadge}
+                    <div>
+                        <div class="ts-name">${m.name}</div>
+                        <div class="ts-team">${m.team_latest}</div>
+                        ${chipRow}
+                    </div>
+                    <div class="ts-statline">
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Record</span>
+                            <span class="ts-stat-val">${m.wins}–${m.losses}${m.ties?'–'+m.ties:''}</span>
+                        </div>
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Win %</span>
+                            <span class="ts-stat-val gold">${pctDisplay}</span>
+                        </div>
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Points</span>
+                            <span class="ts-stat-val">${Math.round(m.total_pf).toLocaleString()}</span>
+                        </div>
+                        <div class="ts-stat">
+                            <span class="ts-stat-lbl">Top-3</span>
+                            <span class="ts-stat-val">${m.top_three_finishes}</span>
+                        </div>
+                        <span class="ts-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+        `;
+    }).join('');
+}
+
+function renderFormer() {
+    const list = document.getElementById('former-list');
+    const former = allManagers.filter(m => !m.is_current);
+    if (former.length === 0) {
+        list.innerHTML = '<div class="loading-state">No alumni recorded.</div>';
+        return;
+    }
+    list.innerHTML = former.map(m => {
+        const yrs = m.seasons_played === 1 ? '1 season' : `${m.seasons_played} seasons`;
+        return `
+            <div class="former-item">
+                <div class="former-name">${m.name}</div>
+                <div class="former-detail">${yrs} · ${m.wins}–${m.losses} · ${Math.round(m.total_pf)} PF</div>
+            </div>
+        `;
+    }).join('');
+}
+
+document.getElementById('sort-options').addEventListener('click', (e) => {
+    const btn = e.target.closest('.sort-option');
+    if (!btn) return;
+    document.querySelectorAll('.sort-option').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSort = btn.dataset.sort;
+    renderCurrent();
+});
+
+loadData();
+</script>
+
+</body>
+</html>

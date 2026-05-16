@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table Treatments · The Lakeside League</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   PAGE CHROME
+   ══════════════════════════════════════════════════════════════════ */
+body {
+  background: #f0e5c8;
+  font-family: var(--sans);
+  color: var(--ink);
+}
+.site-glow, .site-grain { display: none; }
+
+.demo-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem;
+}
+.demo-header {
+  text-align: center;
+  margin-bottom: 5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 3px double rgba(14,22,32,.18);
+}
+.demo-kicker {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .65rem; letter-spacing: .4em; text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: 1.4rem;
+}
+.demo-title {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: .95; letter-spacing: -.02em;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+.demo-title em { font-style: italic; color: var(--gold-deep); }
+.demo-sub {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.1rem; line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 540px; margin: 0 auto;
+}
+
+.demo-block { margin-bottom: 7rem; }
+.demo-block-letter {
+  font-family: var(--serif); font-style: italic;
+  font-size: 4rem; line-height: 1;
+  color: var(--gold-deep);
+  letter-spacing: -.03em;
+  margin-bottom: .3rem;
+}
+.demo-block-label {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .7rem; letter-spacing: .32em; text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: .35rem;
+}
+.demo-block-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.85rem; letter-spacing: -.01em;
+  color: var(--ink);
+  margin-bottom: .5rem;
+}
+.demo-block-desc {
+  font-family: var(--sans);
+  font-size: .92rem; line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 58ch;
+  margin-bottom: 2.5rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SHARED INNER TABLE — INVERTED.
+   Cream interior, dark/ink text, gold-deep accents for readability
+   on the cream surface.
+   ══════════════════════════════════════════════════════════════════ */
+table.demo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  background: var(--cream);
+}
+table.demo-table thead {
+  background: rgba(14,22,32,.06);
+  border-bottom: 1px solid rgba(14,22,32,.18);
+}
+table.demo-table th {
+  padding: .9rem 1rem;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+  color: #6b614e;
+  text-align: left; white-space: nowrap;
+}
+table.demo-table th.num { text-align: right; }
+table.demo-table td {
+  padding: .9rem 1rem;
+  border-top: 1px solid rgba(14,22,32,.08);
+  font-size: .9rem;
+  color: var(--ink-soft);
+  vertical-align: middle;
+}
+table.demo-table td.num {
+  text-align: right; font-variant-numeric: tabular-nums;
+}
+table.demo-table td.rank {
+  font-family: var(--mono); font-weight: 700;
+  color: var(--gold-deep); width: 3rem;
+}
+table.demo-table td.team {
+  font-family: var(--serif); font-size: 1.05rem; color: var(--ink);
+}
+table.demo-table td.mgr {
+  font-family: var(--mono); font-size: .68rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(14,22,32,.55);
+}
+table.demo-table td.score {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.15rem; color: var(--gold-deep);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STYLE A · "Stepped Mat" — Inverted
+
+   Concentric navy layered bands with gold accent seams between
+   them. Cream table interior, navy frame against cream page = max
+   contrast. The eye reads stacked layers as physical depth.
+
+   Layer stack (innermost → outermost):
+     · cream plate (the table)
+     · inner dark hairline
+     · gold halo just outside the plate edge
+     · navy mat ribbon (~5px)
+     · gold step seam (1px)
+     · darker navy band (1px)
+     · gold step seam (1px)
+     · navy mat ribbon, outer (~7px)
+     · outer dark hairline
+     · drop shadow
+   ══════════════════════════════════════════════════════════════════ */
+.style-a {
+  background: var(--cream);
+  border-radius: 2px;
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(14,22,32,.18),       /* inner dark hairline */
+    0 0 0 1px rgba(232,200,137,.55),          /* gold halo */
+    0 0 0 6px var(--ink-card),                 /* inner navy mat */
+    0 0 0 7px rgba(232,200,137,.55),          /* gold seam */
+    0 0 0 8px var(--ink),                      /* dark accent band */
+    0 0 0 9px rgba(232,200,137,.55),          /* gold seam */
+    0 0 0 16px var(--ink-card),                /* outer navy mat */
+    0 0 0 17px rgba(0,0,0,.65),                /* outer dark hairline */
+    0 26px 36px -12px rgba(14,22,32,.55),
+    0  8px 16px  -4px rgba(14,22,32,.35);
+}
+.style-a-wrap { padding: 17px; }
+
+/* ══════════════════════════════════════════════════════════════════
+   STYLE B · "Carved Groove" — Inverted
+
+   One thick navy mat with a routed gold-lined channel cut through
+   the middle. Single carved feature instead of stacked tiers.
+   ══════════════════════════════════════════════════════════════════ */
+.style-b {
+  background: var(--cream);
+  border-radius: 2px;
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(14,22,32,.18),
+    0 0 0 1px rgba(232,200,137,.55),
+    0 0 0 7px var(--ink-card),                /* navy mat — inner portion */
+    /* Routed groove: dark wall, gold line, dark wall */
+    0 0 0 8px rgba(0,0,0,.85),
+    0 0 0 10px rgba(232,200,137,.9),          /* gold accent in the trough */
+    0 0 0 11px rgba(0,0,0,.85),
+    0 0 0 18px var(--ink-card),               /* navy mat — outer portion */
+    0 0 0 19px rgba(0,0,0,.65),
+    0 26px 36px -12px rgba(14,22,32,.55),
+    0  8px 16px  -4px rgba(14,22,32,.35);
+}
+.style-b-wrap { padding: 19px; }
+
+/* ══════════════════════════════════════════════════════════════════
+   STYLE C · "Archival Folder" — Newspaper Plate, Inverted
+
+   Dark navy "folder" surrounding everything. Cream masthead strip
+   at the top of the folder carries the title + dateline like an
+   archive label. Cream plate inside holds the table.
+   ══════════════════════════════════════════════════════════════════ */
+.style-c-mat {
+  position: relative;
+  background: var(--ink-card);
+  /* Engraved hatching on the navy surface */
+  background-image:
+    repeating-linear-gradient(45deg,
+      transparent 0 6px, rgba(232,200,137,.025) 6px 7px),
+    linear-gradient(var(--ink-card), var(--ink-card));
+  padding: 10px;
+  box-shadow:
+    inset 0 0 0 1px rgba(232,200,137,.5),    /* gold inner halo */
+    inset 0 0 0 5px var(--ink-card),
+    inset 0 0 0 6px rgba(232,200,137,.3),    /* second inner gold rule */
+    0 26px 36px -12px rgba(14,22,32,.55),
+    0  8px 16px  -4px rgba(14,22,32,.35);
+}
+.style-c-masthead {
+  background: var(--cream);
+  color: var(--ink);
+  padding: 1rem 1.6rem .8rem;
+  text-align: center;
+  border-bottom: 3px double var(--gold-deep);
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(14,22,32,.18);
+}
+.style-c-edition-l, .style-c-edition-r {
+  position: absolute; top: .55rem;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .55rem; letter-spacing: .25em;
+}
+.style-c-edition-l { left: 1.4rem; color: rgba(14,22,32,.55); }
+.style-c-edition-r { right: 1.4rem; color: var(--gold-deep); }
+.style-c-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.9rem; line-height: 1; letter-spacing: -.01em;
+  color: var(--ink);
+  margin: .25rem 0 .15rem;
+}
+.style-c-title em { color: var(--gold-deep); }
+.style-c-subtitle {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .58rem; letter-spacing: .35em; text-transform: uppercase;
+  color: rgba(14,22,32,.55);
+}
+.style-c-plate {
+  background: var(--cream);
+  margin-top: 10px;
+  box-shadow:
+    inset 0 0 0 1px rgba(14,22,32,.15),
+    0 0 0 1px rgba(232,200,137,.5);
+  overflow-x: auto;
+}
+.style-c-footer {
+  padding: .7rem 1rem .25rem;
+  margin-top: 8px;
+  border-top: 1px dotted rgba(232,200,137,.35);
+  text-align: center;
+  font-family: var(--mono);
+  font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--cream-mute);
+}
+.style-c-footer span { color: var(--gold); font-weight: 700; }
+
+/* ══════════════════════════════════════════════════════════════════
+   STYLE D · "Vintage Album Page" — Trading Card, Inverted
+
+   Dark navy matte with subtle hatching, the cream table set into
+   it like a photographic print in a black album page. A cream
+   strip badge sits on the top edge of the matte.
+   ══════════════════════════════════════════════════════════════════ */
+.style-d {
+  position: relative;
+  background: var(--ink-card);
+  background-image:
+    repeating-linear-gradient(0deg,
+      transparent 0 3px, rgba(232,200,137,.035) 3px 4px),
+    repeating-linear-gradient(90deg,
+      transparent 0 3px, rgba(232,200,137,.025) 3px 4px),
+    linear-gradient(var(--ink-card), var(--ink-card));
+  padding: 1.5rem 1rem 1rem;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 0 1px rgba(232,200,137,.55),
+    inset 0 0 0 4px var(--ink-card),
+    inset 0 0 0 5px rgba(232,200,137,.3),
+    7px 13px 26px -8px rgba(14,22,32,.55),
+    0 4px 10px rgba(14,22,32,.3);
+}
+.style-d-badge {
+  position: absolute;
+  top: -14px; left: 50%; transform: translateX(-50%);
+  padding: .4rem 1.1rem;
+  background: var(--cream);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px var(--gold-deep),
+    0 0 0 3px var(--ink-card),
+    0 0 0 4px var(--gold-deep),
+    0 4px 10px rgba(14,22,32,.45);
+  font-family: var(--mono); font-weight: 700;
+  font-size: .55rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--ink);
+}
+.style-d-plate {
+  background: var(--cream);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1px rgba(14,22,32,.15),
+    0 0 0 1px rgba(232,200,137,.5),
+    0 0 0 3px rgba(0,0,0,.55),
+    0 0 0 4px rgba(232,200,137,.4);
+  overflow: hidden;
+}
+.style-d-footer {
+  display: flex; justify-content: center; align-items: center;
+  gap: .75rem;
+  padding: .9rem .5rem 0;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold);
+}
+.style-d-footer .dot { color: rgba(232,200,137,.55); }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .demo-container { padding: 2.5rem 1.25rem 5rem; }
+  .demo-block { margin-bottom: 4.5rem; }
+  .style-a-wrap { padding: 13px; }
+  .style-b-wrap { padding: 15px; }
+  .style-a {
+    box-shadow:
+      inset 0 0 0 1px rgba(14,22,32,.18),
+      0 0 0 1px rgba(232,200,137,.55),
+      0 0 0 4px var(--ink-card),
+      0 0 0 5px rgba(232,200,137,.55),
+      0 0 0 6px var(--ink),
+      0 0 0 7px rgba(232,200,137,.55),
+      0 0 0 11px var(--ink-card),
+      0 0 0 12px rgba(0,0,0,.65),
+      0 22px 30px -10px rgba(14,22,32,.55);
+  }
+  .style-b {
+    box-shadow:
+      inset 0 0 0 1px rgba(14,22,32,.18),
+      0 0 0 1px rgba(232,200,137,.55),
+      0 0 0 5px var(--ink-card),
+      0 0 0 6px rgba(0,0,0,.85),
+      0 0 0 7px rgba(232,200,137,.9),
+      0 0 0 8px rgba(0,0,0,.85),
+      0 0 0 13px var(--ink-card),
+      0 0 0 14px rgba(0,0,0,.65),
+      0 22px 30px -10px rgba(14,22,32,.55);
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-container">
+
+  <!-- HEADER -->
+  <div class="demo-header">
+    <div class="demo-kicker">★ Frame Treatment · Inverted ★</div>
+    <h1 class="demo-title">Table <em>Treatments.</em></h1>
+    <p class="demo-sub">
+      Cream tables with layered navy frames. Same data inside every
+      one — four ways to make the frame three-dimensional.
+    </p>
+  </div>
+
+  <!-- STYLE A -->
+  <section class="demo-block">
+    <div class="demo-block-letter">A.</div>
+    <div class="demo-block-label">★ Style A · Pure Frame</div>
+    <h2 class="demo-block-title">The Stepped Mat</h2>
+    <p class="demo-block-desc">
+      Concentric navy layered bands with gold accent seams between
+      every step. The cream table interior reads as the "page" inside
+      a layered archival frame. Calm enough to repeat 4× on a real
+      page.
+    </p>
+
+    <div class="style-a-wrap">
+      <div class="style-a">
+        <table class="demo-table">
+          <thead><tr><th>#</th><th>Team</th><th>Manager</th><th class="num">Record</th><th class="num">Score</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td class="team">Stoneridge Hammers</td><td class="mgr">Marcus</td><td class="num">2–0</td><td class="num score">96.7</td></tr>
+            <tr><td class="rank">2</td><td class="team">Den of Thieves</td><td class="mgr">Devin</td><td class="num">2–0</td><td class="num score">88.3</td></tr>
+            <tr><td class="rank">3</td><td class="team">Highland Hawks</td><td class="mgr">Jordan</td><td class="num">1–1</td><td class="num score">75.4</td></tr>
+            <tr><td class="rank">4</td><td class="team">Cold Front</td><td class="mgr">Cole</td><td class="num">1–1</td><td class="num score">67.1</td></tr>
+            <tr><td class="rank">5</td><td class="team">Crosstown Comets</td><td class="mgr">Tyler</td><td class="num">0–2</td><td class="num score">61.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE B -->
+  <section class="demo-block">
+    <div class="demo-block-letter">B.</div>
+    <div class="demo-block-label">★ Style B · Pure Frame</div>
+    <h2 class="demo-block-title">The Carved Groove</h2>
+    <p class="demo-block-desc">
+      One thick navy mat with a single routed channel running through
+      it — a dark trough with a gold accent line down its center. The
+      "carved" feature does the depth work alone, no stacked tiers
+      needed.
+    </p>
+
+    <div class="style-b-wrap">
+      <div class="style-b">
+        <table class="demo-table">
+          <thead><tr><th>#</th><th>Team</th><th>Manager</th><th class="num">Record</th><th class="num">Score</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td class="team">Stoneridge Hammers</td><td class="mgr">Marcus</td><td class="num">2–0</td><td class="num score">96.7</td></tr>
+            <tr><td class="rank">2</td><td class="team">Den of Thieves</td><td class="mgr">Devin</td><td class="num">2–0</td><td class="num score">88.3</td></tr>
+            <tr><td class="rank">3</td><td class="team">Highland Hawks</td><td class="mgr">Jordan</td><td class="num">1–1</td><td class="num score">75.4</td></tr>
+            <tr><td class="rank">4</td><td class="team">Cold Front</td><td class="mgr">Cole</td><td class="num">1–1</td><td class="num score">67.1</td></tr>
+            <tr><td class="rank">5</td><td class="team">Crosstown Comets</td><td class="mgr">Tyler</td><td class="num">0–2</td><td class="num score">61.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE C -->
+  <section class="demo-block">
+    <div class="demo-block-letter">C.</div>
+    <div class="demo-block-label">★ Style C · With Masthead</div>
+    <h2 class="demo-block-title">The Archival Folder</h2>
+    <p class="demo-block-desc">
+      Dark navy "folder" surrounding everything. Cream masthead strip
+      at the top carries the title + edition like an archive label.
+      Below it, the cream table sits in the folder. Heavier than A/B
+      — use only on a flagship table.
+    </p>
+
+    <div class="style-c-mat">
+      <div class="style-c-masthead">
+        <span class="style-c-edition-l">VOL. VII</span>
+        <span class="style-c-edition-r">WK 1 · 2026</span>
+        <div class="style-c-title">Power <em>Rankings.</em></div>
+        <div class="style-c-subtitle">An Almanac Index</div>
+      </div>
+      <div class="style-c-plate">
+        <table class="demo-table">
+          <thead><tr><th>#</th><th>Team</th><th>Manager</th><th class="num">Record</th><th class="num">Score</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td class="team">Stoneridge Hammers</td><td class="mgr">Marcus</td><td class="num">2–0</td><td class="num score">96.7</td></tr>
+            <tr><td class="rank">2</td><td class="team">Den of Thieves</td><td class="mgr">Devin</td><td class="num">2–0</td><td class="num score">88.3</td></tr>
+            <tr><td class="rank">3</td><td class="team">Highland Hawks</td><td class="mgr">Jordan</td><td class="num">1–1</td><td class="num score">75.4</td></tr>
+            <tr><td class="rank">4</td><td class="team">Cold Front</td><td class="mgr">Cole</td><td class="num">1–1</td><td class="num score">67.1</td></tr>
+            <tr><td class="rank">5</td><td class="team">Crosstown Comets</td><td class="mgr">Tyler</td><td class="num">0–2</td><td class="num score">61.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="style-c-footer">
+        The Lakeside League · <span>2026 Edition</span> · Printed weekly
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLE D -->
+  <section class="demo-block">
+    <div class="demo-block-letter">D.</div>
+    <div class="demo-block-label">★ Style D · With Badge</div>
+    <h2 class="demo-block-title">The Album Page</h2>
+    <p class="demo-block-desc">
+      Dark navy matte with subtle hatching, the cream table set into
+      it like a photographic print in a black album page. A cream
+      strip badge anchors the top edge.
+    </p>
+
+    <div class="style-d">
+      <div class="style-d-badge">★ Power Rankings ★</div>
+      <div class="style-d-plate">
+        <table class="demo-table">
+          <thead><tr><th>#</th><th>Team</th><th>Manager</th><th class="num">Record</th><th class="num">Score</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td class="team">Stoneridge Hammers</td><td class="mgr">Marcus</td><td class="num">2–0</td><td class="num score">96.7</td></tr>
+            <tr><td class="rank">2</td><td class="team">Den of Thieves</td><td class="mgr">Devin</td><td class="num">2–0</td><td class="num score">88.3</td></tr>
+            <tr><td class="rank">3</td><td class="team">Highland Hawks</td><td class="mgr">Jordan</td><td class="num">1–1</td><td class="num score">75.4</td></tr>
+            <tr><td class="rank">4</td><td class="team">Cold Front</td><td class="mgr">Cole</td><td class="num">1–1</td><td class="num score">67.1</td></tr>
+            <tr><td class="rank">5</td><td class="team">Crosstown Comets</td><td class="mgr">Tyler</td><td class="num">0–2</td><td class="num score">61.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="style-d-footer">
+        <span>Card 01 / 04</span>
+        <span class="dot">⬥</span>
+        <span>2026 Edition</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
