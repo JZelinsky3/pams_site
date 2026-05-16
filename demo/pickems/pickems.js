@@ -42,10 +42,11 @@ initAuthUI();
 boot().catch(console.error);
 
 async function boot() {
+  const v = Date.now(); // cache-buster so JSON edits show up without a hard-refresh
   const [teamsJson, manifest, usersJson] = await Promise.all([
-    fetch("./teams.json").then(r => r.json()),
-    fetch("./manifest.json").then(r => r.json()),
-    fetch("./users.json").then(r => r.json()),
+    fetch(`./teams.json?v=${v}`).then(r => r.json()),
+    fetch(`./manifest.json?v=${v}`).then(r => r.json()),
+    fetch(`./users.json?v=${v}`).then(r => r.json()),
   ]);
 
   state.accounts = usersJson.accounts || [];
@@ -59,7 +60,7 @@ async function boot() {
   const now = Date.now();
   const openWeeks = [];
   for (const w of manifest.weeks) {
-    const data = await fetch(`./${w.data}`).then(r => r.json());
+    const data = await fetch(`./${w.data}?v=${v}`).then(r => r.json());
     if (new Date(data.openAt).getTime() <= now) {
       openWeeks.push({ meta: w, data });
     }
@@ -122,9 +123,12 @@ function setActive(weekId) {
 }
 
 function weekViewHTML(w) {
-  const open   = dateFmt.format(new Date(w.openAt));
-  const reveal = dateFmt.format(new Date(w.revealAt));
-  const lock   = dateFmt.format(new Date(w.lockAt));
+  // Prefer literal display strings from the week JSON if present
+  // (openLabel / revealLabel / lockLabel). Fall back to formatting
+  // the ISO dates if no label is provided.
+  const open   = w.openLabel   || dateFmt.format(new Date(w.openAt));
+  const reveal = w.revealLabel || dateFmt.format(new Date(w.revealAt));
+  const lock   = w.lockLabel   || dateFmt.format(new Date(w.lockAt));
   return `
     <section class="week" data-week="${w.id}">
       <div class="week-info">

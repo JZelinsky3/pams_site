@@ -2,6 +2,9 @@
   "id": "week2",
   "label": "Week 2",
   "openAt": "2024-01-08T00:00:00Z",
+  "openLabel": "Tue, Sep 15, 12:00 PM",
+  "revealLabel": "Wed, Sep 16, 12:00 PM",
+  "lockLabel": "Thu, Sep 17, 6:00 PM",
   "gameOfWeek": "m3",
   "matchups": [
     {
