@@ -451,26 +451,82 @@ body { font-family: var(--sans); background: var(--rv-bg); color: var(--rv-white
 
 /* ─── MOBILE ──────────────────────────────────────── */
 @media (max-width: 660px) {
-  .rv-body {
-    grid-template-columns: 1fr;
+  /* Page header — pull in the title + tighten the stats grid */
+  .rv-header { padding: 1.4rem 1rem 2.25rem; }
+  .rv-header-kicker { font-size: .54rem; letter-spacing: .2em; margin-bottom: .6rem; }
+  .rv-header h1 { font-size: clamp(3rem, 13vw, 4.2rem); margin-bottom: .4rem; }
+  .rv-header-sub { font-size: .58rem; letter-spacing: .14em; margin-bottom: 1.25rem; }
+  .rv-header-rule { margin-bottom: 1.4rem; }
+  .rv-header-stats { border: none; flex-wrap: wrap; gap: 1px; }
+  .rv-stat-cell { min-width: 70px; padding: .6rem .35rem; border: 1px solid var(--rv-line2); border-radius: 3px; margin: 1px; }
+  .rv-stat-val { font-size: 1.15rem; }
+  .rv-stat-label { font-size: .48rem; letter-spacing: .1em; margin-top: .2rem; }
+
+  /* Card container */
+  .rv-content { padding: .25rem .85rem 4rem; }
+  .rv-card-head { padding: .4rem .85rem; }
+  .rv-card-label { font-size: .5rem; letter-spacing: .16em; }
+  .rv-badge { font-size: .5rem; letter-spacing: .1em; padding: .15rem .42rem; }
+
+  /* Sides stack vertically + tighter padding */
+  .rv-body { grid-template-columns: 1fr; }
+  .rv-side {
+    padding: 1rem 1.1rem;
+    gap: .25rem;
   }
-  .rv-side-a {
-    border-right: none;
-    border-bottom: 1px solid var(--rv-line2);
-  }
+  .rv-side-a { border-right: none; border-bottom: 1px solid var(--rv-line2); }
   .rv-side-b {
     border-left: none;
     border-top: 1px solid var(--rv-line2);
     align-items: flex-start;
   }
   .rv-side-b .rv-dots { flex-direction: row; }
+
+  /* Score + name scale */
+  .rv-wins { font-size: 2.4rem; }
+  .rv-wins-lbl { font-size: .46rem; letter-spacing: .14em; }
+  .rv-name { font-size: 1.2rem; margin-top: .15rem; }
+  .rv-ppg { font-size: .62rem; }
+  .rv-rec { font-size: .5rem; }
+  .rv-dots { gap: .25rem; margin-top: .3rem; }
+  .rv-dot { width: 8px; height: 8px; }
+
+  /* Center column */
   .rv-center {
+    padding: .9rem 1rem;
+    gap: .4rem;
     border-bottom: 1px solid var(--rv-line2);
   }
-  .rv-wins { font-size: 2.8rem; }
-  .rv-name { font-size: 1.35rem; }
-  .rv-header-stats { border: none; flex-wrap: wrap; gap: 1px; }
-  .rv-stat-cell { min-width: 80px; border: 1px solid var(--rv-line2); border-radius: 3px; margin: 1px; }
+  .rv-rivalry-name { font-size: .52rem; letter-spacing: .16em; }
+  .rv-vs { font-size: 1.55rem; }
+  .rv-games { font-size: .5rem; letter-spacing: .12em; }
+  .rv-bar-nums { font-size: .52rem; }
+  .rv-series-lbl { font-size: .54rem; }
+  .rv-last-game { font-size: .48rem; }
+
+  /* Key moment strip */
+  .rv-key { padding: .55rem .85rem; gap: .5rem; }
+  .rv-key-badge { font-size: .46rem; letter-spacing: .16em; padding: .12rem .38rem; }
+  .rv-key-text { font-size: .7rem; min-width: 0; }
+  .rv-key-date { font-size: .5rem; }
+
+  /* Tagline */
+  .rv-tagline { padding: .4rem .85rem .55rem; }
+  .rv-tagline em { font-size: .78rem; }
+
+  /* Section dividers between groups of cards */
+  .rv-section-sep { padding: 1rem 0 .3rem; gap: .65rem; }
+  .rv-section-sep-label { font-size: .5rem; letter-spacing: .16em; }
+}
+
+@media (max-width: 380px) {
+  .rv-header h1 { font-size: 2.6rem; }
+  .rv-side { padding: .85rem .95rem; }
+  .rv-wins { font-size: 2.1rem; }
+  .rv-name { font-size: 1.05rem; }
+  .rv-vs { font-size: 1.35rem; }
+  .rv-stat-cell { min-width: 64px; }
+  .rv-stat-val { font-size: 1rem; }
 }
 </style>
 </head>

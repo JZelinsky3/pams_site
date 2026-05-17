@@ -262,32 +262,57 @@ function matchHTML(w, m, locked, isGOTW) {
   const recA = w.records?.[m.home] || "";
   const recB = w.records?.[m.away] || "";
 
-  const teamBlock = (side, team, rec) => `
-    <div class="team" data-team="${side}">
-      <div class="logo">${team ? `<img src="${esc(team.logo)}" alt="${esc(team.name)}" loading="lazy">` : ""}</div>
-      <div class="meta">
-        <div class="team-name">${esc(team?.name || side)} ${team?.isChampion ? '<span title="Defending Champion">👑</span>' : ""}
-          <span class="record">${esc(rec)}</span>
+  const teamBlock = (side, team, rec, isAway) => {
+    const champ = team?.isChampion ? '<span title="Defending Champion">👑</span>' : "";
+    const name = esc(team?.name || side);
+    const recHTML = `<span class="record">${esc(rec)}</span>`;
+    const nameLine = isAway
+      ? `${recHTML} ${name} ${champ}`
+      : `${name} ${champ} ${recHTML}`;
+    const lwk = team?.last_week_points != null
+      ? `<div class="lwk"><span class="lbl">LAST WK</span> <strong>${team.last_week_points.toFixed(1)}</strong></div>`
+      : "";
+    return `
+      <div class="team" data-team="${side}">
+        <div class="logo">${team ? `<img src="${esc(team.logo)}" alt="${esc(team.name)}" loading="lazy">` : ""}</div>
+        <div class="meta">
+          <div class="team-name">${nameLine}</div>
+          <div class="manager">${esc(team?.manager || "")}</div>
+          ${lwk}
         </div>
-        <div class="manager">${esc(team?.manager || "")}</div>
-      </div>
-    </div>`;
+      </div>`;
+  };
+
+  const haveProj = A?.projected_points != null && B?.projected_points != null;
+  const projCell = haveProj
+    ? `<div class="vs">
+         <span class="vs-pts home">${A.projected_points.toFixed(1)}</span>
+         <span class="vs-mid">vs</span>
+         <span class="vs-pts away">${B.projected_points.toFixed(1)}</span>
+       </div>`
+    : `<div class="vs"><span class="vs-mid">vs</span></div>`;
 
   return `
     <div class="match"${isGOTW ? ' data-gotw="true"' : ""} data-mid="${m.id}">
       <div class="match-top">
-        ${teamBlock(m.home, A, recA)}
-        <div class="vs">vs</div>
-        ${teamBlock(m.away, B, recB)}
+        ${teamBlock(m.home, A, recA, false)}
+        ${projCell}
+        ${teamBlock(m.away, B, recB, true)}
       </div>
       <div class="vote">
         <div class="buttons">
-          <button class="vote-btn" data-matchup="${m.id}" data-team="${m.home}">${esc(A?.name || m.home)}</button>
-          <button class="vote-btn" data-matchup="${m.id}" data-team="${m.away}">${esc(B?.name || m.away)}</button>
+          <button class="vote-btn" data-matchup="${m.id}" data-team="${m.home}">
+            <span class="vote-name">${esc(A?.name || m.home)}</span>
+            <span class="vote-pct" id="vp-${w.id}-${m.id}-${esc(m.home)}">—</span>
+          </button>
+          <button class="vote-btn" data-matchup="${m.id}" data-team="${m.away}">
+            <span class="vote-name">${esc(B?.name || m.away)}</span>
+            <span class="vote-pct" id="vp-${w.id}-${m.id}-${esc(m.away)}">—</span>
+          </button>
         </div>
         <div class="bar2" id="bar-${w.id}-${m.id}">
-          <span class="left"  id="l-${w.id}-${m.id}">50%</span>
-          <span class="right" id="r-${w.id}-${m.id}">50%</span>
+          <span class="left"  id="l-${w.id}-${m.id}"></span>
+          <span class="right" id="r-${w.id}-${m.id}"></span>
         </div>
       </div>
       ${winnerMark(w, m)}
@@ -414,18 +439,16 @@ function liveTally(w, revealAt) {
       const bar  = byId(`bar-${w.id}-${m.id}`);
       const left = byId(`l-${w.id}-${m.id}`);
       const rgt  = byId(`r-${w.id}-${m.id}`);
+      const vpA  = byId(`vp-${w.id}-${m.id}-${m.home}`);
+      const vpB  = byId(`vp-${w.id}-${m.id}-${m.away}`);
       if (!bar || !left || !rgt) continue;
       const a = counts[m.id][m.home], b = counts[m.id][m.away], tot = a + b;
       const pA = show && tot ? Math.round(a / tot * 100) : 50;
       const pB = 100 - pA;
-      left.style.width = pA + "%"; left.textContent = pA + "%";
-      rgt.style.width  = pB + "%"; rgt.textContent  = pB + "%";
-      if (!show) {
-        left.style.color = rgt.style.color = "transparent";
-      } else {
-        left.style.color = "var(--ink)";
-        rgt.style.color  = "var(--cream)";
-      }
+      left.style.width = pA + "%";
+      rgt.style.width  = pB + "%";
+      if (vpA) vpA.textContent = show ? pA + "%" : "—";
+      if (vpB) vpB.textContent = show ? pB + "%" : "—";
       bar.title = show
         ? `${state.teams[m.home]?.name || m.home} ${pA}% · ${state.teams[m.away]?.name || m.away} ${pB}% · ${tot} votes`
         : "Votes hidden until reveal";

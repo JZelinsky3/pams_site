@@ -50,15 +50,27 @@
     ];
 
     // Determine how many levels deep the current page is relative to the site root.
-    // On GitHub Pages the URL starts with /repo-name/ which is not part of the
-    // site's own directory structure, so skip that first segment.
+    // Build an ABSOLUTE site-root prefix (e.g. '/demo/' or '/jzff/demo/').
+    // We return an absolute path instead of relative '../../' because relative
+    // resolution breaks when URLs lose their trailing slash (e.g. /demo vs
+    // /demo/), which turns out to happen in the wild.
+    //   - On GitHub Pages: prepend '/<repo-name>/'
+    //   - Inside a /demo/ subfolder: append 'demo/' too
     function getRoot() {
         var parts = window.location.pathname.split('/').filter(function (p) { return p.length > 0; });
-        var skip  = window.location.hostname.endsWith('.github.io') ? 1 : 0;
-        var fileParts = parts.slice(skip);
-        var depth = fileParts.length > 1 ? fileParts.length - 1 : 0;
-        var prefix = '';
-        for (var i = 0; i < depth; i++) prefix += '../';
+        // Drop a trailing filename like 'standings.html' so we never reason
+        // about a file as if it were a directory
+        if (parts.length && /\.[a-z0-9]+$/i.test(parts[parts.length - 1])) {
+            parts = parts.slice(0, -1);
+        }
+        var prefix;
+        if (window.location.hostname.endsWith('.github.io')) {
+            prefix = '/' + parts[0] + '/';
+            parts = parts.slice(1);
+        } else {
+            prefix = '/';
+        }
+        if (parts[0] === 'demo') prefix += 'demo/';
         return prefix;
     }
 

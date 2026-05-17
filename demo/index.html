@@ -855,6 +855,80 @@ table.data tbody tr.highlight {
     .champion-seal { width: 150px; height: 150px; }
     .champion-name { font-size: clamp(2rem, 7vw, 3.8rem); }
 }
+
+/* ============================================================
+   MAILING LIST · § 04
+   ============================================================ */
+.mailing-card {
+    background: linear-gradient(160deg, var(--ink-card), var(--ink-soft));
+    border: 1px solid var(--ink-line);
+    padding: 2rem 2rem 1.6rem;
+    position: relative;
+    overflow: hidden;
+}
+.mailing-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--gold);
+}
+.mailing-blurb {
+    font-family: var(--sans);
+    font-size: 1rem; line-height: 1.6;
+    color: var(--cream-soft);
+    margin-bottom: 1.25rem;
+    max-width: 640px;
+}
+.mailing-blurb em { color: var(--gold); font-style: italic; }
+.mailing-form {
+    display: flex; gap: .5rem; flex-wrap: wrap;
+}
+.mailing-form input[type="email"] {
+    flex: 1; min-width: 240px;
+    background: var(--ink); color: var(--cream);
+    border: 1px solid var(--ink-line);
+    padding: .85rem 1rem;
+    font-family: var(--sans); font-size: .95rem;
+    border-radius: 2px;
+    transition: border-color .15s, box-shadow .15s;
+}
+.mailing-form input[type="email"]::placeholder { color: var(--cream-mute); }
+.mailing-form input[type="email"]:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(232, 200, 137, .12);
+}
+.mailing-form button {
+    background: var(--gold); color: var(--ink);
+    border: 1px solid var(--gold);
+    padding: .85rem 1.5rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background .15s;
+}
+.mailing-form button:hover { background: var(--gold-bright); }
+.mailing-fineprint {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--cream-mute);
+}
+.mailing-fineprint em {
+    color: var(--gold); font-style: italic; font-family: var(--mono);
+}
+.mailing-status {
+    margin-top: 1rem;
+    font-family: var(--mono); font-weight: 700;
+    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold);
+    min-height: 1.2em;
+}
+.mailing-status[data-state="error"] { color: var(--rust); }
+@media (max-width: 520px) {
+    .mailing-card { padding: 1.5rem 1.25rem 1.25rem; }
+    .mailing-form { flex-direction: column; }
+    .mailing-form button { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -1105,6 +1179,92 @@ table.data tbody tr.highlight {
 
     </div>
 </div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     MAILING LIST · § 04
+     ──────────────────────────────────────────────────────────────────
+     Powered by Web3Forms (https://web3forms.com) — unlimited free
+     submissions, full dashboard at web3forms.com to view/export the
+     signup list. Receiving email: jzffgames@gmail.com.
+     The access key below is the public form key for this site — it's
+     safe to commit, but DON'T paste it into other projects unless you
+     want their submissions hitting this same inbox.
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">
+        <span class="section-num">§ 04 · Stay Posted</span>
+        <span class="section-title">Be first to know —</span>
+        <span class="section-meta">join the list</span>
+    </div>
+
+    <div class="mailing-card">
+        <p class="mailing-blurb">
+            jzFF League Hub is in active development. Drop your email and you'll be the first
+            to hear when testing opens — plus a chance for a
+            <strong>lifetime membership</strong>, one league free forever.
+            <em>Join the future today.</em>
+        </p>
+
+        <form id="mailingForm" class="mailing-form"
+              action="https://api.web3forms.com/submit"
+              method="POST">
+            <input type="hidden" name="access_key" value="8e6ff506-1288-4525-a17e-a1154cae86cd" />
+            <input type="hidden" name="subject" value="New jzFF mailing list signup" />
+            <input type="hidden" name="from_name" value="jzFF Mailing List" />
+            <input type="email" name="email" placeholder="you@example.com"
+                   required autocomplete="email" />
+            <!-- honeypot: Web3Forms's named field for spam filtering -->
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"
+                   style="display:none" aria-hidden="true" />
+            <button type="submit">Join the list</button>
+        </form>
+
+        <output id="mailingStatus" class="mailing-status" for="mailingForm" aria-live="polite"></output>
+
+        <div class="mailing-fineprint">
+            Submissions go to <em>jzffgames@gmail.com</em>
+        </div>
+    </div>
+</div>
+
+<script>
+// Submit the mailing-list form via fetch so the user stays on the page
+// instead of being redirected to Web3Forms's thank-you screen.
+(function () {
+    var form   = document.getElementById('mailingForm');
+    var status = document.getElementById('mailingStatus');
+    if (!form || !status) return;
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        status.removeAttribute('data-state');
+        status.textContent = 'Sending…';
+
+        var data = new FormData(form);
+        fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(function (res) { return res.json().catch(function () { return {}; }); })
+        .then(function (body) {
+            if (body && body.success) {
+                form.reset();
+                status.textContent = "★ You're on the list. Talk soon.";
+            } else {
+                var msg = (body && body.message) || 'Something went wrong. Try again later.';
+                status.setAttribute('data-state', 'error');
+                status.textContent = msg;
+            }
+        })
+        .catch(function () {
+            status.setAttribute('data-state', 'error');
+            status.textContent = 'Network error — try again later.';
+        });
+    });
+})();
+</script>
 
 
 <!-- FOOTER -->

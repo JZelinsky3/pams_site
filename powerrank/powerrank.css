@@ -142,7 +142,23 @@ body {
   font-family: var(--mono); font-weight: 700;
   font-size: 1.4rem; color: var(--gold);
 }
+.podium-runner-score {
+  font-family: var(--mono); font-weight: 700;
+  font-size: .9rem; color: var(--cream-soft);
+}
 .podium-hero-delta .rank-delta { font-size: 11px; }
+
+/* ── Cream accent line — one slim cream rule on every podium card ──
+   Sits just above the bottom row to tie all three cards to the cream
+   page beneath them.  ~35% opacity so it reads as an accent, not a
+   second border. */
+.podium-hero-rec {
+  padding-top: .55rem;
+  border-top: 1px solid rgba(244,235,216,.30);
+}
+.podium-runner-bottom {
+  border-top-color: rgba(244,235,216,.35) !important;  /* was --ink-line */
+}
 
 /* #2 & #3 — side-by-side runner cards */
 .podium-runners {
@@ -162,8 +178,26 @@ body {
 .p2::before { background: var(--steel); }
 .p3::before { background: var(--rust); }
 
+/* Faded Roman numeral watermark — matches the "I." on the hero card. */
+.podium-runner::after {
+  position: absolute;
+  right: .9rem; bottom: -.6rem;
+  font-family: var(--serif); font-style: italic;
+  font-size: 5rem; line-height: 1;
+  pointer-events: none; user-select: none;
+}
+.p2::after { content: 'II.';  color: rgba(107,138,168,.10); }
+.p3::after { content: 'III.'; color: rgba(160,72,48,.11); }
+
 .podium-runner-top {
   display: flex; align-items: center; gap: 10px; margin-bottom: .75rem;
+  padding-right: 4.5rem;   /* leave room for the absolute-positioned score */
+}
+/* Score sits in the top-right corner of the runner cards */
+.podium-runner-score {
+  position: absolute;
+  top: .85rem; right: 1rem;
+  z-index: 1;
 }
 .podium-runner-logo {
   width: 40px; height: 40px; flex-shrink: 0;
@@ -485,4 +519,214 @@ body {
   .podium-runner-mgr { font-size: .5rem; }
   .podium-runner-rec { font-size: .55rem; }
   .podium-runner-score { font-size: .68rem; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   ░ INVERTED TABLE TREATMENT ░  — applied after the original styles
+   so they override.  This is the "Style A" Stepped Mat from the
+   tables-demo: cream interior tables with layered navy frames.
+
+     · .pr-page-masthead   — Style-C masthead at top of the page
+     · .pr-table-wrap      — Style-A stepped frame on every table
+     · .pr-table-wrap.has-badge — Style-D floating badge for conf tables
+     · cell colors flipped for cream backgrounds
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── MASTHEAD NAV (replaces the standard nav + page masthead) ─────────
+   Navy frame surrounds a cream interior strip. Inside that strip:
+     · Back button (left), AUTO badge (right)
+     · Title "Power Rankings." (center), double-rule underline,
+       kicker "THE LAKESIDE LEAGUE · 2026" below
+   ─────────────────────────────────────────────────────────────────── */
+.pr-nav {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--ink-card);   /* navy shows only along the bottom edge */
+  padding: 0 0 2px;
+  margin: 0 0 2.5rem;
+}
+.pr-nav-inner {
+  background: var(--cream);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: .95rem 1.4rem .9rem;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(14,22,32,.18);
+}
+.pr-nav-back {
+  justify-self: start;
+  background: none; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  padding: 0;
+  color: var(--gold-deep);
+  transition: color .15s;
+}
+.pr-nav-back svg { display: block; }
+.pr-nav-back:hover { color: #c89868; }
+.pr-nav-center { text-align: center; justify-self: center; }
+.pr-nav-title {
+  display: block;
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+  line-height: 1; letter-spacing: -.01em;
+  color: var(--ink);
+  text-decoration: none;
+  margin-bottom: .4rem;
+  transition: color .15s;
+}
+.pr-nav-title em { font-style: italic; color: var(--gold-deep); }
+.pr-nav-title:hover { color: var(--ink-soft); }
+.pr-nav-kicker {
+  display: inline-block;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .56rem; letter-spacing: .32em; text-transform: uppercase;
+  color: rgba(14,22,32,.55);
+  padding-top: .42rem;
+  border-top: 3px double rgba(139,109,56,.55);
+}
+.pr-nav-auto {
+  justify-self: end;
+  font-family: var(--mono); font-weight: 700;
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-deep);
+  background: rgba(139,109,56,.14);
+  border: 1px solid rgba(139,109,56,.4);
+  padding: .35rem .65rem;
+  border-radius: 2px;
+}
+
+/* ── STEPPED-MAT FRAME — main tables (10px outward) ────────────────
+   Single central gold line between two navy mats. Tighter drop shadow.
+   Cascade is strictly ascending so every layer is visible.
+   ─────────────────────────────────────────────────────────────────── */
+.pr-table-wrap {
+  background: var(--cream);
+  background-image: none;
+  border: none;
+  border-radius: 2px;
+  position: relative;
+  overflow-x: auto;
+  margin: 16px 0 28px;
+  box-shadow:
+    inset 0 0 0 1px rgba(14,22,32,.18),     /* inner dark hairline */
+    0 0 0 1px rgba(232,200,137,.55),        /* gold halo at plate edge */
+    0 0 0 3px var(--ink-card),               /* inner navy mat (2px wide) */
+    0 0 0 4.5px rgba(232,200,137,.7),       /* single central gold line (1.5px wide) */
+    0 0 0 7px var(--ink-card),               /* outer navy mat (2.5px wide) */
+    0 0 0 8px rgba(0,0,0,.65),               /* outer dark hairline */
+    0 12px 18px -8px rgba(14,22,32,.45),    /* tight drop shadow */
+    0  2px  6px -1px rgba(14,22,32,.22);    /* tight near shadow */
+}
+
+/* ── Conference tables — even tighter (7px outward) ─────────────── */
+.pr-conf-grid .pr-table-wrap {
+  margin: 12px 0 18px;
+  box-shadow:
+    inset 0 0 0 1px rgba(14,22,32,.18),
+    0 0 0 1px rgba(232,200,137,.55),
+    0 0 0 3px var(--ink-card),               /* inner navy 2px */
+    0 0 0 4px rgba(232,200,137,.7),         /* single central gold line */
+    0 0 0 5px var(--ink-card),               /* outer navy 1px */
+    0 0 0 6px rgba(0,0,0,.6),                /* outer dark hairline */
+    0 10px 16px -8px rgba(14,22,32,.40),
+    0  2px  5px -1px rgba(14,22,32,.20);
+}
+/* And give the §03 grid a touch more horizontal gap so the frames breathe */
+.pr-conf-grid { gap: 2rem; }
+
+/* ── INNER TABLE CELLS — flip for cream interior ──────────────────── */
+.pr-table thead {
+  background: rgba(14,22,32,.06);
+  border-bottom: 1px solid rgba(14,22,32,.18);
+}
+.pr-table th {
+  color: #6b614e;            /* darker mute, readable on cream */
+  background: transparent;
+}
+.pr-table td {
+  color: var(--ink-soft);
+  border-top: 1px solid rgba(14,22,32,.08);
+}
+.pr-table tbody tr:hover td { background: rgba(14,22,32,.04); }
+.pr-table tr.top-row td     { border-top-color: rgba(232,200,137,.45); }
+
+/* Rank */
+.rank-num   { color: var(--gold-deep); }
+.delta-same { color: rgba(14,22,32,.35); }
+
+/* Team */
+.team-logo {
+  border: 1px solid rgba(14,22,32,.18);
+  background: rgba(14,22,32,.08);
+}
+.team-name-main { color: var(--ink); }
+.team-mgr       { color: rgba(14,22,32,.55); }
+
+/* Conference badges (inline, inside team-info) */
+.conf-badge-whole {
+  background: rgba(139,109,56,.14);
+  border-color: rgba(139,109,56,.4);
+  color: var(--gold-deep);
+}
+.conf-badge-skim {
+  background: rgba(107,138,168,.14);
+  border-color: rgba(107,138,168,.45);
+  color: #3d5670;
+}
+
+/* Score / record / PF cells */
+.score-cell { color: var(--gold-deep); }
+.pf-cell    { color: var(--ink-soft); }
+.rec-cell   { color: var(--ink-soft); }
+
+/* Factor bars */
+.fbar-label { color: #6b614e; }
+.fbar-track { background: rgba(14,22,32,.10); }
+.fbar-fill  { background: linear-gradient(90deg, var(--gold-deep), var(--rust)); }
+.fbar-val   { color: #6b614e; }
+
+/* Projection table cells */
+.proj-wl-cell  { color: var(--ink-soft); }
+.proj-bye-cell { color: var(--ink-soft); }
+.proj-pct-val  { color: var(--ink-soft); }
+
+/* Projection % bar */
+.proj-bar-wrap { background: rgba(14,22,32,.10); }
+.proj-bar.bar-elite { background: linear-gradient(90deg, var(--gold-deep), #b08550); }
+.proj-bar.bar-good  { background: linear-gradient(90deg, rgba(139,109,56,.8), var(--rust)); }
+.proj-bar.bar-mid   { background: linear-gradient(90deg, var(--rust), rgba(160,72,48,.55)); }
+.proj-bar.bar-low   { background: rgba(14,22,32,.12); }
+
+/* ── Mobile: collapse frames + nav so they don't eat width ──────── */
+@media (max-width: 640px) {
+  .pr-nav-inner {
+    grid-template-columns: auto 1fr auto;
+    padding: .8rem 1rem .7rem;
+    gap: .6rem;
+  }
+  .pr-nav-back { width: 28px; height: 28px; }
+  .pr-nav-title { font-size: 1.25rem; }
+  .pr-nav-kicker { font-size: .48rem; letter-spacing: .22em; }
+  .pr-nav-auto { font-size: .52rem; padding: .25rem .5rem; }
+
+  .pr-table-wrap {
+    margin: 10px 0 22px;
+    box-shadow:
+      inset 0 0 0 1px rgba(14,22,32,.18),
+      0 0 0 1px rgba(232,200,137,.55),
+      0 0 0 3px var(--ink-card),
+      0 0 0 4px rgba(232,200,137,.7),       /* single central gold line */
+      0 0 0 7px var(--ink-card),
+      0 0 0 8px rgba(0,0,0,.65),
+      0 10px 14px -8px rgba(14,22,32,.45);
+  }
+  /* On mobile the conf grid collapses to one column anyway, so use the
+     same lightweight stack as the main tables. */
+  .pr-conf-grid .pr-table-wrap {
+    margin: 8px 0 18px;
+  }
+  .pr-conf-grid { gap: 1rem; }
 }

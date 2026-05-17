@@ -106,20 +106,17 @@ body::before {
 
 .pe-nav-back {
   justify-self: start;
-  background: transparent;
-  border: 1px solid var(--pk-line);
-  color: var(--pk-chalk-soft);
-  font-family: var(--mono); font-weight: 700;
-  font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
-  padding: .42rem .7rem;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: color .15s, border-color .15s, background .15s;
-}
-.pe-nav-back:hover {
+  background: none; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  padding: 0;
   color: var(--pk-magenta-bright);
-  border-color: var(--pk-magenta);
-  background: var(--pk-magenta-soft);
+  transition: color .15s;
+}
+.pe-nav-back svg { display: block; }
+.pe-nav-back:hover { color: var(--pk-magenta); }
+.pe-nav-back:hover {
+  color: #f889b5;
 }
 
 .pe-nav-center { text-align: center; justify-self: center; }
@@ -791,12 +788,23 @@ body::before {
   color: var(--pk-champagne);
 }
 .hl-card select {
-  background: var(--pk-bg-soft);
+  /* Reset Safari/Chrome's native control so our box/border/font apply */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  background-color: var(--pk-bg-soft);
+  /* Custom chevron-down arrow (since we removed the native one) */
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6' width='10' height='6' fill='none' stroke='%23cdb9d6' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='1 1 5 5 9 1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .7rem center;
+  background-size: 10px 6px;
+
   border: 1px solid var(--pk-line);
   color: var(--pk-chalk);
   font-family: var(--sans);
   font-size: .85rem;
-  padding: .5rem .6rem;
+  padding: .5rem 1.9rem .5rem .6rem; /* extra right padding leaves room for the arrow */
   border-radius: 2px;
   cursor: pointer;
   transition: border-color .15s, box-shadow .15s;
@@ -969,7 +977,7 @@ body::before {
     padding: .8rem 1rem;
     gap: .55rem;
   }
-  .pe-nav-back { font-size: .52rem; letter-spacing: .14em; padding: .35rem .55rem; }
+  .pe-nav-back { width: 28px; height: 28px; }
   .pe-nav-title { font-size: 1.25rem; margin-bottom: .35rem; }
   .pe-nav-kicker { font-size: .46rem; letter-spacing: .26em; padding-top: .3rem; }
   .pe-nav-records { font-size: .5rem; padding: .35rem .55rem; letter-spacing: .16em; }

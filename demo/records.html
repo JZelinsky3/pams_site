@@ -400,6 +400,27 @@ table.career-table tbody tr:hover { background: rgba(46,120,58,.06); }
     table.career-table.spread th.pre-gap,
     table.career-table.spread td.pre-gap { padding-left: 1.6rem; }
 
+    /* Legendary Duels + H2H ship with inline colgroup % widths and
+       table-layout:fixed, which on a narrow phone forces columns to
+       overlap (scores spill into the next cell, Week/Year touch, etc.).
+       Drop fixed layout on mobile so the columns size to their content
+       and rely on .career-table-wrap's horizontal scroll instead. */
+    table.career-table[style*="table-layout:fixed"] {
+        table-layout: auto !important;
+        width: auto !important;
+        min-width: 100%;
+    }
+    /* Hide the inline spacer column on mobile — it's a desktop-only
+       breathing-room divider that just eats horizontal space here. */
+    table.career-table th.gap-col,
+    table.career-table td.gap-col { display: none; }
+    /* Inline scores in Legendary Duels: shrink the left gap so they
+       don't visually crash into the next cell. */
+    table.career-table .duel-score { margin-left: .6rem !important; font-size: .85rem !important; }
+    /* H2H Best/Worst Matchup names can be long — give them a little
+       horizontal breathing room. */
+    .h2h-matchup { padding-left: 1.1rem !important; padding-right: 1.1rem !important; font-size: .78rem; }
+
     /* Hint that table is scrollable */
     .career-table-wrap {
         background-image:
@@ -852,8 +873,8 @@ function buildTop10MatchupsTable(top10) {
             <td class="r${i === 0 ? ' gold' : ''}">${i + 1}</td>
             <td class="num hi">${combined}</td>
             <td class="gap-col"></td>
-            <td class="name-link"><a href="managers/manager.html?id=${winnerId}">${winner}</a> <span style="margin-left:1.2rem;color:var(--cream-soft);font-family:var(--serif);font-style:italic;font-size:.95rem">${winScore.toFixed(2)}</span></td>
-            <td>${loser} <span style="margin-left:1.2rem;color:var(--rb-mute);font-family:var(--serif);font-style:italic;font-size:.95rem">${loseScore.toFixed(2)}</span></td>
+            <td class="name-link"><a href="managers/manager.html?id=${winnerId}">${winner}</a> <span class="duel-score" style="margin-left:1.2rem;color:var(--cream-soft);font-family:var(--serif);font-style:italic;font-size:.95rem">${winScore.toFixed(2)}</span></td>
+            <td>${loser} <span class="duel-score" style="margin-left:1.2rem;color:var(--rb-mute);font-family:var(--serif);font-style:italic;font-size:.95rem">${loseScore.toFixed(2)}</span></td>
             <td class="num">W${g.week}</td>
             <td class="num">${g.season}</td>
         </tr>`;
@@ -1001,8 +1022,8 @@ function buildH2HTable(managers) {
             <td class="name-link"><a href="managers/manager.html?id=${m.user_id}">${m.name}</a></td>
             <td class="num">${totalW}–${totalL}</td>
             <td class="num hi">${pct}</td>
-            <td>${bestName}</td>
-            <td>${worstName}</td>
+            <td class="h2h-matchup">${bestName}</td>
+            <td class="h2h-matchup">${worstName}</td>
         </tr>`;
     }).filter(Boolean);
 
@@ -1032,8 +1053,8 @@ function buildH2HTable(managers) {
             <td class="num">${m.h2h_w}–${m.h2h_l}</td>
             <td class="num hi">${fmtPct(m.h2h_pct)}</td>
             <td class="gap-col"></td>
-            <td>${bestName}</td>
-            <td>${worstName}</td>
+            <td class="h2h-matchup">${bestName}</td>
+            <td class="h2h-matchup">${worstName}</td>
         </tr>`;
     }).join('');
 

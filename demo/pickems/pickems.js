@@ -434,7 +434,8 @@ function liveTally(w, revealAt) {
       const lo = topKeys(hl.lowest ).map(id => state.teams[id]?.name || id).join(", ") || "TBD";
       hlBox.innerHTML = `<span class="badge">Highest leader: ${hi}</span> <span class="badge">Lowest leader: ${lo}</span>`;
     } else {
-      hlBox.innerHTML = `<span class="badge" style="color:var(--cream-mute)">Reveals ${dateFmt.format(revealAt)}</span>`;
+      const revealText = w.revealLabel || dateFmt.format(revealAt);
+      hlBox.innerHTML = `<span class="badge" style="color:var(--cream-mute)">Reveals ${revealText}</span>`;
     }
   }
 }

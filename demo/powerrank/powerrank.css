@@ -558,12 +558,13 @@ body {
 .pr-nav-back {
   justify-self: start;
   background: none; border: none; cursor: pointer;
-  font-family: var(--mono); font-weight: 700;
-  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  padding: 0;
   color: var(--gold-deep);
-  padding: .3rem .1rem;
   transition: color .15s;
 }
+.pr-nav-back svg { display: block; }
 .pr-nav-back:hover { color: #c89868; }
 .pr-nav-center { text-align: center; justify-self: center; }
 .pr-nav-title {
@@ -706,7 +707,7 @@ body {
     padding: .8rem 1rem .7rem;
     gap: .6rem;
   }
-  .pr-nav-back { font-size: .55rem; letter-spacing: .14em; }
+  .pr-nav-back { width: 28px; height: 28px; }
   .pr-nav-title { font-size: 1.25rem; }
   .pr-nav-kicker { font-size: .48rem; letter-spacing: .22em; }
   .pr-nav-auto { font-size: .52rem; padding: .25rem .5rem; }
