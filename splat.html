@@ -9,7 +9,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#111;overflow-x:hidden}
 #wrap{max-width:520px;width:min(520px,90vw);margin:0 auto;user-select:none;-webkit-user-select:none}
-canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
+canvas{display:block;touch-action:none;cursor:crosshair;width:100%;aspect-ratio:520/750;height:auto}
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;text-align:center;min-height:600px}
 .screen.on{display:flex}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #e5e7eb}
@@ -152,14 +152,14 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
     <div style="display:flex;align-items:center;gap:4px">
       <div style="text-align:center;margin-right:2px">
         <div id="bomb-lives-display" style="line-height:1"></div>
-        <div style="font-size:9px;color:#6b7280;margin-top:1px">pigeons</div>
+        <div style="font-size:9px;color:#6b7280;margin-top:1px">lives</div>
       </div>
       <div style="text-align:right;margin-right:2px"><div class="tval" id="g-highest">—</div><div class="tlabel">highest</div></div>
       <button class="iconbtn" onclick="togglePause()" id="pause-btn">⏸</button>
       <button class="iconbtn" onclick="goHome()">⌂</button>
     </div>
   </div>
-  <div class="hint">Draw to redirect · Same numbers merge · Glowing arc = match nearby · 🐦 pigeon = dodge it</div>
+  <div class="hint">Draw to redirect · Merge · Glowing arc = match nearby</div>
   <div style="position:relative">
     <canvas id="gc"></canvas>
     <div id="flash-layer"></div>
@@ -256,7 +256,7 @@ async function loadGlobalLeaderboard() {
 
     try {
         const response = await fetch(
-            `${SUPABASE_URL}/rest/v1/scores?select=*&order=score.desc&limit=100`,
+            `${SUPABASE_URL}/rest/v1/scores?select=*&order=highest.desc,score.desc&limit=100`,
             {
                 method: "GET",
                 headers: {
@@ -280,8 +280,8 @@ async function loadGlobalLeaderboard() {
             <div class="lb-row">
                 <div class="lb-rank">#${i+1}</div>
                 <div class="lb-name">${entry.name}</div>
-                <div style="font-size:11px;color:#6b7280;margin-right:6px">tile ${entry.highest}</div>
-                <div class="lb-score">${entry.score.toLocaleString()}</div>
+                <div style="font-size:11px;color:#6b7280;margin-right:6px">score ${entry.score.toLocaleString()}</div>
+                <div class="lb-score">${entry.highest}</div>
             </div>`;
         });
 
@@ -299,7 +299,7 @@ function loadSettings(){
   document.getElementById('set-bombs').value=settings.bombs;
   document.getElementById('set-timer').value=settings.timer;
 }
-function saveSetting(k,v){settings[k]=(['bombs','timer'].includes(k))?parseInt(v):v;localStorage.setItem("grav15_s",JSON.stringify(settings));}
+function saveSetting(k,v){settings[k]=(['bombs','timer'].includes(k))?parseInt(v):v;try{localStorage.setItem("grav15_s",JSON.stringify(settings));}catch(e){}}
 
 let stats={best:0,played:0,highTile:0,history:[]};
 function loadStats(){
@@ -308,7 +308,7 @@ function loadStats(){
   document.getElementById('h-played').textContent=stats.played||0;
   document.getElementById('h-high').textContent=stats.highTile||'—';
 }
-function saveStats(){localStorage.setItem("grav15_st",JSON.stringify(stats));}
+function saveStats(){try{localStorage.setItem("grav15_st",JSON.stringify(stats));}catch(e){}}
 function resetStats(){if(!confirm("Reset all stats?"))return;stats={best:0,played:0,highTile:0,history:[]};saveStats();loadStats();renderLB();}
 
 function filterName(raw){
@@ -348,8 +348,8 @@ function renderLB(){
     <div class="lb-row">
       <div class="lb-rank">#${i+1}</div>
       <div class="lb-name">${e.name||'Anon'}</div>
-      <div style="font-size:11px;color:#6b7280;margin-right:4px">tile ${e.highest}</div>
-      <div class="lb-score">${e.score.toLocaleString()}</div>
+      <div style="font-size:11px;color:#6b7280;margin-right:4px">score ${e.score.toLocaleString()}</div>
+      <div class="lb-score">${e.highest}</div>
     </div>`).join('');
 }
 
@@ -374,7 +374,7 @@ let canvas,ctx,balls=[],lines=[],explosions=[];
 let score=0,merges=0,lost=0,highest=0,meter=METER_FULL;
 let bombsHit=0,maxBombHits=3;
 let lastScore=0,lastHighest=0,lastMerges=0;
-let drawing=false,curLine=null,lastPos=null;
+let drawing=false,curLine=null,lastPos=null,inputReady=false;
 let spawnTimer=0,pendingBomb=false,bombDelay=0,ballCount=0;
 let lastTime=0,raf=null,alive=false,paused=false,diff=1;
 let linesAvail=1,spawnMs=3400;
@@ -403,8 +403,10 @@ function hideBombFlash(){bombFlashActive=false;bombFlashTimer=0;}
 
 function renderBombLives(){
   const max=maxBombHits,hit=bombsHit;
+  const lifeEmojis=['🐦','🐸','🐷'];
   let h='';
-  for(let i=0;i<max;i++)h+=`<span class="bomb-life${i<hit?' lost':''}">🐦</span>`;
+  for(let i=0;i<max;i++)h+=`<span class="bomb-life${i<hit?' lost':''}">
+${lifeEmojis[i%lifeEmojis.length]}</span>`;
   document.getElementById('bomb-lives-display').innerHTML=h;
 }
 
@@ -1012,7 +1014,7 @@ function draw(){
         ctx.beginPath();ctx.arc(-r*0.1,-r*0.26,r*0.04,0,Math.PI*2);ctx.fill();
         ctx.beginPath();ctx.arc(r*0.1,-r*0.26,r*0.04,0,Math.PI*2);ctx.fill();
       }
-      } else if(btype==='pig'){
+      else if(btype==='pig'){
         // Chubby pink pig, snout-first, ears flapping
         const r=b.r;
         // Body — fat pink circle
@@ -1049,6 +1051,7 @@ function draw(){
         // Curly tail at top (it's falling upside-down panicked)
         ctx.strokeStyle='#fb7185';ctx.lineWidth=3;ctx.lineCap='round';
         ctx.beginPath();ctx.arc(r*0.55,-r*0.1,r*0.18,0,Math.PI*1.5);ctx.stroke();
+      }
     } else {
       const c=ballColor(b.val);
       ctx.fillStyle=c.bg;ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();
@@ -1119,13 +1122,15 @@ function getTPos(e){const r=canvas.getBoundingClientRect();const t=e.touches[0];
 function lenOk(pts,np){let len=0;for(let i=1;i<pts.length;i++){const dx=pts[i].x-pts[i-1].x,dy=pts[i].y-pts[i-1].y;len+=Math.sqrt(dx*dx+dy*dy);}const dx=np.x-pts[pts.length-1].x,dy=np.y-pts[pts.length-1].y;return len+Math.sqrt(dx*dx+dy*dy)<=MAX_LINE;}
 
 function setupInput(){
-  canvas.onmousedown=e=>{if(!linesAvail||paused)return;drawing=true;curLine={pts:[getPos(e)],born:Date.now()};lastPos=getPos(e);};
-  canvas.onmousemove=e=>{if(!drawing)return;const p=getPos(e);if((p.x-lastPos.x)**2+(p.y-lastPos.y)**2>9&&lenOk(curLine.pts,p)){curLine.pts.push(p);lastPos=p;}};
+  if(inputReady)return;inputReady=true;
+  canvas.addEventListener('mousedown',e=>{if(!linesAvail||paused)return;drawing=true;curLine={pts:[getPos(e)],born:Date.now()};lastPos=getPos(e);},{passive:false});
+  canvas.addEventListener('mousemove',e=>{if(!drawing)return;const p=getPos(e);if((p.x-lastPos.x)**2+(p.y-lastPos.y)**2>9&&lenOk(curLine.pts,p)){curLine.pts.push(p);lastPos=p;}},{passive:false});
   const endD=()=>{if(drawing&&curLine&&curLine.pts.length>1){lines.push(curLine);linesAvail=Math.max(0,linesAvail-1);renderPips();}drawing=false;curLine=null;};
-  canvas.onmouseup=endD;canvas.onmouseleave=endD;
-  canvas.ontouchstart=e=>{e.preventDefault();if(!linesAvail||paused)return;drawing=true;curLine={pts:[getTPos(e)],born:Date.now()};lastPos=getTPos(e);};
-  canvas.ontouchmove=e=>{e.preventDefault();if(!drawing)return;const p=getTPos(e);if((p.x-lastPos.x)**2+(p.y-lastPos.y)**2>9&&lenOk(curLine.pts,p)){curLine.pts.push(p);lastPos=p;}};
-  canvas.ontouchend=e=>{if(drawing&&curLine&&curLine.pts.length>1){lines.push(curLine);linesAvail=Math.max(0,linesAvail-1);renderPips();}drawing=false;curLine=null;};
+  canvas.addEventListener('mouseup',endD,{passive:false});
+  canvas.addEventListener('mouseleave',endD,{passive:false});
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();if(!linesAvail||paused)return;drawing=true;curLine={pts:[getTPos(e)],born:Date.now()};lastPos=getTPos(e);},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const p=getTPos(e);if((p.x-lastPos.x)**2+(p.y-lastPos.y)**2>9&&lenOk(curLine.pts,p)){curLine.pts.push(p);lastPos=p;}},{passive:false});
+  canvas.addEventListener('touchend',e=>{if(drawing&&curLine&&curLine.pts.length>1){lines.push(curLine);linesAvail=Math.max(0,linesAvail-1);renderPips();}drawing=false;curLine=null;},{passive:false});
 }
 
 loadSettings();loadStats();
