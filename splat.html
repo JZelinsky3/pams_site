@@ -53,6 +53,14 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%;aspect-ratio:
 #bomb-flash{display:none !important; font-family: Georgia, 'Times New Roman', Times, serif;}
 .bomb-life{display:inline-block;font-size:16px;margin:0 1px;transition:opacity .2s}
 .bomb-life.lost{opacity:0.2}
+@media(max-width:479px){
+  #game-home-btn{display:none}
+  .bomb-life{font-size:11px;margin:0 0.5px}
+  .topbar .tval{font-size:15px}
+  .topbar .tlabel{font-size:8px}
+  .topbar{padding:5px 8px}
+  #bomb-lives-display+div{font-size:8px}
+}
 /* BOMB Flash Retro Style */
 #bomb-flash-text {
     font-family: 'Press Start 2P', cursive;
@@ -99,10 +107,10 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%;aspect-ratio:
   </div>
   <div id="tab-how" style="padding:16px;width:100%;text-align:left;overflow-y:auto">
     <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">✏️</span><div><b style="font-size:13px">Draw lines</b><div style="font-size:12px;color:#6b7280;margin-top:2px">Drag to redirect falling balls. 1 line per ball dropped, up to 4 banked. Lines fade fast.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">✏️</span><div><b style="font-size:13px">Draw lines</b><div style="font-size:12px;color:#6b7280;margin-top:2px">Drag to redirect falling balls. 1 line per ball dropped, up to 2 banked. Lines fade fast.</div></div></div>
       <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🎯</span><div><b style="font-size:13px">Land on platform</b><div style="font-size:12px;color:#6b7280;margin-top:2px">The platform slides left-right. Miss it and your merge timer drains faster.</div></div></div>
       <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🔢</span><div><b style="font-size:13px">Merge same numbers</b><div style="font-size:12px;color:#6b7280;margin-top:2px">3+3=6, 6+6=12… Glowing arc appears between nearby matches. Merging resets the timer.</div></div></div>
-      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🐦</span><div><b style="font-size:13px">Dodge the pigeon</b><div style="font-size:12px;color:#6b7280;margin-top:2px">A panicked pigeon wobbles down every ~12 balls. Redirect it off the edge or it explodes in feathers and wrecks your stack.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🐦</span><div><b style="font-size:13px">Dodge the pigeon</b><div style="font-size:12px;color:#6b7280;margin-top:2px">A panicked pigeon wobbles down every minute. Redirect it off the edge or it explodes in feathers and wrecks your stack. Watch out for the frogs too!</div></div></div>
       <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">⏱️</span><div><b style="font-size:13px">Merge timer</b><div style="font-size:12px;color:#6b7280;margin-top:2px">If timer runs out without a merge, game over. Any merge resets it to full.</div></div></div>
     </div>
   </div>
@@ -156,7 +164,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%;aspect-ratio:
       </div>
       <div style="text-align:right;margin-right:2px"><div class="tval" id="g-highest">—</div><div class="tlabel">highest</div></div>
       <button class="iconbtn" onclick="togglePause()" id="pause-btn">⏸</button>
-      <button class="iconbtn" onclick="goHome()">⌂</button>
+      <button class="iconbtn" onclick="goHome()" id="game-home-btn">⌂</button>
     </div>
   </div>
   <div class="hint">Draw to redirect · Merge · Glowing arc = match nearby</div>
@@ -201,9 +209,9 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%;aspect-ratio:
 
 </div>
 <script>
-const W=520,H=750,BALL_R=21,LINE_LIFE=2000,MAX_LINE=110;
-const PLAT_H=14,PLAT_W_FRAC=0.76,WALL_W=10,WALL_H=14,LINE_CAP=3;
-const METER_FULL=100,METER_LOSE=14,BOMB_R=95;
+const W=520,H=750,BALL_R=21,LINE_LIFE=2000,LINE_COLLIDE_LIFE=1500,MAX_LINE=105;
+const PLAT_H=14,PLAT_W_FRAC=0.64,WALL_W=10,WALL_H=14,LINE_CAP=3;
+const METER_FULL=100,METER_LOSE=14,BOMB_R=120;
 const RESTITUTION=0.08,LINE_SLIDE_BOOST=1.28,MERGE_COOLDOWN=500,MAX_SPEED=5.5;
 const MAGNET_DIST=BALL_R*5.5,MAGNET_FORCE=0.012,MAGNET_MIN_GAP=BALL_R*2.15;
 
@@ -387,8 +395,8 @@ const BOMB_FLASH_LABELS={pigeon:'PIGEON!',puffer:'PUFFER!',frog:'FROG!',pig:'OIN
 const BOMB_FLASH_COLORS={pigeon:'#fff',puffer:'#fff',frog:'#fff',pig:'#fff'};
 // Bomb escalation — speed increases every BOMB_ESCALATE_INTERVAL ms, capped at BOMB_MAX_VY
 let gameTimeMs=0;
-const BOMB_BASE_VY=1.85;       // faster base bomb drop
-const BOMB_MAX_VY=4.2;         // higher cap
+const BOMB_BASE_VY=2.6;       // faster base bomb drop
+const BOMB_MAX_VY=5.8;         // higher cap
 const BOMB_ESCALATE_INTERVAL=210000; // escalate every 3.5 minutes
 const BOMB_ESCALATE_STEP=0.3;  // bigger step each escalation
 let currentBombVY=BOMB_BASE_VY;
@@ -414,9 +422,10 @@ function spawnBall(isBomb){
   const x=BALL_R*2+Math.random()*(W-BALL_R*4);
   const sm=settings.speed==='slow'?0.6:settings.speed==='fast'?1.25:1.0;
   const bombType=isBomb?(bombCycle===0?'pigeon':BOMB_TYPES[1+Math.floor(Math.random()*3)]):null;
+  const ballBaseVY=Math.min(0.18+diff*0.009,0.65);
   balls.push({
     x,y:-BALL_R*2,vx:(Math.random()-0.5)*0.28,
-    vy:(isBomb?currentBombVY:0.18+Math.random()*0.13)*sm,
+    vy:(isBomb?currentBombVY:(ballBaseVY+Math.random()*0.13))*sm,
     val:isBomb?0:randVal(),isBomb,r:BALL_R,
     dead:false,merging:false,flash:0,scale:1.0,
     lastMerge:0,locked:false,platDx:null,onPlatform:false,
@@ -636,7 +645,9 @@ function nudgeLocked(newB){
 }
 
 function collideLines(b){
-  const all=curLine&&curLine.pts&&curLine.pts.length>1?[...lines,curLine]:lines;
+  const now=Date.now();
+  const active=lines.filter(l=>now-l.born<LINE_COLLIDE_LIFE);
+  const all=curLine&&curLine.pts&&curLine.pts.length>1?[...active,curLine]:active;
   all.forEach(line=>{
     const pts=line.pts;
     for(let i=0;i<pts.length-1;i++){
