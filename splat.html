@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gravity</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Splat</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#111}
-#wrap{max-width:520px;margin:0 auto;user-select:none;-webkit-user-select:none}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#111;overflow-x:hidden}
+#wrap{max-width:520px;width:min(520px,90vw);margin:0 auto;user-select:none;-webkit-user-select:none}
 canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;text-align:center;min-height:600px}
 .screen.on{display:flex}
@@ -81,8 +81,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 <!-- HOME -->
 <div id="sc-home" style="display:none;flex-direction:column;min-height:640px">
   <div style="padding:24px 20px 16px;width:100%;text-align:center">
-    <div style="font-size:36px;font-weight:800;letter-spacing:-2px;margin-bottom:4px">Gravity</div>
-    <div style="font-size:13px;color:#6b7280">Guide. Stack. Merge. Survive.</div>
+    <div style="font-size:36px;font-weight:800;letter-spacing:-2px;margin-bottom:4px">Splat 🐦</div>
+    <div style="font-size:13px;color:#6b7280">Stack. Merge. Dodge the pigeon.</div>
   </div>
   <div style="display:flex;gap:10px;padding:0 16px 16px;width:100%">
     <div class="home-stat"><div class="home-stat-v" id="h-best">0</div><div class="home-stat-l">Best score</div></div>
@@ -102,7 +102,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
       <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">✏️</span><div><b style="font-size:13px">Draw lines</b><div style="font-size:12px;color:#6b7280;margin-top:2px">Drag to redirect falling balls. 1 line per ball dropped, up to 4 banked. Lines fade fast.</div></div></div>
       <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🎯</span><div><b style="font-size:13px">Land on platform</b><div style="font-size:12px;color:#6b7280;margin-top:2px">The platform slides left-right. Miss it and your merge timer drains faster.</div></div></div>
       <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🔢</span><div><b style="font-size:13px">Merge same numbers</b><div style="font-size:12px;color:#6b7280;margin-top:2px">3+3=6, 6+6=12… Glowing arc appears between nearby matches. Merging resets the timer.</div></div></div>
-      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">☠️</span><div><b style="font-size:13px">Dodge bombs</b><div style="font-size:12px;color:#6b7280;margin-top:2px">Background flashes when a bomb drops. Redirect it off the edge. 3 bombs hit = game over.</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🐦</span><div><b style="font-size:13px">Dodge the pigeon</b><div style="font-size:12px;color:#6b7280;margin-top:2px">A panicked pigeon wobbles down every ~12 balls. Redirect it off the edge or it explodes in feathers and wrecks your stack.</div></div></div>
       <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">⏱️</span><div><b style="font-size:13px">Merge timer</b><div style="font-size:12px;color:#6b7280;margin-top:2px">If timer runs out without a merge, game over. Any merge resets it to full.</div></div></div>
     </div>
   </div>
@@ -152,14 +152,14 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
     <div style="display:flex;align-items:center;gap:4px">
       <div style="text-align:center;margin-right:2px">
         <div id="bomb-lives-display" style="line-height:1"></div>
-        <div style="font-size:9px;color:#6b7280;margin-top:1px">bombs</div>
+        <div style="font-size:9px;color:#6b7280;margin-top:1px">pigeons</div>
       </div>
       <div style="text-align:right;margin-right:2px"><div class="tval" id="g-highest">—</div><div class="tlabel">highest</div></div>
       <button class="iconbtn" onclick="togglePause()" id="pause-btn">⏸</button>
       <button class="iconbtn" onclick="goHome()">⌂</button>
     </div>
   </div>
-  <div class="hint">Draw to redirect · Same numbers merge · Glowing arc = match nearby · ☠ bomb = dodge it</div>
+  <div class="hint">Draw to redirect · Same numbers merge · Glowing arc = match nearby · 🐦 pigeon = dodge it</div>
   <div style="position:relative">
     <canvas id="gc"></canvas>
     <div id="flash-layer"></div>
@@ -185,7 +185,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
   <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center">
     <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-high">—</div><div class="home-stat-l">highest</div></div>
     <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-merges">0</div><div class="home-stat-l">merges</div></div>
-    <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-bombs-hit">0</div><div class="home-stat-l">bombs hit</div></div>
+    <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-bombs-hit">0</div><div class="home-stat-l">pigeons hit</div></div>
     <div class="home-stat" style="min-width:75px"><div class="home-stat-v" id="go-best">0</div><div class="home-stat-l">best ever</div></div>
   </div>
   <div id="go-name-area" style="width:100%;max-width:300px;margin-bottom:12px">
@@ -202,8 +202,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;width:100%}
 </div>
 <script>
 const W=520,H=750,BALL_R=21,LINE_LIFE=2000,MAX_LINE=110;
-const PLAT_H=14,PLAT_W_FRAC=0.76,WALL_W=10,WALL_H=14,LINE_CAP=4;
-const METER_FULL=100,METER_LOSE=14,BOMB_R=55;
+const PLAT_H=14,PLAT_W_FRAC=0.76,WALL_W=10,WALL_H=14,LINE_CAP=3;
+const METER_FULL=100,METER_LOSE=14,BOMB_R=95;
 const RESTITUTION=0.08,LINE_SLIDE_BOOST=1.28,MERGE_COOLDOWN=500,MAX_SPEED=5.5;
 const MAGNET_DIST=BALL_R*5.5,MAGNET_FORCE=0.012,MAGNET_MIN_GAP=BALL_R*2.15;
 
@@ -325,7 +325,7 @@ async function saveToLB() {
     // Save locally (keep your existing system)
     stats.history = stats.history || [];
     stats.history.push({name, score: lastScore, highest: lastHighest, merges: lastMerges});
-    stats.history.sort((a,b) => b.score - a.score);
+    stats.history.sort((a,b) => b.highest!==a.highest ? b.highest-a.highest : b.score-a.score);
     stats.history = stats.history.slice(0, 100);
     saveStats();
 
@@ -380,39 +380,54 @@ let lastTime=0,raf=null,alive=false,paused=false,diff=1;
 let linesAvail=1,spawnMs=3400;
 let plat={x:0,y:0,w:0,vx:0.38};
 let GRAV=0.068,METER_DRAIN_MS=35000;
-let bombFlashActive=false,bombFlashTimer=0;
+let bombFlashActive=false,bombFlashTimer=0,bombFlashType='pigeon';
+let bombCycle=0; // cycles 0=pigeon 1=pufferfish 2=frog
+const BOMB_TYPES=['pigeon','puffer','frog','pig'];
+const BOMB_FLASH_LABELS={pigeon:'PIGEON!',puffer:'PUFFER!',frog:'FROG!',pig:'OINK!'};
+const BOMB_FLASH_COLORS={pigeon:'#fff',puffer:'#fff',frog:'#fff',pig:'#fff'};
+// Bomb escalation — speed increases every BOMB_ESCALATE_INTERVAL ms, capped at BOMB_MAX_VY
+let gameTimeMs=0;
+const BOMB_BASE_VY=1.85;       // faster base bomb drop
+const BOMB_MAX_VY=4.2;         // higher cap
+const BOMB_ESCALATE_INTERVAL=210000; // escalate every 3.5 minutes
+const BOMB_ESCALATE_STEP=0.3;  // bigger step each escalation
+let currentBombVY=BOMB_BASE_VY;
 
 function initPlat(){plat.w=Math.round(W*PLAT_W_FRAC);plat.x=(W-plat.w)/2;plat.y=H-90;plat.vx=0.38;}
 function randVal(){const r=Math.random();return r<0.42?3:r<0.80?6:12;}
 function capSpeed(b){const s=Math.sqrt(b.vx*b.vx+b.vy*b.vy);if(s>MAX_SPEED){b.vx=b.vx/s*MAX_SPEED;b.vy=b.vy/s*MAX_SPEED;}}
 function getSpeedGrav(){return settings.speed==='slow'?0.050:settings.speed==='fast'?0.086:0.068;}
 
-function showBombFlash(){bombFlashActive=true;bombFlashTimer=1000;}
+function showBombFlash(type){bombFlashActive=true;bombFlashTimer=1000;bombFlashType=type||'pigeon';}
 function hideBombFlash(){bombFlashActive=false;bombFlashTimer=0;}
 
 function renderBombLives(){
   const max=maxBombHits,hit=bombsHit;
   let h='';
-  for(let i=0;i<max;i++)h+=`<span class="bomb-life${i<hit?' lost':''}">☠</span>`;
+  for(let i=0;i<max;i++)h+=`<span class="bomb-life${i<hit?' lost':''}">🐦</span>`;
   document.getElementById('bomb-lives-display').innerHTML=h;
 }
 
 function spawnBall(isBomb){
   const x=BALL_R*2+Math.random()*(W-BALL_R*4);
   const sm=settings.speed==='slow'?0.6:settings.speed==='fast'?1.25:1.0;
+  const bombType=isBomb?(bombCycle===0?'pigeon':BOMB_TYPES[1+Math.floor(Math.random()*3)]):null;
   balls.push({
     x,y:-BALL_R*2,vx:(Math.random()-0.5)*0.28,
-    vy:(isBomb?1.08:0.18+Math.random()*0.13)*sm,
+    vy:(isBomb?currentBombVY:0.18+Math.random()*0.13)*sm,
     val:isBomb?0:randVal(),isBomb,r:BALL_R,
     dead:false,merging:false,flash:0,scale:1.0,
-    lastMerge:0,locked:false,platDx:null,onPlatform:false
+    lastMerge:0,locked:false,platDx:null,onPlatform:false,
+    wobbleOffset:Math.random()*Math.PI*2,
+    bombType
   });
   if(!isBomb){
     linesAvail=Math.min(linesAvail+1,LINE_CAP);
     ballCount++;if(ballCount%12===0){pendingBomb=true;bombDelay=1600;}
   } else {
     linesAvail=Math.min(linesAvail+1,LINE_CAP);
-    showBombFlash();
+    bombCycle++;
+    showBombFlash(bombType);
   }
   renderPips();
 }
@@ -431,6 +446,7 @@ function startGame(){
   bombsHit=0;maxBombHits=parseInt(settings.bombs)||3;
   diff=1;spawnTimer=0;pendingBomb=false;bombDelay=0;ballCount=0;
   spawnMs=3400;linesAvail=1;paused=false;
+  gameTimeMs=0;currentBombVY=BOMB_BASE_VY;bombCycle=0;
   GRAV=getSpeedGrav();METER_DRAIN_MS=(parseInt(settings.timer)||35)*1000;
   document.getElementById('g-best').textContent=(stats.best||0).toLocaleString();
   document.getElementById('pause-btn').textContent='⏸';
@@ -462,6 +478,13 @@ function renderPips(){
 function loop(ts){
   if(!alive||paused)return;
   const dt=Math.min(ts-lastTime,50);lastTime=ts;
+  gameTimeMs+=dt;
+  // Escalate bomb speed every BOMB_ESCALATE_INTERVAL ms, up to cap
+  const prevBombVY=currentBombVY;
+  currentBombVY=Math.min(BOMB_MAX_VY, BOMB_BASE_VY + Math.floor(gameTimeMs/BOMB_ESCALATE_INTERVAL)*BOMB_ESCALATE_STEP);
+  if(currentBombVY>prevBombVY+0.01){
+    flashPop(W/2,H*0.4,"🐦 PIGEONS FASTER!","#6b7280");
+  }
   spawnTimer+=dt;spawnMs=Math.max(2200,3400-diff*34);
   if(spawnTimer>spawnMs){spawnTimer=0;spawnBall(false);diff+=0.12;}
   if(pendingBomb){bombDelay-=dt;if(bombDelay<=0){pendingBomb=false;spawnBall(true);}}
@@ -529,12 +552,13 @@ function update(dt){
     }
   }
 
+  // Air vs locked — v15 original: simple positional push, no velocity transfer from locked
   for(const a of air){
     for(const b of live.filter(x=>x.locked)){
       const dx=a.x-b.x,dy=a.y-b.y,dist=Math.sqrt(dx*dx+dy*dy),minD=a.r+b.r;
       if(dist>=minD||dist<0.001)continue;
       const nx=dx/dist,ny=dy/dist,ov=minD-dist;
-      a.x+=nx*ov*0.9;if(dy<0)a.y+=ny*ov*0.6;
+      a.x+=nx*ov*0.9;a.y+=ny*ov*0.6;
       const vd=a.vx*nx+a.vy*ny;
       if(vd<0){a.vx-=vd*nx*RESTITUTION*0.5;a.vy-=vd*ny*RESTITUTION*0.5;a.vx*=0.55;capSpeed(a);}
     }
@@ -543,17 +567,42 @@ function update(dt){
   air.forEach(b=>{
     collidePlat(b);collideLines(b);
     if(b.y>H+BALL_R*2){b.dead=true;if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE);flashPop(Math.min(W-10,Math.max(10,b.x)),H-30,"lost","#DC2626");}}
-    if(b.x<-BALL_R*2||b.x>W+BALL_R*2){b.dead=true;if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE*0.5);}}
+    // Use larger buffer so balls clear the edge cleanly on all screen sizes
+    if(b.x<-BALL_R*4||b.x>W+BALL_R*4){b.dead=true;if(!b.isBomb){lost++;meter=Math.max(0,meter-METER_LOSE*0.5);}}
   });
 
   checkBombs();checkMerges();
   balls=balls.filter(b=>!b.dead&&!b.merging);
+
+  // After merges — enforce minimum spacing between ALL locked balls
+  // Run multiple passes to fully resolve overlaps
+  const allLocked=balls.filter(b=>!b.dead&&!b.merging&&b.locked&&!b.isBomb);
+  for(let pass=0;pass<4;pass++){
+    for(let i=0;i<allLocked.length;i++){
+      for(let j=i+1;j<allLocked.length;j++){
+        const a=allLocked[i],b=allLocked[j];
+        const dx=b.x-a.x;
+        const dist=Math.abs(dx);
+        const minD=BALL_R*2+1; // hard minimum gap — no overlap allowed
+        if(dist<minD){
+          const push=(minD-dist)*0.5+0.5;
+          const dir=dx>=0?1:-1;
+          const iL=plat.x+WALL_W+BALL_R,iR=plat.x+plat.w-WALL_W-BALL_R;
+          a.x=Math.max(iL,Math.min(iR,a.x-dir*push));
+          b.x=Math.max(iL,Math.min(iR,b.x+dir*push));
+          a.platDx=a.x-plat.x;b.platDx=b.x-plat.x;
+        }
+      }
+    }
+  }
+
   explosions=explosions.filter(e=>{e.age+=dt;return e.age<600;});
   updateUI();
 }
 
 function collidePlat(b){
   const iL=plat.x+WALL_W,iR=plat.x+plat.w-WALL_W,pT=plat.y;
+  // Top surface landing
   if(b.x>iL-b.r*0.2&&b.x<iR+b.r*0.2&&b.y+b.r>pT-2&&b.y+b.r<pT+PLAT_H+b.r+4){
     b.y=pT-b.r;
     if(b.vy>0){
@@ -564,8 +613,13 @@ function collidePlat(b){
       } else {b.vy=-Math.abs(b.vy)*RESTITUTION;b.vx*=0.5;capSpeed(b);}
     }
   }
-  if(b.x-b.r<plat.x+WALL_W&&b.x>plat.x-b.r&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H){b.x=plat.x+WALL_W+b.r;b.vx=Math.abs(b.vx)*RESTITUTION;}
-  if(b.x+b.r>plat.x+plat.w-WALL_W&&b.x<plat.x+plat.w+b.r&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H){b.x=plat.x+plat.w-WALL_W-b.r;b.vx=-Math.abs(b.vx)*RESTITUTION;}
+  // Wall collision: ONLY fire if ball is moving inward (toward centre) AND
+  // is still mostly over the platform. If ball is being pushed outward by
+  // another ball, do NOT deflect — let it exit cleanly with no rubberband.
+  const overLeft=b.x-b.r<plat.x+WALL_W&&b.x>plat.x&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H;
+  if(overLeft&&b.vx<0){b.x=plat.x+WALL_W+b.r;b.vx=Math.abs(b.vx)*RESTITUTION;}
+  const overRight=b.x+b.r>plat.x+plat.w-WALL_W&&b.x<plat.x+plat.w&&b.y+b.r>pT-WALL_H&&b.y<pT+PLAT_H;
+  if(overRight&&b.vx>0){b.x=plat.x+plat.w-WALL_W-b.r;b.vx=-Math.abs(b.vx)*RESTITUTION;}
 }
 
 function nudgeLocked(newB){
@@ -616,18 +670,33 @@ function checkBombs(){
 
 function doBomb(bomb){
   if(bomb.dead)return;bomb.dead=true;hideBombFlash();
-  explosions.push({x:bomb.x,y:bomb.y,age:0});
+  const btype=bomb.bombType||'pigeon';
+  explosions.push({x:bomb.x,y:bomb.y,age:0,seed:Math.random()*Math.PI*2,type:btype});
   bombsHit++;renderBombLives();
-  flashPop(bomb.x,bomb.y-36,"☠ BOOM! ("+bombsHit+"/"+maxBombHits+")","#DC2626");
-  balls.forEach(b=>{
-    if(b.dead||b.isBomb)return;
+  let scoreLost=0;
+  const inRadius=balls.filter(b=>{
+    if(b.dead||b.isBomb)return false;
     const dx=b.x-bomb.x,dy=b.y-bomb.y;
-    if(Math.sqrt(dx*dx+dy*dy)<BOMB_R+b.r){
+    return Math.sqrt(dx*dx+dy*dy)<BOMB_R+b.r;
+  });
+  if(btype==='pig'){
+    // Pig scrambles values of balls in radius — values shuffled between affected balls
+    const vals=inRadius.map(b=>b.val);
+    for(let i=vals.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[vals[i],vals[j]]=[vals[j],vals[i]];}
+    inRadius.forEach((b,i)=>{b.val=vals[i];b.flash=0.9;b.scale=1.28;flashPop(b.x,b.y-22,'?!','#ec4899');});
+  } else {
+    inRadius.forEach(b=>{
+      const penalty=b.val*4;
+      scoreLost+=penalty;
       b.locked=false;b.platDx=null;
       b.vx=(b.x-bomb.x)*0.055;b.vy=-1.6-Math.random()*0.5;capSpeed(b);
-    }
-  });
-  if(bombsHit>=maxBombHits){endGame(false,'Too many bombs hit!');return;}
+      flashPop(b.x,b.y-22,"-"+penalty,"#DC2626");
+    });
+    score=Math.max(0,score-scoreLost);
+  }
+  const label={pigeon:'🐦 SPLAT!',puffer:'🐡 POOF!',frog:'🐸 SPLOP!',pig:'🐷 OINK!'}[btype]||'SPLAT!';
+  flashPop(bomb.x,bomb.y-46,label+" ("+bombsHit+"/"+maxBombHits+")","#4b5563");
+  if(bombsHit>=maxBombHits){endGame(false,'Too many critters!');return;}
 }
 
 function checkMerges(){
@@ -697,8 +766,120 @@ function draw(){
   ctx.beginPath();ctx.roundRect(plat.x,plat.y-WALL_H,WALL_W,WALL_H+PLAT_H,3);ctx.fill();
   ctx.beginPath();ctx.roundRect(plat.x+plat.w-WALL_W,plat.y-WALL_H,WALL_W,WALL_H+PLAT_H,3);ctx.fill();
 
-  // explosions
-  explosions.forEach(e=>{const pr=e.age/600;ctx.globalAlpha=(1-pr)*0.25;ctx.fillStyle='#E24B4A';ctx.beginPath();ctx.arc(e.x,e.y,BOMB_R*pr,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;});
+  // type-specific explosions
+  explosions.forEach(e=>{
+    const pr=e.age/700; // slightly longer duration
+    const alpha=1-pr;
+    const type=e.type||'pigeon';
+
+    if(type==='pigeon'){
+      // Big window-splat blob — irregular star shape, appears instantly then fades
+      ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.seed);
+      ctx.globalAlpha=alpha*0.82;
+      ctx.fillStyle='#9ca3af';
+      ctx.beginPath();
+      const spikes=12,outerR=BOMB_R*0.72*(1-pr*0.3),innerR=outerR*0.48;
+      for(let i=0;i<spikes*2;i++){
+        const r2=i%2===0?outerR:innerR;
+        const a=(i/spikes)*Math.PI;
+        i===0?ctx.moveTo(Math.cos(a)*r2,Math.sin(a)*r2):ctx.lineTo(Math.cos(a)*r2,Math.sin(a)*r2);
+      }
+      ctx.closePath();ctx.fill();
+      // white centre blob
+      ctx.fillStyle='#f3f4f6';ctx.globalAlpha=alpha*0.6;
+      ctx.beginPath();ctx.arc(0,0,outerR*0.38,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+      // feathers radiating out
+      for(let f=0;f<10;f++){
+        const ang=(f/10)*Math.PI*2+e.seed;
+        const dist=BOMB_R*pr*1.1;
+        const fx=e.x+Math.cos(ang)*dist,fy=e.y+Math.sin(ang)*dist;
+        ctx.save();ctx.translate(fx,fy);ctx.rotate(ang+Math.PI/2);
+        ctx.globalAlpha=alpha*0.8;
+        ctx.fillStyle=f%3===0?'#d1d5db':f%3===1?'#9ca3af':'#f9fafb';
+        ctx.beginPath();ctx.ellipse(0,0,4,14*(1-pr*0.4),0,0,Math.PI*2);ctx.fill();
+        ctx.restore();
+      }
+
+    } else if(type==='puffer'){
+      // Spike starburst — sharp points shooting out
+      ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.seed);
+      const spikes=16;
+      const outerR=BOMB_R*pr*1.1,innerR=outerR*0.35;
+      ctx.globalAlpha=alpha*0.85;
+      ctx.fillStyle='#fde68a'; // yellow puffer spikes
+      ctx.beginPath();
+      for(let i=0;i<spikes*2;i++){
+        const r2=i%2===0?outerR:innerR;
+        const a=(i/(spikes*2))*Math.PI*2;
+        i===0?ctx.moveTo(Math.cos(a)*r2,Math.sin(a)*r2):ctx.lineTo(Math.cos(a)*r2,Math.sin(a)*r2);
+      }
+      ctx.closePath();ctx.fill();
+      // centre orange blob
+      ctx.fillStyle='#f97316';ctx.globalAlpha=alpha*0.7;
+      ctx.beginPath();ctx.arc(0,0,innerR*1.2,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+
+    } else if(type==='frog'){
+      // Slime splat — wobbly green irregular blob, drips
+      ctx.save();ctx.translate(e.x,e.y);
+      ctx.globalAlpha=alpha*0.85;
+      // Main slime blob using bezier curves for organic shape
+      const sr=BOMB_R*0.68*(1-pr*0.25);
+      ctx.fillStyle='#86efac'; // bright lime green
+      ctx.beginPath();
+      const pts2=10;
+      for(let i=0;i<pts2;i++){
+        const a=(i/pts2)*Math.PI*2+e.seed;
+        const wobb=1+Math.sin(a*3+e.seed)*0.38;
+        const px=Math.cos(a)*sr*wobb,py=Math.sin(a)*sr*wobb;
+        i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.closePath();ctx.fill();
+      // darker green centre
+      ctx.fillStyle='#16a34a';ctx.globalAlpha=alpha*0.55;
+      ctx.beginPath();ctx.arc(0,0,sr*0.42,0,Math.PI*2);ctx.fill();
+      // slime drips radiating out
+      for(let d=0;d<6;d++){
+        const a=(d/6)*Math.PI*2+e.seed+0.3;
+        const dx2=Math.cos(a)*BOMB_R*pr*0.9,dy2=Math.sin(a)*BOMB_R*pr*0.9;
+        ctx.globalAlpha=alpha*0.7;
+        ctx.fillStyle='#86efac';
+        ctx.beginPath();ctx.ellipse(dx2,dy2,5,12,a+Math.PI/2,0,Math.PI*2);ctx.fill();
+      }
+      ctx.restore();
+      } else if(type==='pig'){
+      // Mud splat — brown wobbly blob with pink oinks flying out
+      ctx.save();ctx.translate(e.x,e.y);
+      ctx.globalAlpha=alpha*0.82;
+      // mud blob
+      const mr=BOMB_R*0.65*(1-pr*0.28);
+      ctx.fillStyle='#92400e';
+      ctx.beginPath();
+      for(let i=0;i<10;i++){
+        const a=(i/10)*Math.PI*2+e.seed;
+        const wobb=1+Math.sin(a*4+e.seed)*0.32;
+        const px=Math.cos(a)*mr*wobb,py=Math.sin(a)*mr*wobb;
+        i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.closePath();ctx.fill();
+      // pink centre
+      ctx.fillStyle='#f9a8d4';ctx.globalAlpha=alpha*0.55;
+      ctx.beginPath();ctx.arc(0,0,mr*0.38,0,Math.PI*2);ctx.fill();
+      // mud droplets flying out
+      for(let d=0;d<8;d++){
+        const a=(d/8)*Math.PI*2+e.seed;
+        const dist2=BOMB_R*pr*1.0;
+        ctx.globalAlpha=alpha*0.75;
+        ctx.fillStyle=d%2===0?'#92400e':'#f9a8d4';
+        ctx.beginPath();ctx.arc(e.x+Math.cos(a)*dist2-e.x+e.x,e.y+Math.sin(a)*dist2-e.y+e.y,6*(1-pr),0,Math.PI*2);
+        // fix: draw relative to translated context
+        ctx.beginPath();ctx.arc(Math.cos(a)*dist2,Math.sin(a)*dist2,6*(1-pr),0,Math.PI*2);ctx.fill();
+      }
+      ctx.restore();
+    }
+    ctx.globalAlpha=1;
+  });
 
   // lines
   const now=Date.now();
@@ -717,12 +898,157 @@ function draw(){
     ctx.save();ctx.translate(b.x,b.y);
     const sc=Math.min(1.35,Math.max(1.0,b.scale));ctx.scale(sc,sc);
     if(b.isBomb){
-      ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();
-      ctx.strokeStyle='#E24B4A';ctx.lineWidth=2.5;ctx.stroke();
-      const pulse=0.4+0.6*Math.sin(Date.now()/110);
-      ctx.globalAlpha=pulse*0.35;ctx.strokeStyle='#E24B4A';ctx.lineWidth=3;
-      ctx.beginPath();ctx.arc(0,0,b.r+7,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;
-      ctx.font=`${Math.round(b.r*0.92)}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('☠',0,1);
+      const t=Date.now()/400+b.wobbleOffset;
+      const wobble=Math.sin(t)*0.18;
+      ctx.rotate(wobble);
+      const r=b.r;
+      const btype=b.bombType||'pigeon';
+
+      if(btype==='pigeon'){
+        // Body
+        ctx.fillStyle='#9ca3af';
+        ctx.beginPath();ctx.ellipse(0,2,r*0.78,r*0.62,0,0,Math.PI*2);ctx.fill();
+        // Wing flapping
+        const flapAngle=Math.sin(Date.now()/180+b.wobbleOffset)*0.4;
+        ctx.save();ctx.rotate(flapAngle);
+        ctx.fillStyle='#6b7280';
+        ctx.beginPath();ctx.ellipse(-r*0.25,-r*0.05,r*0.55,r*0.28,-0.3,0,Math.PI*2);ctx.fill();
+        ctx.restore();
+        // Tail
+        ctx.fillStyle='#6b7280';
+        ctx.beginPath();ctx.moveTo(r*0.45,r*0.3);ctx.lineTo(r*0.82,r*0.55);ctx.lineTo(r*0.65,r*0.62);ctx.lineTo(r*0.3,r*0.42);ctx.closePath();ctx.fill();
+        // Head
+        ctx.fillStyle='#d1d5db';ctx.beginPath();ctx.arc(-r*0.3,-r*0.38,r*0.36,0,Math.PI*2);ctx.fill();
+        // Neck shimmer
+        ctx.fillStyle='#6ee7b7';ctx.globalAlpha=0.55;
+        ctx.beginPath();ctx.ellipse(-r*0.12,-r*0.08,r*0.28,r*0.2,-0.2,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+        // Beak
+        ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.moveTo(-r*0.08,-r*0.42);ctx.lineTo(r*0.28,-r*0.38);ctx.lineTo(-r*0.08,-r*0.28);ctx.closePath();ctx.fill();
+        // Eye
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-r*0.36,-r*0.42,r*0.12,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#111';ctx.beginPath();ctx.arc(-r*0.33,-r*0.41,r*0.06,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-r*0.30,-r*0.44,r*0.025,0,Math.PI*2);ctx.fill();
+        // Legs
+        ctx.strokeStyle='#f59e0b';ctx.lineWidth=2.5;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(-r*0.1,r*0.58);ctx.lineTo(-r*0.1,r*0.82);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(-r*0.1,r*0.82);ctx.lineTo(-r*0.22,r*0.95);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(-r*0.1,r*0.82);ctx.lineTo(r*0.02,r*0.95);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(r*0.15,r*0.6);ctx.lineTo(r*0.15,r*0.84);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(r*0.15,r*0.84);ctx.lineTo(r*0.03,r*0.97);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(r*0.15,r*0.84);ctx.lineTo(r*0.28,r*0.97);ctx.stroke();
+
+      } else if(btype==='puffer'){
+        // Pufferfish — round inflating body with spines
+        // Inflate slightly as it falls (scale grows slightly based on vy progress)
+        const inflatePulse=1+Math.sin(Date.now()/220+b.wobbleOffset)*0.07;
+        ctx.scale(inflatePulse,inflatePulse);
+        // Body — round yellow-orange
+        ctx.fillStyle='#fde68a';
+        ctx.beginPath();ctx.arc(0,0,r*0.72,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#f59e0b';
+        ctx.beginPath();ctx.arc(0,0,r*0.72,0,Math.PI*2);ctx.stroke();
+        // Belly spots
+        ctx.fillStyle='#f97316';ctx.globalAlpha=0.5;
+        ctx.beginPath();ctx.arc(-r*0.18,r*0.1,r*0.18,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(r*0.2,-r*0.05,r*0.12,0,Math.PI*2);ctx.fill();
+        ctx.globalAlpha=1;
+        // Spines radiating out — short pointy triangles
+        ctx.fillStyle='#78350f';
+        const numSpines=12;
+        for(let s=0;s<numSpines;s++){
+          const a=(s/numSpines)*Math.PI*2+b.wobbleOffset*0.3;
+          ctx.save();ctx.rotate(a);
+          ctx.beginPath();ctx.moveTo(0,r*0.7);ctx.lineTo(-r*0.1,r*0.9);ctx.lineTo(r*0.1,r*0.9);ctx.closePath();ctx.fill();
+          ctx.restore();
+        }
+        // Angry eyes
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-r*0.26,-r*0.16,r*0.18,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(r*0.26,-r*0.16,r*0.18,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#1c1917';ctx.beginPath();ctx.arc(-r*0.24,-r*0.15,r*0.1,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#1c1917';ctx.beginPath();ctx.arc(r*0.28,-r*0.15,r*0.1,0,Math.PI*2);ctx.fill();
+        // Angry brows
+        ctx.strokeStyle='#78350f';ctx.lineWidth=3;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(-r*0.38,-r*0.34);ctx.lineTo(-r*0.14,-r*0.26);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(r*0.38,-r*0.34);ctx.lineTo(r*0.14,-r*0.26);ctx.stroke();
+        // Puffy mouth
+        ctx.fillStyle='#78350f';
+        ctx.beginPath();ctx.arc(0,r*0.22,r*0.16,0,Math.PI);ctx.fill();
+
+      } else if(btype==='frog'){
+        // Frog — squat body, giant googly eyes, legs dangling
+        // Body — wide green oval
+        ctx.fillStyle='#4ade80';
+        ctx.beginPath();ctx.ellipse(0,r*0.08,r*0.75,r*0.58,0,0,Math.PI*2);ctx.fill();
+        // Belly — lighter
+        ctx.fillStyle='#bbf7d0';
+        ctx.beginPath();ctx.ellipse(0,r*0.18,r*0.5,r*0.38,0,0,Math.PI*2);ctx.fill();
+        // Back legs dangling (wiggle as it falls)
+        const legWiggle=Math.sin(Date.now()/160+b.wobbleOffset)*0.25;
+        ctx.strokeStyle='#16a34a';ctx.lineWidth=5;ctx.lineCap='round';
+        // left leg
+        ctx.save();ctx.rotate(-legWiggle);
+        ctx.beginPath();ctx.moveTo(-r*0.45,r*0.42);ctx.lineTo(-r*0.62,r*0.72);ctx.lineTo(-r*0.82,r*0.78);ctx.stroke();
+        ctx.restore();
+        // right leg
+        ctx.save();ctx.rotate(legWiggle);
+        ctx.beginPath();ctx.moveTo(r*0.45,r*0.42);ctx.lineTo(r*0.62,r*0.72);ctx.lineTo(r*0.82,r*0.78);ctx.stroke();
+        ctx.restore();
+        // Googly eyes on top of head — big, panicked
+        ctx.fillStyle='#4ade80';ctx.beginPath();ctx.arc(-r*0.3,-r*0.52,r*0.3,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#4ade80';ctx.beginPath();ctx.arc(r*0.3,-r*0.52,r*0.3,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-r*0.3,-r*0.54,r*0.22,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(r*0.3,-r*0.54,r*0.22,0,Math.PI*2);ctx.fill();
+        // pupils — slightly crossed (panicked)
+        ctx.fillStyle='#14532d';ctx.beginPath();ctx.arc(-r*0.26,-r*0.53,r*0.12,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#14532d';ctx.beginPath();ctx.arc(r*0.26,-r*0.53,r*0.12,0,Math.PI*2);ctx.fill();
+        // shine dots
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-r*0.21,-r*0.58,r*0.05,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(r*0.31,-r*0.58,r*0.05,0,Math.PI*2);ctx.fill();
+        // Wide flat mouth
+        ctx.strokeStyle='#15803d';ctx.lineWidth=2.5;
+        ctx.beginPath();ctx.moveTo(-r*0.28,-r*0.12);ctx.quadraticCurveTo(0,-r*0.02,r*0.28,-r*0.12);ctx.stroke();
+        // Nostrils
+        ctx.fillStyle='#15803d';
+        ctx.beginPath();ctx.arc(-r*0.1,-r*0.26,r*0.04,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(r*0.1,-r*0.26,r*0.04,0,Math.PI*2);ctx.fill();
+      }
+      } else if(btype==='pig'){
+        // Chubby pink pig, snout-first, ears flapping
+        const r=b.r;
+        // Body — fat pink circle
+        ctx.fillStyle='#fda4af';
+        ctx.beginPath();ctx.ellipse(0,r*0.05,r*0.78,r*0.68,0,0,Math.PI*2);ctx.fill();
+        // Belly — lighter pink
+        ctx.fillStyle='#ffe4e6';
+        ctx.beginPath();ctx.ellipse(0,r*0.18,r*0.48,r*0.36,0,0,Math.PI*2);ctx.fill();
+        // Ears — floppy, wiggle as it falls
+        const earWiggle=Math.sin(Date.now()/200+b.wobbleOffset)*0.3;
+        ctx.fillStyle='#fb7185';
+        ctx.save();ctx.rotate(-0.3+earWiggle);
+        ctx.beginPath();ctx.ellipse(-r*0.52,-r*0.52,r*0.22,r*0.3,0,0,Math.PI*2);ctx.fill();
+        ctx.restore();
+        ctx.save();ctx.rotate(0.3-earWiggle);
+        ctx.fillStyle='#fb7185';
+        ctx.beginPath();ctx.ellipse(r*0.52,-r*0.52,r*0.22,r*0.3,0,0,Math.PI*2);ctx.fill();
+        ctx.restore();
+        // Snout — big oval pointing down
+        ctx.fillStyle='#fb7185';
+        ctx.beginPath();ctx.ellipse(0,r*0.28,r*0.38,r*0.26,0,0,Math.PI*2);ctx.fill();
+        // Nostrils on snout
+        ctx.fillStyle='#be123c';
+        ctx.beginPath();ctx.arc(-r*0.14,r*0.3,r*0.08,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(r*0.14,r*0.3,r*0.08,0,Math.PI*2);ctx.fill();
+        // Eyes — small beady, panicked
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-r*0.28,-r*0.2,r*0.16,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(r*0.28,-r*0.2,r*0.16,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#1c1917';ctx.beginPath();ctx.arc(-r*0.26,-r*0.19,r*0.09,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#1c1917';ctx.beginPath();ctx.arc(r*0.30,-r*0.19,r*0.09,0,Math.PI*2);ctx.fill();
+        // Shine
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-r*0.22,-r*0.23,r*0.04,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(r*0.33,-r*0.23,r*0.04,0,Math.PI*2);ctx.fill();
+        // Curly tail at top (it's falling upside-down panicked)
+        ctx.strokeStyle='#fb7185';ctx.lineWidth=3;ctx.lineCap='round';
+        ctx.beginPath();ctx.arc(r*0.55,-r*0.1,r*0.18,0,Math.PI*1.5);ctx.stroke();
     } else {
       const c=ballColor(b.val);
       ctx.fillStyle=c.bg;ctx.beginPath();ctx.arc(0,0,b.r,0,Math.PI*2);ctx.fill();
@@ -733,34 +1059,19 @@ function draw(){
     ctx.restore();
   });
 
-  // bomb text on top of everything
+  // animal warning flash
 if(bombFlashActive){
     ctx.save();
-    
-    ctx.font = '900 52px "Press Start 2P"';
+    ctx.font = '900 44px "Press Start 2P"';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    
-    const x = W/2;
-    const y = H/2 - 8;   // slight adjustment for better centering
-    
-    // Multiple outline layers to simulate the retro colored shadow
-    ctx.fillStyle = '#fdff2a';   // yellow
-    ctx.fillText('BOMB', x-4, y);
-    
-    ctx.fillStyle = '#df4a42';   // red
-    ctx.fillText('BOMB', x+4, y);
-    
-    ctx.fillStyle = '#91fcfe';   // cyan
-    ctx.fillText('BOMB', x-2, y-2);
-    
-    ctx.fillStyle = '#4405fc';   // purple
-    ctx.fillText('BOMB', x+2, y+2);
-    
-    // Main bright white text on top
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('BOMB', x, y);
-    
+    const x = W/2, y = H/2 - 8;
+    const label=BOMB_FLASH_LABELS[bombFlashType]||'INCOMING!';
+    ctx.fillStyle='#fdff2a';ctx.fillText(label,x-4,y);
+    ctx.fillStyle='#df4a42';ctx.fillText(label,x+4,y);
+    ctx.fillStyle='#91fcfe';ctx.fillText(label,x-2,y-2);
+    ctx.fillStyle='#4405fc';ctx.fillText(label,x+2,y+2);
+    ctx.fillStyle='#ffffff';ctx.fillText(label,x,y);
     ctx.restore();
 }
 
@@ -788,7 +1099,7 @@ function endGame(quit,reason){
   document.getElementById('go-merges').textContent=merges;
   document.getElementById('go-bombs-hit').textContent=bombsHit;
   document.getElementById('go-best').textContent=(stats.best||0).toLocaleString();
-  document.getElementById('go-share').textContent=`Gravity — highest tile: ${highest}, score: ${score.toLocaleString()}, ${merges} merges. Beat me?`;
+  document.getElementById('go-share').textContent=`Splat — highest tile: ${highest}, score: ${score.toLocaleString()}, ${merges} merges. Beat me?`;
   document.getElementById('go-name-area').innerHTML=`
     <div style="font-size:12px;color:#6b7280;margin-bottom:6px">Enter your name for the leaderboard</div>
     <input id="go-name-input" maxlength="16" placeholder="Your name" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;font-family:inherit;outline:none;text-align:center"/>
@@ -797,7 +1108,7 @@ function endGame(quit,reason){
 
 function shareAndCopy(){
   const t=document.getElementById('go-share').textContent;
-  if(navigator.share)navigator.share({title:'Gravity',text:t}).catch(()=>{});
+  if(navigator.share)navigator.share({title:'Splat',text:t}).catch(()=>{});
   else if(navigator.clipboard)navigator.clipboard.writeText(t);
   document.getElementById('go-share').textContent='Copied!';
   setTimeout(()=>document.getElementById('go-share').textContent=t,2000);
