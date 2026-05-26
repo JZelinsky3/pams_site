@@ -1,27 +1,28 @@
 """
 08 — Scrape end-of-season fantasy rankings from FantasyPros.
 
-Scoring: Full PPR (1 pt/catch) + 6 pts/passing TD.
-  - RB/WR/TE: FantasyPros PPR (scoring=PPR) is used directly.
-  - QB: FantasyPros PPR + 2 extra pts per passing TD
-         (their default is 4 pts/passing TD; we want 6).
+Produces four scoring profiles (every PPR × passing-TD combination):
+  - ppr_6pt   Full PPR (1 pt/catch) + 6 pts/passing TD
+  - half_4pt  Half PPR (0.5 pt/catch) + 4 pts/passing TD (FantasyPros default for QB)
+  - ppr_4pt   Full PPR (1 pt/catch) + 4 pts/passing TD
+  - half_6pt  Half PPR (0.5 pt/catch) + 6 pts/passing TD
+
+For each, RB/WR/TE use the matching FantasyPros scoring page. QB uses the PPR page
+(QB FPTS are identical across PPR/HALF/STD on FantasyPros) and we adjust passing TDs:
+  *_6pt:  FantasyPros default is 4pt → add 2*passing_TDs to reach 6pt
+  *_4pt:  FantasyPros default is 4pt → no adjustment
 
 URL pattern:
-  https://www.fantasypros.com/nfl/stats/{pos}.php?year={year}&scoring=PPR&range=full
+  https://www.fantasypros.com/nfl/stats/{pos}.php?year={year}&scoring={SCORING}&range=full
 
-Outputs:
-  output/fantasy_ranks/{season}.json
-  output/_raw_html/{season}/fp_{pos}_ppr.html    (per-position PPR cache)
-  ../../data/fantasy_ranks/{season}.json
+Outputs (per profile):
+  output/fantasy_ranks/{profile}/{season}.json
+  output/_raw_html/{season}/fp_{pos}_{scoring}.html
+  ../../data/fantasy_ranks/{profile}/{season}.json
 
-Each player record:
-  {
-    "rank":        int,    # overall rank by adjusted FPTS
-    "player_name": str,
-    "team":        str,
-    "position":    str,   # QB / RB / WR / TE
-    "fpts":        float, # PPR + 6pt passing TD adjusted
-  }
+Backward-compat: the legacy flat path `data/fantasy_ranks/{season}.json` is also
+written (mirrors the ppr_6pt profile) so the original pams_site draft page keeps
+working without changes.
 """
 
 import re
@@ -38,9 +39,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from _common import output_path, save_json
 
 # ── Constants ────────────────────────────────────────────────────────────────
-SEASONS       = [2019, 2020, 2021, 2022, 2023, 2024, 2025]
+SEASONS       = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
 POSITIONS     = ["qb", "rb", "wr", "te"]
 SITE_DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "fantasy_ranks"
+
+# Each profile picks a FantasyPros scoring param for RB/WR/TE and a passing-TD
+# adjustment for QB. QB pages are scraped with scoring=PPR (FantasyPros returns
+# the same FPTS for QB regardless of PPR/HALF/STD; we use one URL to share cache).
+PROFILES = {
+    "ppr_6pt":  {"flex_scoring": "PPR",  "qb_pass_td_bonus": 2.0},  # full PPR, +2/passing TD → 6pt
+    "half_4pt": {"flex_scoring": "HALF", "qb_pass_td_bonus": 0.0},  # half PPR, FP default 4pt
+    "ppr_4pt":  {"flex_scoring": "PPR",  "qb_pass_td_bonus": 0.0},  # full PPR, FP default 4pt
+    "half_6pt": {"flex_scoring": "HALF", "qb_pass_td_bonus": 2.0},  # half PPR, +2/passing TD → 6pt
+}
 
 HEADERS = {
     "User-Agent": (
@@ -57,37 +68,39 @@ HEADERS = {
 #  Fetch + cache
 # ══════════════════════════════════════════════════════════════════════════════
 
-def fetch_position(season: int, pos: str) -> list:
-    cache_path = output_path("_raw_html", str(season), f"fp_{pos}_ppr.html")
+def fetch_position(season: int, pos: str, scoring: str) -> str:
+    cache_path = output_path("_raw_html", str(season), f"fp_{pos}_{scoring.lower()}.html")
 
     if cache_path.exists():
         html = cache_path.read_text(encoding="utf-8")
-        print(f"    {pos.upper()}: cached ({cache_path.stat().st_size:,} bytes)")
-    else:
-        url = (
-            f"https://www.fantasypros.com/nfl/stats/{pos}.php"
-            f"?year={season}&scoring=PPR&range=full"
-        )
-        print(f"    {pos.upper()}: fetching {url}")
-        time.sleep(2)
-        try:
-            resp = requests.get(url, headers=HEADERS, timeout=20)
-            resp.raise_for_status()
-        except Exception as e:
-            print(f"    {pos.upper()}: ✗ {e}")
-            return []
-        html = resp.text
-        cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_text(html, encoding="utf-8")
+        print(f"    {pos.upper()} [{scoring}]: cached ({cache_path.stat().st_size:,} bytes)")
+        return html
 
-    return parse_fp_table(html, pos.upper())
+    url = (
+        f"https://www.fantasypros.com/nfl/stats/{pos}.php"
+        f"?year={season}&scoring={scoring}&range=full"
+    )
+    print(f"    {pos.upper()} [{scoring}]: fetching {url}")
+    time.sleep(2)
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=20)
+        resp.raise_for_status()
+    except Exception as e:
+        print(f"    {pos.upper()} [{scoring}]: ✗ {e}")
+        return ""
+    html = resp.text
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    cache_path.write_text(html, encoding="utf-8")
+    return html
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  Parser
 # ══════════════════════════════════════════════════════════════════════════════
 
-def parse_fp_table(html: str, position: str) -> list:
+def parse_fp_table(html: str, position: str, qb_pass_td_bonus: float) -> list:
+    if not html:
+        return []
     page  = BeautifulSoup(html, "html.parser")
     table = page.find("table", id="data")
     if not table:
@@ -107,7 +120,7 @@ def parse_fp_table(html: str, position: str) -> list:
         print(f"    ✗ FPTS column not found for {position}")
         return []
 
-    # For QBs: find the first "TD" column (passing TDs) to apply 6-pt adjustment
+    # For QBs: find the first "TD" column (passing TDs) to apply pt adjustment
     td_idx = None
     if position == "QB":
         td_idx = next((i for i, h in enumerate(headers) if h == "TD"), None)
@@ -132,7 +145,7 @@ def parse_fp_table(html: str, position: str) -> list:
             player_name = raw_name
             team        = ""
 
-        # FPTS (PPR)
+        # FPTS from FantasyPros for the requested scoring
         fpts_raw = cells[fpts_idx].get_text(strip=True).replace(",", "")
         try:
             fpts = float(fpts_raw)
@@ -141,11 +154,11 @@ def parse_fp_table(html: str, position: str) -> list:
         if fpts <= 0:
             continue
 
-        # QB 6-pt passing TD adjustment (+2 pts per passing TD)
-        if position == "QB" and td_idx is not None:
+        # QB passing-TD adjustment
+        if position == "QB" and td_idx is not None and qb_pass_td_bonus != 0.0:
             try:
                 pass_tds = float(cells[td_idx].get_text(strip=True))
-                fpts = round(fpts + 2 * pass_tds, 2)
+                fpts = round(fpts + qb_pass_td_bonus * pass_tds, 2)
             except (ValueError, IndexError):
                 pass
 
@@ -163,10 +176,16 @@ def parse_fp_table(html: str, position: str) -> list:
 #  Main
 # ══════════════════════════════════════════════════════════════════════════════
 
-def scrape_season(season: int) -> list:
+def scrape_season(season: int, profile_name: str) -> list:
+    profile = PROFILES[profile_name]
     all_players = []
     for pos in POSITIONS:
-        players = fetch_position(season, pos)
+        # QBs always come from the PPR page (cache shared across profiles); the
+        # passing-TD bonus differentiates the profiles. Flex positions use the
+        # profile's own scoring page.
+        scoring = "PPR" if pos == "qb" else profile["flex_scoring"]
+        html = fetch_position(season, pos, scoring)
+        players = parse_fp_table(html, pos.upper(), profile["qb_pass_td_bonus"])
         print(f"      → {len(players)} {pos.upper()} players")
         all_players.extend(players)
 
@@ -179,32 +198,40 @@ def scrape_season(season: int) -> list:
 
 def main():
     print("=" * 70)
-    print("08 — Fantasy Rankings Scraper (FantasyPros · Full PPR + 6pt Pass TD)")
+    print("08 — Fantasy Rankings Scraper (FantasyPros · 4 scoring profiles)")
     print("=" * 70)
 
     SITE_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    for season in SEASONS:
-        print(f"\n{'─'*60}")
-        print(f"  Season {season}")
-        print(f"{'─'*60}")
+    for profile_name in PROFILES:
+        print(f"\n{'#' * 60}")
+        print(f"  Profile: {profile_name}")
+        print(f"{'#' * 60}")
 
-        players = scrape_season(season)
-        if not players:
-            print(f"  [skip] No data for {season}")
-            continue
+        for season in SEASONS:
+            print(f"\n  ── {season} ──")
+            players = scrape_season(season, profile_name)
+            if not players:
+                print(f"  [skip] No data for {season}")
+                continue
 
-        print(f"  Total: {len(players)} players ranked")
+            print(f"  Total: {len(players)} players ranked")
+            data = {"year": season, "profile": profile_name, "players": players}
 
-        data = {"year": season, "players": players}
+            out = output_path("fantasy_ranks", profile_name, f"{season}.json")
+            save_json(data, out)
+            print(f"  ✓ Scraper output → {out}")
 
-        out = output_path("fantasy_ranks", f"{season}.json")
-        save_json(data, out)
-        print(f"  ✓ Scraper output → {out}")
+            site_out = SITE_DATA_DIR / profile_name / f"{season}.json"
+            save_json(data, site_out)
+            print(f"  ✓ Site data      → {site_out}")
 
-        site_out = SITE_DATA_DIR / f"{season}.json"
-        save_json(data, site_out)
-        print(f"  ✓ Site data      → {site_out}")
+            # Backward-compat: keep the flat ppr_6pt copy so the original
+            # pams_site draft page continues to work without code changes.
+            if profile_name == "ppr_6pt":
+                flat = SITE_DATA_DIR / f"{season}.json"
+                save_json(data, flat)
+                print(f"  ✓ Legacy flat    → {flat}")
 
     print("\n" + "=" * 70)
     print("Done.")
