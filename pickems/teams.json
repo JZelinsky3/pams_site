@@ -3,7 +3,7 @@
   "teams": [
     {
       "id": "joey",
-      "name": "Joey",
+      "name": "My Head",
       "manager": "Joey",
       "roster_id": 1,
       "sleeper_user_id": "591884559361040384",
@@ -13,13 +13,13 @@
     },
     {
       "id": "sean",
-      "name": "Sean",
+      "name": "Commisioner Goodhead",
       "manager": "Sean",
       "roster_id": 2,
       "sleeper_user_id": "728702248099663872",
       "division": 1,
       "division_name": "Whole",
-      "logo": "https://sleepercdn.com/uploads/59c887fa8cee822a71b1bb0292960c60.jpg"
+      "logo": "https://sleepercdn.com/uploads/26866a0f4ada85fc82d1bb7ce7cc549c.jpg"
     },
     {
       "id": "kyle",
@@ -43,13 +43,13 @@
     },
     {
       "id": "chris",
-      "name": "Chris",
+      "name": "Masked Man",
       "manager": "Chris",
       "roster_id": 5,
       "sleeper_user_id": "739747288599150592",
       "division": 2,
       "division_name": "Skim",
-      "logo": "https://sleepercdn.com/avatars/82aec8e811b839b8ec25d7b458afd57b"
+      "logo": "https://sleepercdn.com/uploads/e9005ee43fd48fabffe7b8760c19d3f0.jpg"
     },
     {
       "id": "evan",
