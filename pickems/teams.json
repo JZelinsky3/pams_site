@@ -23,13 +23,13 @@
     },
     {
       "id": "kyle",
-      "name": "Kyle",
+      "name": "Woodpooper",
       "manager": "Kyle",
       "roster_id": 3,
       "sleeper_user_id": "609426003600670720",
       "division": 1,
       "division_name": "Whole",
-      "logo": "https://sleepercdn.com/avatars/441a0cdf6792efae341e600e62b6d183"
+      "logo": "https://sleepercdn.com/uploads/3570f0614c7eff235dd45d44b74a6662.jpg"
     },
     {
       "id": "andrew",
@@ -59,7 +59,7 @@
       "sleeper_user_id": "1346560472878452736",
       "division": 1,
       "division_name": "Whole",
-      "logo": "https://sleepercdn.com/avatars/33239bae17699d5b98a1543b690ea205"
+      "logo": "https://sleepercdn.com/uploads/eb94923733d090a59762e10beccc250e.jpg"
     },
     {
       "id": "isaac",
