@@ -2,7 +2,7 @@
   "week": 0,
   "label": "Pre-Season",
   "season": 2026,
-  "generated": "2026-07-28T17:25:36.708566+00:00",
+  "generated": "2026-08-04T17:47:32.507048+00:00",
   "overall": [
     {
       "rank": 1,
@@ -27,9 +27,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 53.7,
+      "playoff_pct": 53.6,
       "bye_pct": 18.4,
-      "conf_win_pct": 19.0
+      "conf_win_pct": 18.9
     },
     {
       "rank": 2,
@@ -54,9 +54,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 51.8,
-      "bye_pct": 18.4,
-      "conf_win_pct": 17.7
+      "playoff_pct": 53.0,
+      "bye_pct": 18.6,
+      "conf_win_pct": 18.7
     },
     {
       "rank": 3,
@@ -81,9 +81,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 53.7,
-      "bye_pct": 18.1,
-      "conf_win_pct": 19.0
+      "playoff_pct": 53.6,
+      "bye_pct": 18.4,
+      "conf_win_pct": 18.6
     },
     {
       "rank": 4,
@@ -108,9 +108,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.9,
-      "bye_pct": 17.6,
-      "conf_win_pct": 17.0
+      "playoff_pct": 50.1,
+      "bye_pct": 17.3,
+      "conf_win_pct": 16.9
     },
     {
       "rank": 5,
@@ -135,9 +135,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 51.0,
-      "bye_pct": 18.3,
-      "conf_win_pct": 18.0
+      "playoff_pct": 50.6,
+      "bye_pct": 17.4,
+      "conf_win_pct": 17.3
     },
     {
       "rank": 6,
@@ -162,9 +162,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.4,
-      "bye_pct": 16.9,
-      "conf_win_pct": 16.8
+      "playoff_pct": 50.1,
+      "bye_pct": 17.9,
+      "conf_win_pct": 16.6
     },
     {
       "rank": 7,
@@ -189,9 +189,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 51.2,
-      "bye_pct": 16.4,
-      "conf_win_pct": 17.3
+      "playoff_pct": 50.5,
+      "bye_pct": 16.6,
+      "conf_win_pct": 16.9
     },
     {
       "rank": 8,
@@ -216,9 +216,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 47.9,
-      "bye_pct": 16.0,
-      "conf_win_pct": 15.2
+      "playoff_pct": 48.3,
+      "bye_pct": 15.8,
+      "conf_win_pct": 15.0
     },
     {
       "rank": 9,
@@ -244,8 +244,8 @@
       "proj_wins": 7,
       "proj_losses": 7,
       "playoff_pct": 47.9,
-      "bye_pct": 16.2,
-      "conf_win_pct": 15.4
+      "bye_pct": 16.1,
+      "conf_win_pct": 15.5
     },
     {
       "rank": 10,
@@ -270,8 +270,8 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 49.2,
-      "bye_pct": 15.2,
+      "playoff_pct": 48.7,
+      "bye_pct": 15.7,
       "conf_win_pct": 15.9
     },
     {
@@ -297,9 +297,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 46.0,
-      "bye_pct": 14.4,
-      "conf_win_pct": 14.6
+      "playoff_pct": 47.2,
+      "bye_pct": 14.6,
+      "conf_win_pct": 15.3
     },
     {
       "rank": 12,
@@ -325,8 +325,8 @@
       "proj_wins": 7,
       "proj_losses": 7,
       "playoff_pct": 46.3,
-      "bye_pct": 14.1,
-      "conf_win_pct": 14.2
+      "bye_pct": 13.4,
+      "conf_win_pct": 14.3
     }
   ],
   "whole": [
@@ -353,9 +353,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 53.7,
+      "playoff_pct": 53.6,
       "bye_pct": 18.4,
-      "conf_win_pct": 19.0
+      "conf_win_pct": 18.9
     },
     {
       "rank": 3,
@@ -380,9 +380,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 53.7,
-      "bye_pct": 18.1,
-      "conf_win_pct": 19.0
+      "playoff_pct": 53.6,
+      "bye_pct": 18.4,
+      "conf_win_pct": 18.6
     },
     {
       "rank": 7,
@@ -407,9 +407,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 51.2,
-      "bye_pct": 16.4,
-      "conf_win_pct": 17.3
+      "playoff_pct": 50.5,
+      "bye_pct": 16.6,
+      "conf_win_pct": 16.9
     },
     {
       "rank": 10,
@@ -434,8 +434,8 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 49.2,
-      "bye_pct": 15.2,
+      "playoff_pct": 48.7,
+      "bye_pct": 15.7,
       "conf_win_pct": 15.9
     },
     {
@@ -461,9 +461,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 46.0,
-      "bye_pct": 14.4,
-      "conf_win_pct": 14.6
+      "playoff_pct": 47.2,
+      "bye_pct": 14.6,
+      "conf_win_pct": 15.3
     },
     {
       "rank": 12,
@@ -489,8 +489,8 @@
       "proj_wins": 7,
       "proj_losses": 7,
       "playoff_pct": 46.3,
-      "bye_pct": 14.1,
-      "conf_win_pct": 14.2
+      "bye_pct": 13.4,
+      "conf_win_pct": 14.3
     }
   ],
   "skim": [
@@ -517,9 +517,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 51.8,
-      "bye_pct": 18.4,
-      "conf_win_pct": 17.7
+      "playoff_pct": 53.0,
+      "bye_pct": 18.6,
+      "conf_win_pct": 18.7
     },
     {
       "rank": 4,
@@ -544,9 +544,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.9,
-      "bye_pct": 17.6,
-      "conf_win_pct": 17.0
+      "playoff_pct": 50.1,
+      "bye_pct": 17.3,
+      "conf_win_pct": 16.9
     },
     {
       "rank": 5,
@@ -571,9 +571,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 51.0,
-      "bye_pct": 18.3,
-      "conf_win_pct": 18.0
+      "playoff_pct": 50.6,
+      "bye_pct": 17.4,
+      "conf_win_pct": 17.3
     },
     {
       "rank": 6,
@@ -598,9 +598,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.4,
-      "bye_pct": 16.9,
-      "conf_win_pct": 16.8
+      "playoff_pct": 50.1,
+      "bye_pct": 17.9,
+      "conf_win_pct": 16.6
     },
     {
       "rank": 8,
@@ -625,9 +625,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 47.9,
-      "bye_pct": 16.0,
-      "conf_win_pct": 15.2
+      "playoff_pct": 48.3,
+      "bye_pct": 15.8,
+      "conf_win_pct": 15.0
     },
     {
       "rank": 9,
@@ -653,8 +653,8 @@
       "proj_wins": 7,
       "proj_losses": 7,
       "playoff_pct": 47.9,
-      "bye_pct": 16.2,
-      "conf_win_pct": 15.4
+      "bye_pct": 16.1,
+      "conf_win_pct": 15.5
     }
   ]
 }
