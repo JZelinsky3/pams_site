@@ -2,7 +2,7 @@
   "week": 0,
   "label": "Pre-Season",
   "season": 2026,
-  "generated": "2026-08-11T16:55:57.101939+00:00",
+  "generated": "2026-08-18T16:29:15.420387+00:00",
   "overall": [
     {
       "rank": 1,
@@ -27,8 +27,8 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 54.4,
-      "bye_pct": 19.8,
+      "playoff_pct": 54.2,
+      "bye_pct": 19.2,
       "conf_win_pct": 19.8
     },
     {
@@ -54,9 +54,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 52.0,
+      "playoff_pct": 52.4,
       "bye_pct": 18.4,
-      "conf_win_pct": 18.3
+      "conf_win_pct": 17.7
     },
     {
       "rank": 3,
@@ -81,9 +81,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 53.3,
-      "bye_pct": 18.9,
-      "conf_win_pct": 19.7
+      "playoff_pct": 54.1,
+      "bye_pct": 18.7,
+      "conf_win_pct": 19.2
     },
     {
       "rank": 4,
@@ -108,9 +108,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.6,
-      "bye_pct": 17.4,
-      "conf_win_pct": 16.8
+      "playoff_pct": 50.2,
+      "bye_pct": 17.3,
+      "conf_win_pct": 17.0
     },
     {
       "rank": 5,
@@ -135,8 +135,8 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 52.2,
-      "bye_pct": 17.8,
+      "playoff_pct": 51.0,
+      "bye_pct": 18.1,
       "conf_win_pct": 17.8
     },
     {
@@ -162,9 +162,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.3,
-      "bye_pct": 16.9,
-      "conf_win_pct": 17.0
+      "playoff_pct": 51.4,
+      "bye_pct": 16.7,
+      "conf_win_pct": 17.5
     },
     {
       "rank": 7,
@@ -189,9 +189,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 48.4,
-      "bye_pct": 15.9,
-      "conf_win_pct": 15.6
+      "playoff_pct": 48.5,
+      "bye_pct": 16.5,
+      "conf_win_pct": 15.8
     },
     {
       "rank": 8,
@@ -216,9 +216,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 48.3,
-      "bye_pct": 15.5,
-      "conf_win_pct": 15.5
+      "playoff_pct": 48.6,
+      "bye_pct": 15.8,
+      "conf_win_pct": 15.0
     },
     {
       "rank": 9,
@@ -243,16 +243,16 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 48.5,
-      "bye_pct": 16.0,
-      "conf_win_pct": 16.1
+      "playoff_pct": 49.3,
+      "bye_pct": 16.9,
+      "conf_win_pct": 16.7
     },
     {
       "rank": 10,
       "team_id": "connor",
-      "team_name": "Connor",
+      "team_name": "The People's Tight End",
       "manager": "Connor",
-      "logo": "https://sleepercdn.com/avatars/b319fdf8b7b5b0359d3c78622ba4d70c",
+      "logo": "https://sleepercdn.com/uploads/7308703f4aa90f6ed33946fb8c6a8596.jpg",
       "division": 1,
       "division_name": "Whole",
       "wins": 0,
@@ -270,9 +270,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 49.3,
-      "bye_pct": 15.1,
-      "conf_win_pct": 15.2
+      "playoff_pct": 48.9,
+      "bye_pct": 14.2,
+      "conf_win_pct": 14.9
     },
     {
       "rank": 11,
@@ -297,9 +297,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 47.4,
-      "bye_pct": 15.1,
-      "conf_win_pct": 14.6
+      "playoff_pct": 46.2,
+      "bye_pct": 14.5,
+      "conf_win_pct": 14.9
     },
     {
       "rank": 12,
@@ -324,9 +324,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 45.3,
-      "bye_pct": 13.3,
-      "conf_win_pct": 13.7
+      "playoff_pct": 45.1,
+      "bye_pct": 13.7,
+      "conf_win_pct": 13.8
     }
   ],
   "whole": [
@@ -353,8 +353,8 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 54.4,
-      "bye_pct": 19.8,
+      "playoff_pct": 54.2,
+      "bye_pct": 19.2,
       "conf_win_pct": 19.8
     },
     {
@@ -380,9 +380,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 53.3,
-      "bye_pct": 18.9,
-      "conf_win_pct": 19.7
+      "playoff_pct": 54.1,
+      "bye_pct": 18.7,
+      "conf_win_pct": 19.2
     },
     {
       "rank": 6,
@@ -407,16 +407,16 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.3,
-      "bye_pct": 16.9,
-      "conf_win_pct": 17.0
+      "playoff_pct": 51.4,
+      "bye_pct": 16.7,
+      "conf_win_pct": 17.5
     },
     {
       "rank": 10,
       "team_id": "connor",
-      "team_name": "Connor",
+      "team_name": "The People's Tight End",
       "manager": "Connor",
-      "logo": "https://sleepercdn.com/avatars/b319fdf8b7b5b0359d3c78622ba4d70c",
+      "logo": "https://sleepercdn.com/uploads/7308703f4aa90f6ed33946fb8c6a8596.jpg",
       "division": 1,
       "division_name": "Whole",
       "wins": 0,
@@ -434,9 +434,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 49.3,
-      "bye_pct": 15.1,
-      "conf_win_pct": 15.2
+      "playoff_pct": 48.9,
+      "bye_pct": 14.2,
+      "conf_win_pct": 14.9
     },
     {
       "rank": 11,
@@ -461,9 +461,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 47.4,
-      "bye_pct": 15.1,
-      "conf_win_pct": 14.6
+      "playoff_pct": 46.2,
+      "bye_pct": 14.5,
+      "conf_win_pct": 14.9
     },
     {
       "rank": 12,
@@ -488,9 +488,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 45.3,
-      "bye_pct": 13.3,
-      "conf_win_pct": 13.7
+      "playoff_pct": 45.1,
+      "bye_pct": 13.7,
+      "conf_win_pct": 13.8
     }
   ],
   "skim": [
@@ -517,9 +517,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 52.0,
+      "playoff_pct": 52.4,
       "bye_pct": 18.4,
-      "conf_win_pct": 18.3
+      "conf_win_pct": 17.7
     },
     {
       "rank": 4,
@@ -544,9 +544,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 50.6,
-      "bye_pct": 17.4,
-      "conf_win_pct": 16.8
+      "playoff_pct": 50.2,
+      "bye_pct": 17.3,
+      "conf_win_pct": 17.0
     },
     {
       "rank": 5,
@@ -571,8 +571,8 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 52.2,
-      "bye_pct": 17.8,
+      "playoff_pct": 51.0,
+      "bye_pct": 18.1,
       "conf_win_pct": 17.8
     },
     {
@@ -598,9 +598,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 48.4,
-      "bye_pct": 15.9,
-      "conf_win_pct": 15.6
+      "playoff_pct": 48.5,
+      "bye_pct": 16.5,
+      "conf_win_pct": 15.8
     },
     {
       "rank": 8,
@@ -625,9 +625,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 48.3,
-      "bye_pct": 15.5,
-      "conf_win_pct": 15.5
+      "playoff_pct": 48.6,
+      "bye_pct": 15.8,
+      "conf_win_pct": 15.0
     },
     {
       "rank": 9,
@@ -652,9 +652,9 @@
       "is_preseason": true,
       "proj_wins": 7,
       "proj_losses": 7,
-      "playoff_pct": 48.5,
-      "bye_pct": 16.0,
-      "conf_win_pct": 16.1
+      "playoff_pct": 49.3,
+      "bye_pct": 16.9,
+      "conf_win_pct": 16.7
     }
   ]
 }
