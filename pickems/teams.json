@@ -116,10 +116,10 @@
       "name": "Team12",
       "manager": "Team12",
       "roster_id": 12,
-      "sleeper_user_id": "",
+      "sleeper_user_id": "1396713777201737728",
       "division": 2,
       "division_name": "Skim",
-      "logo": "/assets/images/default_team.png"
+      "logo": "https://sleepercdn.com/avatars/578c6b253dd7b4bab45382e1af102204"
     }
   ]
 }
