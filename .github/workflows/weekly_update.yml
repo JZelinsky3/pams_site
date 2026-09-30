@@ -1,9 +1,11 @@
 name: Weekly Sleeper Update
 
 on:
-  schedule:
-    # Every Tuesday at 4pm UTC (noon EDT / 11am EST)
-    - cron: '0 16 * * 2'
+  # Schedule turned off 2026-09-30: pams_site is retired (pickems and power
+  # rankings live on The Sunday Chronicle now), and this run had failed every
+  # Tuesday since 2026-09-01. To bring it back, restore:
+  #   schedule:
+  #     - cron: '0 16 * * 2'   # Tuesdays, 4pm UTC
   workflow_dispatch:   # allow manual trigger from GitHub Actions tab
 
 jobs:
